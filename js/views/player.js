@@ -250,7 +250,7 @@ export async function mount(root) {
         }).join("");
         root.innerHTML = `${barHtml([emoji, name], false)}
           <div class="card">${svgWealthChart(series, style, 620, 340, 1, null, true)}</div>
-          <div class="card"><h2>Question by question</h2><div class="qsummary">${qrows}</div></div>`;
+          <div class="card"><div class="qsummary">${qrows}</div></div>`;
         return;
       }
       if (stage === 5 && f && f.sizing) {
