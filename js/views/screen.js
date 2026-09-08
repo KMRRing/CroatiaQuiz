@@ -360,7 +360,7 @@ export async function mount(root) {
       root.innerHTML = `
         <div class="screen center">
           <div class="finalboard">
-            <h1>Full time</h1>
+            <h1>Final leaderboard</h1>
             <ol class="board finallb" style="columns:${cols}">
               ${bd.map((r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span>${fmt(r.w)}</span></li>`).join("")}
             </ol>
