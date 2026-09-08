@@ -66,7 +66,7 @@ export function requiredAccuracy(reveals, target) {
 }
 
 // Minimal SVG line chart. series: {token: [w0..wN]}, style: {token:{color,width,dash,label}}
-export function svgWealthChart(series, style, width, height) {
+export function svgWealthChart(series, style, width, height, fscale = 1) {
   const tokens = Object.keys(series);
   if (!tokens.length) return "<svg></svg>";
   const N = series[tokens[0]].length - 1;
@@ -79,9 +79,9 @@ export function svgWealthChart(series, style, width, height) {
   for (const gv of [0.25, 0.5, 0.75, 1]) {
     const v = Math.round(maxW * gv);
     g += `<line x1="${padL}" y1="${Y(v)}" x2="${width - padR}" y2="${Y(v)}" stroke="#F0F2F8"/>` +
-         `<text x="${padL - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#5A6070">$${v}</text>`;
+         `<text x="${padL - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="#5A6070">$${v}</text>`;
   }
-  g += `<text x="${width - padR}" y="${height - 6}" text-anchor="end" font-size="11" fill="#5A6070">round ${N}</text>`;
+  g += `<text x="${width - padR}" y="${height - 6}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="#5A6070">round ${N}</text>`;
   const sorted = tokens.slice().sort((a, b) => ((style[a] && style[a].width) || 1) - ((style[b] && style[b].width) || 1));
   for (const t of sorted) {
     const st = style[t] || {};
@@ -89,7 +89,7 @@ export function svgWealthChart(series, style, width, height) {
     g += `<polyline points="${pts}" fill="none" stroke="${st.color || "#D7DBE6"}" stroke-width="${st.width || 1.2}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""}/>`;
     if (st.label) {
       const last = series[t][N];
-      g += `<text x="${X(N) - 4}" y="${Y(last) - 5}" text-anchor="end" font-size="12" font-weight="700" fill="${st.color}">${st.label}</text>`;
+      g += `<text x="${X(N) - 4}" y="${Y(last) - 5}" text-anchor="end" font-size="${Math.round(12 * fscale)}" font-weight="700" fill="${st.color}">${st.label}</text>`;
     }
   }
   return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto">${g}</svg>`;

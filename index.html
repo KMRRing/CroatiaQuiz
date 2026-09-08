@@ -137,6 +137,11 @@
   .avatar { position:relative; }
   .avatar .hat { position:absolute; top:-28px; right:-8px; width:66px; transform:rotate(18deg); }
   @media (prefers-reduced-motion: reduce) { .cf, .fw, .rocket { animation:none; display:none; } }
+  .chartstage { position:fixed; inset:0; padding:2.5vh 2.5vw 2vh; display:flex; flex-direction:column; gap:1vh; }
+  .chartstage .chead { display:flex; justify-content:space-between; align-items:baseline; gap:2vw; }
+  .chartstage h1 { margin:0; }
+  .chartstage .cwrap { flex:1; min-height:0; }
+  .chartstage .cwrap svg { display:block; }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>
