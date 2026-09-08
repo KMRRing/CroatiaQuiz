@@ -359,7 +359,8 @@ export async function mount(root) {
       const bd = f.board || [];
       const cols = bd.length > 16 ? 2 : 1;
       root.innerHTML = `
-        <div class="screen center">
+        <div class="kstage">
+        <div class="tcenter">
           <div class="finalboard">
             <h1>Final leaderboard</h1>
             <ol class="board finallb" style="columns:${cols}">
@@ -371,6 +372,7 @@ export async function mount(root) {
             f.biggestWin ? `Best single round: ${nameOf(f.biggestWin.t)} +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})` : "",
             f.biggestLoss ? `Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})` : "",
           ].filter(Boolean).join(" \u00b7 ")}</p>
+        </div>
         </div>`;
       return;
     }
