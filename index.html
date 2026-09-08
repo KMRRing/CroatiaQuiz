@@ -17,6 +17,8 @@
   .motif circle:nth-of-type(1) { animation:spinA 46s linear infinite; }
   .motif circle:nth-of-type(2) { animation:spinB 64s linear infinite; }
   .motif circle:nth-of-type(3) { animation:spinA 38s linear infinite; }
+  .ringR { position:fixed; top:50%; left:max(calc(50% + 26.5vw), calc(50% + 345px)); transform:translateY(-50%); height:132vh; width:132vh; pointer-events:none; z-index:0; }
+  .ringR circle { transform-box:fill-box; transform-origin:center; animation:spinB 64s linear infinite; }
   @keyframes spinA { to { transform:rotate(360deg); } }
   @keyframes spinB { to { transform:rotate(-360deg); } }
   #app { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:14px; }
@@ -225,9 +227,15 @@
 </style>
 </head>
 <body>
-<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1330" cy="320" r="430" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="40" cy="660" r="140" fill="none" stroke="url(#tg)" stroke-width="2.2"/><line x1="-62.5" y1="564.6" x2="347.6" y2="123.9" stroke="url(#tg)" stroke-width="1.3"/></svg>
+<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMinYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="40" cy="660" r="140" fill="none" stroke="url(#tg)" stroke-width="2.2"/><line x1="-62.5" y1="564.6" x2="347.6" y2="123.9" stroke="url(#tg)" stroke-width="1.3"/></svg>
+<svg class="ringR" viewBox="0 0 100 100" aria-hidden="true">
+  <defs><linearGradient id="tgr" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
+  </linearGradient></defs>
+  <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
+</svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b85-bigarc", "./js/questions.js": "./js/questions.js?v=b85-bigarc", "./js/characters.js": "./js/characters.js?v=b85-bigarc", "./js/engine.js": "./js/engine.js?v=b85-bigarc", "./js/fb.js": "./js/fb.js?v=b85-bigarc", "./js/bots.js": "./js/bots.js?v=b85-bigarc", "./js/finale.js": "./js/finale.js?v=b85-bigarc", "./js/views/player.js": "./js/views/player.js?v=b85-bigarc", "./js/views/screen.js": "./js/views/screen.js?v=b85-bigarc", "./js/views/host.js": "./js/views/host.js?v=b85-bigarc", "./js/views/swarm.js": "./js/views/swarm.js?v=b85-bigarc" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b86-ringtrack", "./js/questions.js": "./js/questions.js?v=b86-ringtrack", "./js/characters.js": "./js/characters.js?v=b86-ringtrack", "./js/engine.js": "./js/engine.js?v=b86-ringtrack", "./js/fb.js": "./js/fb.js?v=b86-ringtrack", "./js/bots.js": "./js/bots.js?v=b86-ringtrack", "./js/finale.js": "./js/finale.js?v=b86-ringtrack", "./js/views/player.js": "./js/views/player.js?v=b86-ringtrack", "./js/views/screen.js": "./js/views/screen.js?v=b86-ringtrack", "./js/views/host.js": "./js/views/host.js?v=b86-ringtrack", "./js/views/swarm.js": "./js/views/swarm.js?v=b86-ringtrack" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
