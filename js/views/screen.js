@@ -13,7 +13,7 @@ export async function mount(root) {
   const S = { state: null, players: {}, wealth: {}, betCount: 0, reveal: null, finale: null, timer: null, betsUnsub: null };
 
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
-  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question" && root.querySelector("#lbList")) renderBoard(S.wealth, null); });
+  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question" && root.querySelector("#lbList")) renderBoard(S.wealth); });
   onValue(gref("state"), async (s) => {
     S.state = s.val(); S.reveal = null;
     if (S.state && S.state.phase === "reveal") {
@@ -189,24 +189,78 @@ export async function mount(root) {
   }
 
 
-  function renderBoard(wm, prevWm, deltas) {
+  function rowHtml(t, i, w) {
+    return `<li data-t="${t}"><span class="lbleft"><span class="lbrank">${i + 1}</span>${iconHtml(t)}</span><span class="lbmoney">${fmt(w)}</span></li>`;
+  }
+  function boardOrder(wm) { return Object.keys(wm).sort((a, b) => wm[b] - wm[a]); }
+  function renderBoard(wm) {
     const el = root.querySelector("#lbList");
     if (!el || !wm) return;
-    const rank = (m) => Object.keys(m).sort((a, b) => m[b] - m[a]);
-    const after = rank(wm);
-    const prevIdx = {};
-    if (prevWm) rank(prevWm).forEach((t, i) => { prevIdx[t] = i; });
-    const rowH = 40;
-    el.innerHTML = after.slice(0, 10).map((t, i) => {
-      const badge = deltas && deltas[t] != null && Math.abs(deltas[t]) >= 0.5
-        ? `<span class="delta-badge ${deltas[t] >= 0 ? "pos" : "neg"}" style="animation-delay:${i * 70}ms">${deltas[t] >= 0 ? "+" : "\u2212"}${fmt(Math.abs(deltas[t]))}</span>` : "";
-      if (!prevWm) return `<li class="lbrow-static">${badge}<span class="lbleft"><span class="lbrank">${i + 1}</span>${iconHtml(t)}</span><span>${fmt(wm[t])}</span></li>`;
-      const pi = prevIdx[t] != null ? prevIdx[t] : 12;
-      const enter = pi > 9;
-      return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${i * 70}ms">
-        ${badge}<span class="lbleft"><span class="lbrank">${i + 1}</span>${iconHtml(t)}</span><span>${fmt(wm[t])}</span></li>`;
-    }).join("");
+    el.innerHTML = boardOrder(wm).slice(0, 10).map((t, i) => rowHtml(t, i, wm[t])).join("");
   }
+  function addBadges(deltas) {
+    const el = root.querySelector("#lbList");
+    if (!el) return;
+    [...el.children].forEach((li, i) => {
+      const d = deltas[li.dataset.t];
+      if (d == null || Math.abs(d) < 0.5) return;
+      li.insertAdjacentHTML("afterbegin",
+        `<span class="delta-badge ${d >= 0 ? "pos" : "neg"}" style="animation-delay:${i * 70}ms">${d >= 0 ? "+" : "\u2212"}${fmt(Math.abs(d))}</span>`);
+    });
+  }
+  function flipBoard(wAfter) {
+    const el = root.querySelector("#lbList");
+    if (!el || !wAfter) return;
+    const order = boardOrder(wAfter).slice(0, 10);
+    const oldRows = new Map([...el.children].map((li) => [li.dataset.t, li]));
+    const oldTops = new Map([...el.children].map((li) => [li.dataset.t, li.offsetTop]));
+    const listH = el.offsetHeight;
+    for (const [t, li] of oldRows) {
+      if (order.includes(t)) continue;
+      li.style.position = "absolute"; li.style.top = oldTops.get(t) + "px";
+      li.style.left = "0"; li.style.right = "0"; li.style.margin = "0 0 0 auto";
+      li.classList.add("leave");
+      requestAnimationFrame(() => {
+        li.style.transform = `translateY(${Math.max(40, listH - oldTops.get(t))}px)`;
+        li.style.opacity = "0";
+      });
+      setTimeout(() => li.remove(), 950);
+      oldRows.delete(t);
+    }
+    const entrants = [];
+    order.forEach((t, i) => {
+      let li = oldRows.get(t);
+      if (!li) {
+        el.insertAdjacentHTML("beforeend", rowHtml(t, i, wAfter[t]));
+        li = el.lastElementChild;
+        li.classList.add("enter");
+        entrants.push(li);
+      } else {
+        const rankEl = li.querySelector(".lbrank"), monEl = li.querySelector(".lbmoney");
+        if (rankEl) rankEl.textContent = String(i + 1);
+        if (monEl) monEl.textContent = fmt(wAfter[t]);
+      }
+      el.appendChild(li);
+    });
+    [...el.children].forEach((li) => {
+      if (li.classList.contains("leave") || li.classList.contains("enter")) return;
+      const prev = oldTops.get(li.dataset.t);
+      if (prev == null) return;
+      const dy = prev - li.offsetTop;
+      if (!dy) return;
+      li.style.transition = "none";
+      li.style.transform = `translateY(${dy}px)`;
+      void li.offsetHeight;
+      li.style.transition = "";
+      li.style.transform = "";
+    });
+    requestAnimationFrame(() => entrants.forEach((li, k) => {
+      li.style.transitionDelay = (0.35 + k * 0.12) + "s";
+      li.classList.add("enter-in");
+      setTimeout(() => { li.classList.remove("enter", "enter-in"); li.style.transitionDelay = ""; }, 1600);
+    }));
+  }
+
 
   function tick() {
     const num = root.querySelector("#clocknum2");
@@ -253,7 +307,7 @@ export async function mount(root) {
         <div class="zone-r" id="zoneR"><ol class="board lb biglb" id="lbList"></ol></div>
       </div>`;
     S.stageRound = S.state.round; S.revealApplied = false; S.stagePhase = phase;
-    renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth, null);
+    renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth);
     if (phase === "question") { S.timer = setInterval(tick, 250); tick(); }
     else if (phase === "preview") {
       const num = root.querySelector("#clocknum2"), fg = root.querySelector("#ringfg2");
@@ -303,11 +357,9 @@ export async function mount(root) {
       const right = rv.aiAnswers && rv.aiAnswers[t] === rv.correct;
       deltas[t] = right && !rv.rolled && rv.mult > 0 ? st * (rv.mult - 1) : -st;
     }
-    const wBefore = {};
-    for (const t of Object.keys(wAfter)) wBefore[t] = wAfter[t] - (deltas[t] || 0);
-    clearTimeout(S.lbTimer);
-    setTimeout(() => renderBoard(wBefore, null, deltas), 350);
-    S.lbTimer = setTimeout(() => renderBoard(wAfter, wBefore, null), 2300);
+    clearTimeout(S.lbTimer); clearTimeout(S.lbTimer2);
+    S.lbTimer = setTimeout(() => addBadges(deltas), 4500);
+    S.lbTimer2 = setTimeout(() => flipBoard(wAfter), 6400);
   }
 
   function joinUrl() {

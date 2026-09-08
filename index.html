@@ -169,9 +169,11 @@
   .reveal2 { padding-top:20px; }
   .revbottom { display:grid; grid-template-columns:1.15fr 1fr; gap:24px; align-items:start; margin-top:10px; }
   .lbbox { padding-left:10px; }
-  .lb .lbrow { opacity:0; transform:translateY(var(--dy)); animation:lbslide .7s cubic-bezier(.2,.7,.2,1) forwards; }
-  .lb .lbrow.enter { opacity:0; }
-  @keyframes lbslide { to { transform:translateY(0); opacity:1; } }
+  #lbList { position:relative; }
+  .lb li { transition:transform .85s cubic-bezier(.2,.7,.2,1), opacity .55s ease; }
+  .lb li.leave { z-index:0; }
+  .lb li.enter { opacity:0; transform:translateY(26px); }
+  .lb li.enter-in { opacity:1; transform:translateY(0); }
   @media (prefers-reduced-motion: reduce) { body.urgent { animation:none; background:#F8C9C2; } .delta-badge { animation:none; opacity:1; transform:none; } .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
   .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
   @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
@@ -238,7 +240,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b92-preview", "./js/questions.js": "./js/questions.js?v=b92-preview", "./js/characters.js": "./js/characters.js?v=b92-preview", "./js/engine.js": "./js/engine.js?v=b92-preview", "./js/fb.js": "./js/fb.js?v=b92-preview", "./js/bots.js": "./js/bots.js?v=b92-preview", "./js/finale.js": "./js/finale.js?v=b92-preview", "./js/views/player.js": "./js/views/player.js?v=b92-preview", "./js/views/screen.js": "./js/views/screen.js?v=b92-preview", "./js/views/host.js": "./js/views/host.js?v=b92-preview", "./js/views/swarm.js": "./js/views/swarm.js?v=b92-preview" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b93-flip", "./js/questions.js": "./js/questions.js?v=b93-flip", "./js/characters.js": "./js/characters.js?v=b93-flip", "./js/engine.js": "./js/engine.js?v=b93-flip", "./js/fb.js": "./js/fb.js?v=b93-flip", "./js/bots.js": "./js/bots.js?v=b93-flip", "./js/finale.js": "./js/finale.js?v=b93-flip", "./js/views/player.js": "./js/views/player.js?v=b93-flip", "./js/views/screen.js": "./js/views/screen.js?v=b93-flip", "./js/views/host.js": "./js/views/host.js?v=b93-flip", "./js/views/swarm.js": "./js/views/swarm.js?v=b93-flip" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
