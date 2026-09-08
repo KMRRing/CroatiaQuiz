@@ -118,7 +118,7 @@
   .optfillwrap { position:absolute; inset:0; clip-path:inset(0 100% 0 0); animation:barfill 1s cubic-bezier(.2,.7,.2,1) .35s forwards; }
   .optrow.right .optfillwrap { background:var(--orange); color:#0B1030; }
   .optrow.wrong .optfillwrap { background:#141B2E; color:#fff; }
-  .optfill { padding:11px 58px 11px 16px; font-size:1.15rem; }
+  .optfill { padding:11px 58px 11px 16px; font-size:inherit; line-height:inherit; }
   @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
   .stage { position:fixed; inset:0; }
   .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; width:50vw; min-width:660px; max-height:92vh; }
@@ -219,9 +219,9 @@
 </style>
 </head>
 <body>
-<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1300" cy="320" r="380" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="160" cy="660" r="140" fill="none" stroke="url(#tg)" stroke-width="2.2"/><line x1="93.7" y1="536.7" x2="1120.2" y2="-14.8" stroke="url(#tg)" stroke-width="1.3"/></svg>
+<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1300" cy="320" r="380" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="40" cy="660" r="140" fill="none" stroke="url(#tg)" stroke-width="2.2"/><line x1="-62.5" y1="564.6" x2="347.6" y2="123.9" stroke="url(#tg)" stroke-width="1.3"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b79-tangent", "./js/questions.js": "./js/questions.js?v=b79-tangent", "./js/characters.js": "./js/characters.js?v=b79-tangent", "./js/engine.js": "./js/engine.js?v=b79-tangent", "./js/fb.js": "./js/fb.js?v=b79-tangent", "./js/bots.js": "./js/bots.js?v=b79-tangent", "./js/finale.js": "./js/finale.js?v=b79-tangent", "./js/views/player.js": "./js/views/player.js?v=b79-tangent", "./js/views/screen.js": "./js/views/screen.js?v=b79-tangent", "./js/views/host.js": "./js/views/host.js?v=b79-tangent", "./js/views/swarm.js": "./js/views/swarm.js?v=b79-tangent" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b80-align", "./js/questions.js": "./js/questions.js?v=b80-align", "./js/characters.js": "./js/characters.js?v=b80-align", "./js/engine.js": "./js/engine.js?v=b80-align", "./js/fb.js": "./js/fb.js?v=b80-align", "./js/bots.js": "./js/bots.js?v=b80-align", "./js/finale.js": "./js/finale.js?v=b80-align", "./js/views/player.js": "./js/views/player.js?v=b80-align", "./js/views/screen.js": "./js/views/screen.js?v=b80-align", "./js/views/host.js": "./js/views/host.js?v=b80-align", "./js/views/swarm.js": "./js/views/swarm.js?v=b80-align" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
