@@ -329,7 +329,7 @@ export async function mount(root) {
       }
       if (stage === 2 && f.sizing) {
         root.innerHTML = `
-          <div class="screen center">
+          <div class="kstage">
             <div class="kcard">
             <h1>The right size, in one line</h1>
             ${KELLY_FORMULA_HTML}
