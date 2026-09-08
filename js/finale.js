@@ -94,7 +94,9 @@ export function svgWealthChart(series, style, width, height, fscale = 1, icons =
       return { t: e.t, y: e.y, c };
     });
     const maxC = placements.length ? Math.max(...placements.map((p) => p.c)) : 0;
-    padR = 16 + (maxC + 1) * colStep + Math.round(iconS / 2);
+    const span = Math.min(maxC * colStep, 4 * iconS);
+    placements.colStep = maxC ? span / maxC : 0;
+    padR = 16 + span + iconS;
   }
   const X = (i) => padL + (i / N) * (width - padL - padR);
   let g = `<line x1="${padL}" y1="${Y(0)}" x2="${width - padR}" y2="${Y(0)}" stroke="${gMajor}"/>`;
@@ -115,7 +117,7 @@ export function svgWealthChart(series, style, width, height, fscale = 1, icons =
     }
   }
   if (icons && placements) {
-    const colStep = Math.round(iconS * 1.05);
+    const colStep = placements.colStep || 0;
     const x0 = width - padR + 12 + Math.round(iconS / 2);
     for (const p of placements) {
       const ic = icons[p.t], x = x0 + p.c * colStep;
