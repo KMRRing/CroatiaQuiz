@@ -127,6 +127,14 @@
   .finalboard h1 { color:#fff; text-align:center; margin:.1em 0 .5em; }
   .finallb { column-gap:3.5vw; }
   .finallb li { break-inside:avoid; color:#fff; border-bottom:1px solid rgba(255,255,255,.16); font-size:1.3rem; padding:7px 4px; min-width:22vw; display:flex; justify-content:space-between; gap:2.5rem; font-variant-numeric:tabular-nums; }
+  .confetti-layer { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:6; }
+  .cf { position:fixed; top:-4vh; border-radius:2px; animation:cfall linear forwards; }
+  @keyframes cfall { to { transform:translateY(112vh) rotate(720deg); } }
+  .fw { position:fixed; width:8px; height:8px; border-radius:50%; animation:fboom .95s ease-out forwards; }
+  @keyframes fboom { to { transform:translate(var(--dx), var(--dy)) scale(.5); opacity:0; } }
+  .avatar { position:relative; }
+  .avatar .hat { position:absolute; top:-16px; right:-2px; width:46px; transform:rotate(20deg); }
+  @media (prefers-reduced-motion: reduce) { .cf, .fw { animation:none; display:none; } }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>

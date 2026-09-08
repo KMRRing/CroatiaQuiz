@@ -66,7 +66,43 @@ export async function mount(root) {
   /* ---------- rendering ---------- */
   function charOf(p) { return p ? CHARACTERS[p.ci] || ["\u{1F3AD}", "Mystery"] : null; }
 
+
+  function stopParty() {
+    clearInterval(S.partyTimer); clearInterval(S.partyTimer2);
+    const l = document.querySelector(".confetti-layer"); if (l) l.remove();
+  }
+  function startParty() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let layer = document.querySelector(".confetti-layer");
+    if (!layer) { layer = document.createElement("div"); layer.className = "confetti-layer"; document.body.appendChild(layer); }
+    const COLORS = ["#0000FF", "#8200DE", "#FF6432", "#FFD359", "#0CA6FF"];
+    const conf = () => {
+      for (let k = 0; k < 10; k++) {
+        const isE = Math.random() < 0.25;
+        const d = document.createElement(isE ? "span" : "div");
+        if (isE) { d.textContent = ["\u{1F389}", "\u2728", "\u{1F38A}"][k % 3]; d.style.fontSize = (12 + Math.random() * 14) + "px"; }
+        else { d.style.width = "9px"; d.style.height = (8 + Math.random() * 8) + "px"; d.style.background = COLORS[k % COLORS.length]; }
+        d.className = "cf"; d.style.left = Math.random() * 100 + "vw";
+        d.style.animationDuration = (2.6 + Math.random() * 2.2) + "s";
+        layer.appendChild(d); setTimeout(() => d.remove(), 5200);
+      }
+    };
+    const boom = () => {
+      const x = 15 + Math.random() * 70, y = 12 + Math.random() * 45;
+      for (let k = 0; k < 12; k++) {
+        const q2 = document.createElement("div"); q2.className = "fw";
+        q2.style.left = x + "vw"; q2.style.top = y + "vh"; q2.style.background = COLORS[k % COLORS.length];
+        const a = (k / 12) * 2 * Math.PI, r = 55 + Math.random() * 70;
+        q2.style.setProperty("--dx", Math.cos(a) * r + "px"); q2.style.setProperty("--dy", Math.sin(a) * r + "px");
+        layer.appendChild(q2); setTimeout(() => q2.remove(), 1000);
+      }
+    };
+    conf(); boom();
+    S.partyTimer = setInterval(conf, 650); S.partyTimer2 = setInterval(boom, 2200);
+  }
+
   function render() {
+    stopParty();
     clearInterval(S.timer);
     if (!S.me) {
       root.innerHTML = `
@@ -183,17 +219,28 @@ export async function mount(root) {
         </div>`;
         return;
       }
-      let mine = "";
+      let mine = "", won = false;
       if (f && f.board) {
         const idx = f.board.findIndex((r) => r.token === token);
-        if (idx >= 0) mine = `<h2>You finished ${idx + 1}${["st","nd","rd"][idx] || "th"} with ${fmt(f.board[idx].w)}</h2>`;
+        won = idx === 0;
+        if (idx >= 0) mine = won
+          ? `<h2>\u{1F3C6} You won the night \u2014 ${fmt(f.board[idx].w)}</h2>`
+          : `<h2>You finished ${idx + 1}${["st","nd","rd"][idx] || "th"} with ${fmt(f.board[idx].w)}</h2>`;
       }
       root.innerHTML = `
         <div class="card center">
-          <div class="avatar">${emoji}</div>
+          <div class="avatar${won ? " winner" : ""}">${emoji}${won ? `
+            <svg class="hat" viewBox="0 0 40 40" aria-hidden="true">
+              <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
+              </linearGradient></defs>
+              <path d="M20 3 L33 35 L7 35 Z" fill="url(#hg)"/>
+              <circle cx="20" cy="4.5" r="3.6" fill="#FFD359"/>
+            </svg>` : ""}</div>
           ${mine || "<h2>Full time.</h2>"}
-          <p class="dim">Final boards are on the big screen \u2014 more coming.</p>
+          <p class="dim">${won ? "Take a bow." : "Final boards are on the big screen \u2014 more coming."}</p>
         </div>`;
+      if (won) startParty();
       return;
     }
   }
