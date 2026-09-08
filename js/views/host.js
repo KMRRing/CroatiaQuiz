@@ -236,16 +236,22 @@ export async function mount(root) {
         <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)} \u00b7 build ${BUILD}</p>
         ${!isHost() ? `<button class="big" id="claim">Claim host on this device</button>` : `
           <div class="btnrow">
-            <button id="lobby">Open lobby</button>
             <button id="show" ${canStartNext ? "" : "disabled"}>Show question ${n + 2}</button>
             <button id="start" ${ph === "preview" ? "" : "disabled"}>Start timer (${S.timerSec}s)</button>
+            <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
+          </div>
+          <div class="btnrow">
             <button id="tminus10">\u221210s</button>
             <button id="tminus">\u22121s</button>
             <button id="tplus">+1s</button>
             <button id="tplus10">+10s</button>
-            <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
-            <button id="finish">Finish \u2192 finale (any time)</button>
+          </div>
+          <div class="btnrow">
+            <button id="lobby">Open lobby</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
+            <button id="finish" class="${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "danger"}">Finish \u2192 finale${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : " (early)"}</button>
+          </div>
+          <div class="btnrow">
             <button id="release" class="danger">Give up host</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
@@ -271,7 +277,11 @@ export async function mount(root) {
     if (q("#tplus10")) q("#tplus10").onclick = () => { S.timerSec = Math.min(180, S.timerSec + 10); render(); };
     if (q("#tplus")) q("#tplus").onclick = () => { S.timerSec = Math.min(180, S.timerSec + 1); render(); };
     if (q("#close")) q("#close").onclick = closeAndSettle;
-    if (q("#finish")) q("#finish").onclick = finish;
+    if (q("#finish")) q("#finish").onclick = () => {
+      const finalDone = S.state && S.state.phase === "reveal" && S.state.round + 1 >= N_ROUNDS;
+      if (!finalDone && !confirm("End the game now, before the last round is settled?")) return;
+      finish();
+    };
     if (q("#stage")) q("#stage").onclick = () => {
       const next = (((S.state && S.state.finaleStage) || 0) + 1) % 6;
       update(gref(), { "state/finaleStage": next });
