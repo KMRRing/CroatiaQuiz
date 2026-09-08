@@ -74,9 +74,29 @@ export function svgWealthChart(series, style, width, height, fscale = 1, icons =
   const N = series[tokens[0]].length - 1;
   let maxW = 10;
   tokens.forEach((t) => series[t].forEach((w) => { if (w > maxW) maxW = w; }));
-  const padL = Math.round(46 * (fscale > 1 ? fscale * 0.95 : 1)), padB = 26, padT = 12, padR = icons ? 122 : 8;
-  const X = (i) => padL + (i / N) * (width - padL - padR);
+  const padL = Math.round(46 * (fscale > 1 ? fscale * 0.95 : 1)), padB = 26, padT = 12;
+  let padR = icons ? 122 : 8;
   const Y = (w) => padT + (1 - w / maxW) * (height - padT - padB);
+  const iconS = Math.round(19 * fscale);
+  let placements = null;
+  if (icons) {
+    // beeswarm: every icon at its true final height; collisions shunt right, filling from the left
+    const colStep = Math.round(iconS * 1.05);
+    const ends = tokens
+      .filter((t) => icons[t])
+      .map((t) => ({ t, y: Y(series[t][N]) }))
+      .sort((a, b) => a.y - b.y);
+    const cols = [];
+    placements = ends.map((e) => {
+      let c = 0;
+      while (cols[c] && cols[c].some((y) => Math.abs(y - e.y) < iconS * 0.95)) c++;
+      (cols[c] = cols[c] || []).push(e.y);
+      return { t: e.t, y: e.y, c };
+    });
+    const maxC = placements.length ? Math.max(...placements.map((p) => p.c)) : 0;
+    padR = 16 + (maxC + 1) * colStep + Math.round(iconS / 2);
+  }
+  const X = (i) => padL + (i / N) * (width - padL - padR);
   let g = `<line x1="${padL}" y1="${Y(0)}" x2="${width - padR}" y2="${Y(0)}" stroke="${gMajor}"/>`;
   for (const gv of [0.25, 0.5, 0.75, 1]) {
     const v = Math.round(maxW * gv);
@@ -94,30 +114,14 @@ export function svgWealthChart(series, style, width, height, fscale = 1, icons =
       g += `<text x="${X(N) - 4}" y="${Y(last) - 5}" text-anchor="end" font-size="${Math.round(12 * fscale)}" font-weight="700" fill="${st.color}">${st.label}</text>`;
     }
   }
-  if (icons) {
-    const s = Math.round(19 * fscale);
-    const ends = tokens
-      .filter((t) => icons[t])
-      .map((t) => ({ t, w: series[t][N], y: Y(series[t][N]) }))
-      .sort((a, b) => a.y - b.y);
-    const clusters = [];
-    for (const e of ends) {
-      const c = clusters[clusters.length - 1];
-      if (c && e.y - c.items[c.items.length - 1].y <= s * 0.8) c.items.push(e);
-      else clusters.push({ items: [e] });
-    }
-    const x0 = width - padR + 10;
-    for (const c of clusters) {
-      const cy = c.items.reduce((a, e) => a + e.y, 0) / c.items.length;
-      const show = c.items.slice().sort((a, b) => b.w - a.w).slice(0, 6);
-      show.forEach((e, j) => {
-        const ic = icons[e.t], x = x0 + j * s * 0.42;
-        g += ic.img
-          ? `<image href="${ic.img}" x="${(x - s / 2).toFixed(0)}" y="${(cy - s / 2).toFixed(0)}" width="${s}" height="${s}"/>`
-          : `<text x="${x.toFixed(0)}" y="${(cy + s * 0.32).toFixed(0)}" text-anchor="middle" font-size="${Math.round(s * 0.9)}">${ic.emoji}</text>`;
-      });
-      if (c.items.length > 6)
-        g += `<text x="${(x0 + 6 * s * 0.42 + s * 0.6).toFixed(0)}" y="${(cy + 5).toFixed(0)}" font-size="${Math.round(11 * fscale)}" fill="${txt}">+${c.items.length - 6}</text>`;
+  if (icons && placements) {
+    const colStep = Math.round(iconS * 1.05);
+    const x0 = width - padR + 12 + Math.round(iconS / 2);
+    for (const p of placements) {
+      const ic = icons[p.t], x = x0 + p.c * colStep;
+      g += ic.img
+        ? `<image href="${ic.img}" x="${(x - iconS / 2).toFixed(0)}" y="${(p.y - iconS / 2).toFixed(0)}" width="${iconS}" height="${iconS}"/>`
+        : `<text x="${x.toFixed(0)}" y="${(p.y + iconS * 0.32).toFixed(0)}" text-anchor="middle" font-size="${Math.round(iconS * 0.9)}">${ic.emoji}</text>`;
     }
   }
   return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto">${g}</svg>`;
