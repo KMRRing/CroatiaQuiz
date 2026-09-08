@@ -123,7 +123,7 @@ export async function mount(root) {
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
       if (stage === 1 && S.reveals) {
-        const revArr = []; for (let i = 0; i < N_ROUNDS; i++) revArr.push(S.reveals[i]);
+        const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
         const series = wealthSeries(revArr, tokens);
         const style = {};

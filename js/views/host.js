@@ -109,9 +109,11 @@ export async function mount(root) {
   }
 
   async function finish() {
+    clearTimeout(S.closeTimer);
     const [wealth, players] = await Promise.all([read("wealth"), read("players")]);
+    const all = (await read("reveal")) || {};
     const reveals = [];
-    for (let n = 0; n < N_ROUNDS; n++) reveals.push(await read("reveal", n));
+    for (let n = 0; n < N_ROUNDS; n++) { if (all[n] == null) break; reveals.push(all[n]); }
     const bd = board(wealth || {}, players || {}).map((r) => ({ token: r.token, w: r.w }));
     const calib = {};
     let bestRound = null, biggestWin = null, biggestLoss = null;
@@ -145,7 +147,7 @@ export async function mount(root) {
       Obar: sizing.Obar,
     };
     await update(gref(), {
-      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss, sizing: sizing.rows, thresholds },
+      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss, sizing: sizing.rows, thresholds, nPlayed: reveals.length },
       state: { phase: "finished", round: N_ROUNDS - 1, rollover: 0, closesAt: 0, finaleStage: 0 },
     });
     log("Finale written. Full time.");
@@ -171,7 +173,7 @@ export async function mount(root) {
             <button id="lobby">Open lobby</button>
             <button id="next" ${canStartNext ? "" : "disabled"}>Start question ${n + 2}</button>
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
-            <button id="finish" ${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "disabled"}>Finish \u2192 finale</button>
+            <button id="finish">Finish \u2192 finale (any time)</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
           <p class="dim">Rounds auto-close and settle when the clock runs out \u2014 keep this tab open and awake.</p>`}
