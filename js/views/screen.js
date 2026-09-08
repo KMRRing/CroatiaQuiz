@@ -87,9 +87,8 @@ export async function mount(root) {
       g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 20 : 60)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
       if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 40 : 104)}" y="${(ey2 - 8).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
-    const potHead = rv.rolled
-      ? `<text x="${cx}" y="${compact ? 30 : 120}" text-anchor="middle" font-size="${hf * 0.75}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">NOBODY RIGHT \u2014 ${fmt(rv.pot)} ROLLS OVER</text>`
-      : `<text x="${cx}" y="${compact ? 34 : 120}" text-anchor="middle" font-size="${hf}" font-weight="700" fill="#0000FF" font-family="Century Gothic,Questrial,Poppins,Arial">${fmt(totalIn)} in the pot</text>`;
+    const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
+    const f2 = Math.round(f1 * 0.52);
     return `
     <svg class="flow" viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
       <defs>
@@ -99,12 +98,11 @@ export async function mount(root) {
         <marker id="ain" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8200DE"/></marker>
         <marker id="aout" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FF6432"/></marker>
       </defs>
-      ${potHead}
       ${g}
       <g class="potring" style="transform-origin:${cx}px ${cy}px">
         <circle cx="${cx}" cy="${cy}" r="${R}" fill="#fff" stroke="url(#tgw)" stroke-width="${compact ? 3.5 : 5}"/>
-        <text x="${cx}" y="${cy - (compact ? 4 : 8)}" text-anchor="middle" font-size="${compact ? 26 : 46}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.rolled ? "\u21bb" : "\u00d7" + rv.mult.toFixed(2)}</text>
-        <text x="${cx}" y="${cy + (compact ? 18 : 30)}" text-anchor="middle" font-size="${compact ? 11 : 17}" fill="#5A6070">${rv.rolled ? "carried over" : "paid to the right side"}</text>
+        <text x="${cx}" y="${cy - f2 * 0.35}" text-anchor="middle" font-size="${f1}" font-weight="700" fill="#0000FF" font-family="Century Gothic,Questrial,Poppins,Arial">${fmt(totalIn)}</text>
+        <text x="${cx}" y="${cy + f2 * 1.15}" text-anchor="middle" font-size="${f2}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.rolled ? "\u21bb rolls over" : "\u00d7" + rv.mult.toFixed(2)}</text>
       </g>
     </svg>`;
   }
