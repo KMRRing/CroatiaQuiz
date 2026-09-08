@@ -1,5 +1,6 @@
 import { gref, onValue, ensureAuth, serverNow, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
+import { RULES } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { fmt, board } from "../engine.js";
 import { botRoster } from "../bots.js";
@@ -64,8 +65,9 @@ export async function mount(root) {
     mkIn.sort((a, b) => b.v - a.v);
     mkOut.sort((a, b) => b.v - a.v);
     const totalIn = rv.pot;
-    const vmax = Math.max(1, mkIn[0] ? mkIn[0].v : 1, mkOut[0] ? mkOut[0].v : 1);
-    const wOf = (v) => ((compact ? 1.2 : 1.5) + (compact ? 8 : 12) * Math.sqrt(v / vmax)).toFixed(1);
+    let vm = Math.max(RULES.minStake + 1, mkOut[0] ? mkOut[0].v : 1);
+    const MINW = compact ? 1.6 : 2, SPAN = compact ? 9 : 13;
+    const wOf = (v) => (MINW + SPAN * Math.sqrt(Math.max(0, v - RULES.minStake) / Math.max(1, vm - RULES.minStake))).toFixed(1);
     const yTop = compact ? 66 : 90, yBot = H - (compact ? 16 : 50);
     const spread = (n, i) => yTop + (n <= 1 ? (yBot - yTop) / 2 : (i / (n - 1)) * (yBot - yTop));
     const fs = compact ? 13 : 19, hf = compact ? 21 : 40;
@@ -90,6 +92,7 @@ export async function mount(root) {
     }
     const inRows = top3.map((e) => ({ kind: "one", e })).concat(gl.map((grp) => ({ kind: "grp", grp })));
     const nIn = inRows.length;
+    inRows.forEach((r) => { vm = Math.max(vm, r.kind === "one" ? r.e.v : r.grp.v); });
     inRows.forEach((row, i) => {
       const sy = spread(nIn, i);
       const ix = (compact ? 20 : 60) + bowOff(nIn, i);
