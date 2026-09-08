@@ -175,7 +175,7 @@
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
-    const FILES = ["index.html","version.json","assets/trafigura.svg","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
+    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
     const bust = async () => { try { await Promise.all(FILES.map((f) => fetch(f, { cache: "reload" }))); } catch (e) {} };
     const chk = document.createElement("button");
     chk.className = "refresh-btn"; chk.textContent = "running " + BUILD + " \u00b7 live \u2026";
