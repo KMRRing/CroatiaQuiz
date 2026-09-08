@@ -23,7 +23,7 @@ export const RULES = {
   timerSec: 40,     // seconds per question
 };
 
-export const BUILD = "b78-circleframe";
+export const BUILD = "b79-tangent";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";

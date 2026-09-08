@@ -195,11 +195,11 @@ export async function mount(root) {
     el.innerHTML = after.slice(0, 10).map((t, i) => {
       const badge = deltas && deltas[t] != null && Math.abs(deltas[t]) >= 0.5
         ? `<span class="delta-badge ${deltas[t] >= 0 ? "pos" : "neg"}" style="animation-delay:${i * 70}ms">${deltas[t] >= 0 ? "+" : "\u2212"}${fmt(Math.abs(deltas[t]))}</span>` : "";
-      if (!prevWm) return `<li class="lbrow-static">${badge}${iconHtml(t)}<span>${fmt(wm[t])}</span></li>`;
+      if (!prevWm) return `<li class="lbrow-static">${badge}<span class="lbleft"><span class="lbrank">${i + 1}</span>${iconHtml(t)}</span><span>${fmt(wm[t])}</span></li>`;
       const pi = prevIdx[t] != null ? prevIdx[t] : 12;
       const enter = pi > 9;
       return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${i * 70}ms">
-        ${badge}${iconHtml(t)}<span>${fmt(wm[t])}</span></li>`;
+        ${badge}<span class="lbleft"><span class="lbrank">${i + 1}</span>${iconHtml(t)}</span><span>${fmt(wm[t])}</span></li>`;
     }).join("");
   }
 
