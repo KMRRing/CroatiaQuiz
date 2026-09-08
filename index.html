@@ -142,7 +142,7 @@
   .avatar { position:relative; }
   .avatar .hat { position:absolute; left:-34px; top:-95px; width:200px; height:210px; pointer-events:none; z-index:2; }
   @media (prefers-reduced-motion: reduce) { .cf, .fw, .rocket { animation:none; display:none; } }
-  .chartstage { position:fixed; inset:1.2vh 1.2vw; padding:2.2vh 2.2vw 2vh; display:flex; flex-direction:column; gap:1vh; background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:0 18px 50px rgba(11,16,48,.15); }
+  .chartstage { position:fixed; inset:6.5vh 1.2vw 1.2vh; padding:2.2vh 2.2vw 2vh; display:flex; flex-direction:column; gap:1vh; background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:0 18px 50px rgba(11,16,48,.15); }
   .chartstage .chead { display:flex; justify-content:space-between; align-items:baseline; gap:2vw; }
   .chartstage h1 { margin:0; }
   .chartstage .cwrap { flex:1; min-height:0; }
@@ -153,7 +153,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b42-truebuild", "./js/questions.js": "./js/questions.js?v=b42-truebuild", "./js/characters.js": "./js/characters.js?v=b42-truebuild", "./js/engine.js": "./js/engine.js?v=b42-truebuild", "./js/fb.js": "./js/fb.js?v=b42-truebuild", "./js/bots.js": "./js/bots.js?v=b42-truebuild", "./js/finale.js": "./js/finale.js?v=b42-truebuild", "./js/views/player.js": "./js/views/player.js?v=b42-truebuild", "./js/views/screen.js": "./js/views/screen.js?v=b42-truebuild", "./js/views/host.js": "./js/views/host.js?v=b42-truebuild", "./js/views/swarm.js": "./js/views/swarm.js?v=b42-truebuild" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b43-charticons", "./js/questions.js": "./js/questions.js?v=b43-charticons", "./js/characters.js": "./js/characters.js?v=b43-charticons", "./js/engine.js": "./js/engine.js?v=b43-charticons", "./js/fb.js": "./js/fb.js?v=b43-charticons", "./js/bots.js": "./js/bots.js?v=b43-charticons", "./js/finale.js": "./js/finale.js?v=b43-charticons", "./js/views/player.js": "./js/views/player.js?v=b43-charticons", "./js/views/screen.js": "./js/views/screen.js?v=b43-charticons", "./js/views/host.js": "./js/views/host.js?v=b43-charticons", "./js/views/swarm.js": "./js/views/swarm.js?v=b43-charticons" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

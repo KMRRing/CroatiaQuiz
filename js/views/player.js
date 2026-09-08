@@ -207,7 +207,7 @@ export async function mount(root) {
         const style = {};
         tokens.forEach((t) => { style[t] = { color: "#DDE1EC", width: 1 }; });
         style[token] = { color: "#0000FF", width: 3, label: "you" };
-        root.innerHTML = `<div class="card"><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
+        root.innerHTML = `<div><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
         return;
       }
       if (stage === 2 && f && f.sizing) {

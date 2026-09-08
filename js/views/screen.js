@@ -316,12 +316,11 @@ export async function mount(root) {
         const style = {};
         tokens.forEach((t) => { style[t] = { color: "#C9D0E2", width: 2 }; });
         let k = 0;
-        for (const t of tokens) if (BOTS[t]) { style[t] = { color: AI_COLORS[k % AI_COLORS.length], width: 3.2, dash: "7 4", label: BOTS[t].name }; k++; }
-        if (f.board && f.board.length) {
-          const win = f.board[0].token;
-          style[win] = { color: "#0000FF", width: 4.5, label: plainName(win) };
-        }
-        const chart = svgWealthChart(series, style, 1760, 760, 1.9)
+        for (const t of tokens) if (BOTS[t]) { style[t] = { color: AI_COLORS[k % AI_COLORS.length], width: 3.2, dash: "7 4" }; k++; }
+        if (f.board && f.board.length) style[f.board[0].token] = { color: "#0000FF", width: 4.5 };
+        const icons = {};
+        for (const t of tokens) icons[t] = BOTS[t] && BOTS[t].img ? { img: BOTS[t].img } : { emoji: iconOf(t) };
+        const chart = svgWealthChart(series, style, 1760, 760, 1.9, icons)
           .replace('style="width:100%;height:auto"', 'style="width:100%;height:100%"');
         root.innerHTML = `
           <div class="chartstage">

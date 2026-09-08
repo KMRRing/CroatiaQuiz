@@ -65,13 +65,13 @@ export function requiredKnowledge(reveals, target) {
 }
 
 // Minimal SVG line chart. series: {token: [w0..wN]}, style: {token:{color,width,dash,label}}
-export function svgWealthChart(series, style, width, height, fscale = 1) {
+export function svgWealthChart(series, style, width, height, fscale = 1, icons = null) {
   const tokens = Object.keys(series);
   if (!tokens.length) return "<svg></svg>";
   const N = series[tokens[0]].length - 1;
   let maxW = 10;
   tokens.forEach((t) => series[t].forEach((w) => { if (w > maxW) maxW = w; }));
-  const padL = 46, padB = 26, padT = 12, padR = 8;
+  const padL = 46, padB = 26, padT = 12, padR = icons ? 122 : 8;
   const X = (i) => padL + (i / N) * (width - padL - padR);
   const Y = (w) => padT + (1 - w / maxW) * (height - padT - padB);
   let g = `<line x1="${padL}" y1="${Y(0)}" x2="${width - padR}" y2="${Y(0)}" stroke="#E3E6EF"/>`;
@@ -86,9 +86,35 @@ export function svgWealthChart(series, style, width, height, fscale = 1) {
     const st = style[t] || {};
     const pts = series[t].map((w, i) => `${X(i).toFixed(1)},${Y(w).toFixed(1)}`).join(" ");
     g += `<polyline points="${pts}" fill="none" stroke="${st.color || "#D7DBE6"}" stroke-width="${st.width || 1.2}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""}/>`;
-    if (st.label) {
+    if (st.label && !icons) {
       const last = series[t][N];
       g += `<text x="${X(N) - 4}" y="${Y(last) - 5}" text-anchor="end" font-size="${Math.round(12 * fscale)}" font-weight="700" fill="${st.color}">${st.label}</text>`;
+    }
+  }
+  if (icons) {
+    const s = Math.round(19 * fscale);
+    const ends = tokens
+      .filter((t) => icons[t])
+      .map((t) => ({ t, w: series[t][N], y: Y(series[t][N]) }))
+      .sort((a, b) => a.y - b.y);
+    const clusters = [];
+    for (const e of ends) {
+      const c = clusters[clusters.length - 1];
+      if (c && e.y - c.items[c.items.length - 1].y <= s * 0.8) c.items.push(e);
+      else clusters.push({ items: [e] });
+    }
+    const x0 = width - padR + 10;
+    for (const c of clusters) {
+      const cy = c.items.reduce((a, e) => a + e.y, 0) / c.items.length;
+      const show = c.items.slice().sort((a, b) => b.w - a.w).slice(0, 6);
+      show.forEach((e, j) => {
+        const ic = icons[e.t], x = x0 + j * s * 0.42;
+        g += ic.img
+          ? `<image href="${ic.img}" x="${(x - s / 2).toFixed(0)}" y="${(cy - s / 2).toFixed(0)}" width="${s}" height="${s}"/>`
+          : `<text x="${x.toFixed(0)}" y="${(cy + s * 0.32).toFixed(0)}" text-anchor="middle" font-size="${Math.round(s * 0.9)}">${ic.emoji}</text>`;
+      });
+      if (c.items.length > 6)
+        g += `<text x="${(x0 + 6 * s * 0.42 + s * 0.6).toFixed(0)}" y="${(cy + 5).toFixed(0)}" font-size="${Math.round(11 * fscale)}" fill="#5A6070">+${c.items.length - 6}</text>`;
     }
   }
   return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto">${g}</svg>`;
