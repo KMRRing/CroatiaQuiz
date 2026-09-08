@@ -3,6 +3,11 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { RULES, BUILD, TEST_MODE } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 
+function randomWrong(q) {
+  for (let i = 0; i < 40; i++) { const a = randomAnswerFor(q); if (a !== q.correct) return a; }
+  return q.correct === "0" ? "1" : "0";
+}
+
 function randomAnswerFor(q) {
   if (q.type === "single") return String(Math.floor(Math.random() * q.options.length));
   const picks = [];
@@ -115,7 +120,9 @@ export async function mount(root) {
             d = bot.decide(q, n, w);
             stake = Math.min(w, Math.max(Math.min(RULES.minStake, w), d.frac * w));
           } else if (p.test) {
-            d = { answer: Math.random() < 0.5 ? q.correct : randomAnswerFor(q) };
+            if (TEST_MODE && n === 0) d = { answer: t === "tb_0" ? randomWrong(q) : q.correct };
+            else if (TEST_MODE && n === 1) d = { answer: t === "tb_0" ? q.correct : randomWrong(q) };
+            else d = { answer: Math.random() < 0.5 ? q.correct : randomAnswerFor(q) };
             stake = Math.min(w, RULES.minStake + Math.random() * Math.max(0, w - RULES.minStake));
           } else {
             d = { answer: null };

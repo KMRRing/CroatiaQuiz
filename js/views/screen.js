@@ -85,23 +85,8 @@ export async function mount(root) {
     let g = "";
     const bow = compact ? 16 : 24;
     const bowOff = (n, i) => bow * (1 - (n <= 1 ? 0 : Math.sin(Math.PI * (i / (n - 1)))));
-    // top 3 losing stakes individually; the rest piled into one arrow per wrong answer chosen
-    const top3 = mkIn.slice(0, 3);
-    const rest = mkIn.slice(3);
-    const groups = {};
-    for (const e of rest) {
-      const raw = e.bot ? (rv.aiAnswers ? rv.aiAnswers[e.t] : "") : (rv.answers ? rv.answers[e.t] : null);
-      const key = raw == null ? "?" : (raw === "" ? "\u2205" : raw);
-      (groups[key] = groups[key] || { key, v: 0, members: [] });
-      groups[key].v += e.v; groups[key].members.push(e.t);
-    }
-    let gl = Object.values(groups).sort((x, y) => y.v - x.v);
-    if (gl.length > 6) {
-      const keep = gl.slice(0, 5), misc = gl.slice(5);
-      keep.push({ key: "\u2026", v: misc.reduce((a2, g2) => a2 + g2.v, 0), members: misc.flatMap((g2) => g2.members) });
-      gl = keep;
-    }
-    const inRows = top3.map((e) => ({ kind: "one", e })).concat(gl.map((grp) => ({ kind: "grp", grp })));
+    // no clustering: every loser pays in on their own arrow
+    const inRows = mkIn.map((e) => ({ kind: "one", e }));
     const nIn = inRows.length;
     inRows.forEach((r) => { vm = Math.max(vm, r.kind === "one" ? r.e.v : r.grp.v); });
     inRows.forEach((row, i) => {
