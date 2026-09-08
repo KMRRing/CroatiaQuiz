@@ -8,4 +8,8 @@ export const CHARACTERS = [
   ["\u{1F427}","Penguin"],["\u{1F988}","Shark"],["\u{1F9AB}","Beaver"],["\u{1F40E}","Horse"],
   ["\u{1F9A6}","Otter"],["\u{1F42F}","Tiger"],["\u{1F9A5}","Sloth"],["\u{1F9E8}","Firecracker"],
   ["\u{1F9C0}","Cheese"],["\u{1F344}","Mushroom"],["\u{1F335}","Cactus"],["\u{1F991}","Squid"],
+  ["\u{1F986}","Duck"],["\u{1F98E}","Gecko"],["\u{1F99B}","Hippo"],["\u{1F98F}","Rhino"],
+  ["\u{1F418}","Elephant"],["\u{1F98D}","Gorilla"],["\u{1F9A7}","Orangutan"],["\u{1F42D}","Mouse"],
+  ["\u{1F430}","Rabbit"],["\u{1F43C}","Panda"],["\u{1F428}","Koala"],["\u{1F984}","Unicorn"],
+  ["\u{1F41E}","Ladybird"],["\u{1F9AC}","Bison"],
 ];
