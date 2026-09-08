@@ -64,6 +64,25 @@ export async function mount(root) {
   }
 
   /* ---------- rendering ---------- */
+  function barHtml(me, withClock) {
+    const [emoji, name] = me;
+    return `<div class="bar">
+      <span id="wealth">${fmt(S.wealth)}</span>
+      <span class="clockcell">${withClock ? `
+        <svg class="ring" viewBox="0 0 44 44">
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
+          </linearGradient></defs>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(10,10,20,.12)" stroke-width="4"/>
+          <circle id="ringfg" cx="22" cy="22" r="18" fill="none" stroke="url(#rg)" stroke-width="4"
+            pathLength="100" stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+            transform="rotate(-90 22 22)"/>
+          <text id="clocknum" x="22" y="27" text-anchor="middle" font-size="14" font-weight="700" fill="#0A0A14"></text>
+        </svg>` : ""}</span>
+      <span class="barname">${emoji} ${name}</span>
+    </div>`;
+  }
+
   function charOf(p) { return p ? CHARACTERS[p.ci] || ["\u{1F3AD}", "Mystery"] : null; }
 
 
@@ -114,6 +133,7 @@ export async function mount(root) {
 
   function render() {
     stopParty();
+    document.body.classList.remove("urgent");
     clearInterval(S.timer);
     if (!S.me) {
       root.innerHTML = `
@@ -130,6 +150,7 @@ export async function mount(root) {
 
     if (!S.state || ph === "lobby") {
       root.innerHTML = `
+        ${barHtml([emoji, name], false)}
         <div class="card center">
           <div class="avatar">${emoji}</div>
           <h1>You are ${name}</h1>
@@ -144,13 +165,8 @@ export async function mount(root) {
       if (locked) S.pct = 100;
       const stake = clampStake(S.pct, S.wealth, RULES.minStake);
       root.innerHTML = `
-        <div class="bar">
-          <span id="wealth">${fmt(S.wealth)}</span>
-          <span id="clock" class="clock"></span>
-          <span class="barname">${emoji} ${name}</span>
-        </div>
+        ${barHtml([emoji, name], true)}
         <div class="card">
-          <div class="dim">Question ${S.state.round + 1} of ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</div>
           <h2>${q.text}</h2>
           <div id="opts">${q.options.map((o, i) =>
             `<button class="opt ${S.answer.has(i) ? "sel" : ""}" data-i="${i}">${o}</button>`).join("")}
@@ -178,18 +194,26 @@ export async function mount(root) {
     if (ph === "reveal") {
       const q = QUESTIONS[S.state.round];
       const rv = S.reveal;
+      const mineAns = rv && rv.answers && rv.answers[token] != null
+        ? rv.answers[token]
+        : (S.answer.size ? [...S.answer].sort((a, b) => a - b).join("") : "");
+      const mineSet = new Set(mineAns.split("").map((c) => +c));
       const d = rv && rv.deltas ? rv.deltas[token] : null;
       root.innerHTML = `
-        <div class="bar"><span>${fmt(S.wealth)}</span><span></span><span class="barname">${emoji} ${name}</span></div>
+        ${barHtml([emoji, name], false)}
         <div class="card">
-          <div class="dim">Question ${S.state.round + 1} \u2014 the answer</div>
-          <h2>${q.type === "single" ? q.options[+q.correct] : q.correct.split("").map((i) => q.options[+i]).join(" \u00b7 ")}</h2>
-          ${rv ? `
-            <p>${rv.rolled ? "Nobody had it \u2014 the pot rolls over." :
-              `${rv.nRight} right \u00b7 winners paid ${rv.mult.toFixed(2)}\u00d7`}</p>
-            <p class="delta ${d >= 0 ? "up" : "down"}">${d == null ? "" : (d >= 0 ? "+" : "\u2212") + fmt(Math.abs(d))}</p>
-          ` : `<p class="dim">Settling\u2026</p>`}
-          <p class="dim">Watch the big screen \u2014 next question shortly.</p>
+          <h2>${q.text}</h2>
+          <div>${q.options.map((o, i) => {
+            const isC = q.correct.includes(String(i));
+            const cls = isC ? "res-c" : (mineSet.has(i) ? "res-w" : "");
+            return `<button class="opt ${cls}" disabled>${o}</button>`;
+          }).join("")}</div>
+          <div class="stakebox resultbox">
+            ${rv ? `
+              <p class="delta ${d >= 0 ? "up" : "down"}">${d == null ? "" : (d >= 0 ? "+" : "\u2212") + fmt(Math.abs(d))}</p>
+              ${rv.rolled ? `<p class="dim">Nobody had it \u2014 the pot rolls over.</p>` : ""}
+            ` : `<p class="dim">Settling\u2026</p>`}
+          </div>
         </div>`;
       return;
     }
@@ -239,6 +263,7 @@ export async function mount(root) {
           : `<h2>You finished ${idx + 1}${["st","nd","rd"][idx] || "th"} with ${fmt(f.board[idx].w)}</h2>`;
       }
       root.innerHTML = `
+        ${barHtml([emoji, name], false)}
         <div class="card center">
           <div class="avatar${won ? " winner" : ""}">${emoji}${won ? `
             <svg class="hat" viewBox="0 0 200 210" aria-hidden="true">
@@ -257,8 +282,7 @@ export async function mount(root) {
   }
 
   function statusLine() {
-    if (!S.answer.size) return "Pick an answer \u2014 no answer means the minimum stake is lost.";
-    return S.saved ? "Locked in \u2014 you can still change it until the clock runs out." : "";
+    return S.answer.size && S.saved ? "Locked in \u2014 you can still change it until the clock runs out." : "";
   }
   function patchStatus() { const el = root.querySelector("#status"); if (el) el.textContent = statusLine(); }
   function patchWealth() {
@@ -267,13 +291,18 @@ export async function mount(root) {
     if (st) st.textContent = fmt(clampStake(S.pct, S.wealth, RULES.minStake));
   }
   function tick() {
-    const el = root.querySelector("#clock");
-    if (!el || !S.state || !S.state.closesAt) return;
+    const num = root.querySelector("#clocknum");
+    const fg = root.querySelector("#ringfg");
+    if (!num || !S.state || !S.state.closesAt) return;
+    const total = RULES.timerSec * 1000;
     const left = Math.max(0, S.state.closesAt - serverNow());
-    el.textContent = Math.ceil(left / 1000) + "s";
+    num.textContent = Math.ceil(left / 1000);
+    if (fg) fg.style.strokeDashoffset = String(100 * (1 - left / total));
+    const urgent = left > 0 && left <= 5000 && !S.answer.size;
+    document.body.classList.toggle("urgent", urgent);
     if (left <= 0) {
       root.querySelectorAll(".opt,#slider").forEach((n) => (n.disabled = true));
-      el.textContent = "closed";
+      document.body.classList.remove("urgent");
     }
   }
 }
