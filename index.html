@@ -192,13 +192,18 @@
     .card .clock { color:#FFD359; }
     .card input[type=range] { accent-color:#FFD359; }
   }
+  .hlstack { position:fixed; top:3vh; left:2vw; display:flex; flex-direction:column; gap:1.6vh; z-index:2; }
+  .hlcard { background:#fff; border:1px solid var(--line); border-radius:18px; padding:13px 20px; box-shadow:0 12px 34px rgba(11,16,48,.18); min-width:17vw; opacity:0; transform:translateY(-10px); animation:hlpop .45s cubic-bezier(.2,.8,.3,1.1) forwards; }
+  .hlcard .hlt { color:var(--dim); font-size:.9rem; }
+  .hlcard .hlv { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-weight:700; color:var(--blue); font-size:1.25rem; }
+  @keyframes hlpop { to { opacity:1; transform:translateY(0); } }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b66-noline", "./js/questions.js": "./js/questions.js?v=b66-noline", "./js/characters.js": "./js/characters.js?v=b66-noline", "./js/engine.js": "./js/engine.js?v=b66-noline", "./js/fb.js": "./js/fb.js?v=b66-noline", "./js/bots.js": "./js/bots.js?v=b66-noline", "./js/finale.js": "./js/finale.js?v=b66-noline", "./js/views/player.js": "./js/views/player.js?v=b66-noline", "./js/views/screen.js": "./js/views/screen.js?v=b66-noline", "./js/views/host.js": "./js/views/host.js?v=b66-noline", "./js/views/swarm.js": "./js/views/swarm.js?v=b66-noline" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b67-highlights", "./js/questions.js": "./js/questions.js?v=b67-highlights", "./js/characters.js": "./js/characters.js?v=b67-highlights", "./js/engine.js": "./js/engine.js?v=b67-highlights", "./js/fb.js": "./js/fb.js?v=b67-highlights", "./js/bots.js": "./js/bots.js?v=b67-highlights", "./js/finale.js": "./js/finale.js?v=b67-highlights", "./js/views/player.js": "./js/views/player.js?v=b67-highlights", "./js/views/screen.js": "./js/views/screen.js?v=b67-highlights", "./js/views/host.js": "./js/views/host.js?v=b67-highlights", "./js/views/swarm.js": "./js/views/swarm.js?v=b67-highlights" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

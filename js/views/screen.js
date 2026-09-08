@@ -309,7 +309,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
-      if (stage === 1 && S.reveals) {
+      if (stage === 2 && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
         const series = wealthSeries(revArr, tokens);
@@ -327,7 +327,7 @@ export async function mount(root) {
           </div>`;
         return;
       }
-      if (stage === 2 && f.sizing) {
+      if (stage === 3 && f.sizing) {
         const t = f.thresholds || {};
         const kM = t.kMedian != null ? t.kMedian : t.pMedian;
         const kA = t.kMean;
@@ -374,12 +374,13 @@ export async function mount(root) {
               return `<div class="fbcols"><ol class="board finallb">${rows.slice(0, half).join("")}</ol><ol class="board finallb">${rows.slice(half).join("")}</ol></div>`;
             })()}
           </div>
-          <p class="dim">${[
-            f.bestRound ? `Biggest pot: Q${f.bestRound.n + 1}, ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7` : "",
-            f.biggestWin ? `Best single round: ${nameOf(f.biggestWin.t)} +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})` : "",
-            f.biggestLoss ? `Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})` : "",
-          ].filter(Boolean).join(" \u00b7 ")}</p>
         </div>
+        ${stage === 1 ? `
+        <div class="hlstack">
+          ${f.bestRound ? `<div class="hlcard" style="animation-delay:0ms"><div class="hlt">Biggest pot</div><div class="hlv">Q${f.bestRound.n + 1} \u00b7 ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7</div></div>` : ""}
+          ${f.biggestWin ? `<div class="hlcard" style="animation-delay:180ms"><div class="hlt">Best single round</div><div class="hlv">${iconHtml(f.biggestWin.t)} ${plainName(f.biggestWin.t)} \u00b7 +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})</div></div>` : ""}
+          ${f.biggestLoss ? `<div class="hlcard" style="animation-delay:360ms"><div class="hlt">Worst beat</div><div class="hlv">${iconHtml(f.biggestLoss.t)} ${plainName(f.biggestLoss.t)} \u00b7 \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</div></div>` : ""}
+        </div>` : ""}
         </div>`;
       return;
     }
