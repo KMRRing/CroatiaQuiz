@@ -20,10 +20,10 @@ export const RULES = {
   stipend: 10,      // every player gets this at the start of every round
   bonus: 20,        // added to the pot every round
   minStake: 10,     // floor on every stake
-  timerSec: 40,     // seconds per question
+  timerSec: 35,     // seconds per question
 };
 
-export const BUILD = "b111-releasehost";
+export const BUILD = "b112-timer";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";

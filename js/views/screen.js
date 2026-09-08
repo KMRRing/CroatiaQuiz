@@ -276,11 +276,11 @@ export async function mount(root) {
     const fg = root.querySelector("#ringfg2");
     if (!num || !S.state || !S.state.closesAt) return;
     const total = ((S.state && S.state.timerSec) || RULES.timerSec) * 1000;
-    const left = Math.max(0, S.state.closesAt - serverNow());
-    num.textContent = Math.ceil(left / 1000);
-    const low = left <= 5000;
+    const dLeft = Math.max(0, S.state.closesAt - serverNow() - 1000);
+    num.textContent = Math.ceil(dLeft / 1000);
+    const low = dLeft <= 5000;
     if (fg) {
-      fg.style.strokeDashoffset = String(100 * (1 - left / total));
+      fg.style.strokeDashoffset = String(100 * (1 - Math.min(1, dLeft / total)));
       fg.setAttribute("stroke", low ? "#D93636" : "url(#rg2)");
     }
     num.setAttribute("fill", low ? "#D93636" : "#0A0A14");

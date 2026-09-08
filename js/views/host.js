@@ -70,7 +70,7 @@ export async function mount(root) {
 
   async function startQuestion() {
     if (!S.state || S.state.phase !== "preview") return;
-    await update(gref(), { "state/phase": "question", "state/closesAt": serverNow() + S.timerSec * 1000, "state/timerSec": S.timerSec });
+    await update(gref(), { "state/phase": "question", "state/closesAt": serverNow() + (S.timerSec + 1) * 1000, "state/timerSec": S.timerSec });
     log(`Timer running: ${S.timerSec}s.`);
   }
 
@@ -239,8 +239,10 @@ export async function mount(root) {
             <button id="lobby">Open lobby</button>
             <button id="show" ${canStartNext ? "" : "disabled"}>Show question ${n + 2}</button>
             <button id="start" ${ph === "preview" ? "" : "disabled"}>Start timer (${S.timerSec}s)</button>
+            <button id="tminus10">\u221210s</button>
             <button id="tminus">\u22121s</button>
             <button id="tplus">+1s</button>
+            <button id="tplus10">+10s</button>
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
             <button id="finish">Finish \u2192 finale (any time)</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
@@ -257,6 +259,8 @@ export async function mount(root) {
     if (q("#show")) q("#show").onclick = () => showQuestion(n + 1);
     if (q("#start")) q("#start").onclick = startQuestion;
     if (q("#tminus")) q("#tminus").onclick = () => { S.timerSec = Math.max(5, S.timerSec - 1); render(); };
+    if (q("#tminus10")) q("#tminus10").onclick = () => { S.timerSec = S.timerSec < 15 ? 5 : S.timerSec - 10; render(); };
+    if (q("#tplus10")) q("#tplus10").onclick = () => { S.timerSec = Math.min(180, S.timerSec + 10); render(); };
     if (q("#tplus")) q("#tplus").onclick = () => { S.timerSec = Math.min(180, S.timerSec + 1); render(); };
     if (q("#close")) q("#close").onclick = closeAndSettle;
     if (q("#finish")) q("#finish").onclick = finish;
