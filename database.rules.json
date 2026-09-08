@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "games": {
+      "$gid": {
+        ".read": "auth != null",
+        "meta": {
+          ".write": "auth != null && (!data.exists() || data.child('hostUid').val() === auth.uid)"
+        },
+        "state": { ".write": "root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid" },
+        "wealth": { ".write": "root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid" },
+        "reveal": { ".write": "root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid" },
+        "finale": { ".write": "root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid" },
+        "players": {
+          "$token": {
+            ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid || root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid)"
+          }
+        },
+        "bets": {
+          "$round": {
+            "$token": {
+              ".write": "auth != null && root.child('games').child($gid).child('players').child($token).child('uid').val() === auth.uid && root.child('games').child($gid).child('state').child('phase').val() === 'question'"
+            }
+          }
+        },
+        ".write": "root.child('games').child($gid).child('meta').child('hostUid').val() === auth.uid"
+      }
+    }
+  }
+}
