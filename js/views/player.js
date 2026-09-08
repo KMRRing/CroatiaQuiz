@@ -29,7 +29,9 @@ export async function mount(root) {
   onValue(gref("state"), (s) => {
     const st = s.val();
     const newRound = st && st.round !== (S.state && S.state.round);
+    const prevPhase = S.state && S.state.phase;
     S.state = st;
+    if (prevPhase === "preview" && st && st.phase === "question" && st.round === S.round && (S.answer.size || S.pct > 0)) saveBet();
     if (st && (st.phase === "question" || st.phase === "preview") && (newRound || S.round !== st.round)) {
       S.round = st.round; S.answer = new Set(); S.pct = 0; S.saved = false; S.reveal = null;
     }
@@ -184,12 +186,12 @@ export async function mount(root) {
           </div>
           <div class="stakebox">
             <div class="pctbig" id="pctbig">${S.pct}%</div>
-            <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked || previewing ? "disabled" : ""} />
+            <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked ? "disabled" : ""} />
             <div class="row"><span class="dim">${locked ? "stack at the minimum" : "minimum " + fmt(RULES.minStake)}</span><strong id="stake">${fmt(stake)}</strong><span class="dim">all in</span></div>
             <div id="status" class="dim">${statusLine()}</div>
           </div>
         </div>`;
-      root.querySelectorAll(".opt").forEach((b) => { b.disabled = previewing; b.onclick = () => pickOption(+b.dataset.i, q.type); });
+      root.querySelectorAll(".opt").forEach((b) => { b.onclick = () => pickOption(+b.dataset.i, q.type); });
       const slider = root.querySelector("#slider");
       let deb = null;
       slider.oninput = () => {
