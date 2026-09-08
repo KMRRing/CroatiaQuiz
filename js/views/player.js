@@ -238,9 +238,19 @@ export async function mount(root) {
         const tokens = (f.board || []).map((r) => r.token);
         const series = wealthSeries(revArr, tokens);
         const style = {};
-        tokens.forEach((t) => { style[t] = { color: "#DDE1EC", width: 1 }; });
-        style[token] = { color: "#0000FF", width: 3, label: "you" };
-        root.innerHTML = `<div><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
+        tokens.forEach((t) => { style[t] = { color: "rgba(255,255,255,.35)", width: 1 }; });
+        style[token] = { color: "#FFD359", width: 3, label: "you" };
+        const qrows = revArr.map((rv, i) => {
+          if (!rv) return "";
+          const d = rv.deltas ? rv.deltas[token] : null;
+          const a = rv.answers ? rv.answers[token] : null;
+          const mark = d == null ? "\u2014" : (d > 0 ? "\u2713" : (a === "" || a == null ? "\u2014" : "\u2717"));
+          const dTxt = d == null ? "" : (d >= 0 ? "+" : "\u2212") + fmt(Math.abs(d));
+          return `<div class="qsrow"><span>Q${i + 1} ${mark}</span><span class="${d >= 0 ? "up" : "down"}">${dTxt}</span></div>`;
+        }).join("");
+        root.innerHTML = `${barHtml([emoji, name], false)}
+          <div class="card"><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340, 1, null, true)}</div>
+          <div class="card"><h2>Question by question</h2><div class="qsummary">${qrows}</div></div>`;
         return;
       }
       if (stage === 5 && f && f.sizing) {
