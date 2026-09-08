@@ -133,8 +133,8 @@ export async function mount(root) {
         <linearGradient id="tgw" x1="0" y1="0" x2="${W}" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#0000FF"/><stop offset="0.5" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
         </linearGradient>
-        <marker id="ain" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8200DE"/></marker>
-        <marker id="aout" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FF6432"/></marker>
+        <marker id="ain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3" markerHeight="3" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8200DE"/></marker>
+        <marker id="aout" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3" markerHeight="3" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FF6432"/></marker>
       </defs>
       ${g}
       <g class="potring" style="transform-origin:${cx}px ${cy}px">

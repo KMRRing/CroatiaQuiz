@@ -71,7 +71,7 @@
   table.sizing th, table.sizing td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
   table.sizing th { color:var(--dim); font-weight:400; }
   .thresh { border:1px solid var(--line); border-radius:18px; padding:22px; }
-  .flow path.arrow { fill:none; stroke:url(#tgw); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; animation:drawin .7s ease-out forwards; opacity:.85; }
+  .flow path.arrow { fill:none; stroke:url(#tgw); stroke-linecap:butt; stroke-dasharray:100; stroke-dashoffset:100; animation:drawin .7s ease-out forwards; opacity:.85; }
   .flow text.lbl { opacity:0; animation:fadein .5s ease-out forwards; }
   .flow .potring { animation:potpop 1s ease-out; }
   @keyframes drawin { to { stroke-dashoffset:0; } }
@@ -129,7 +129,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b23-piles", "./js/questions.js": "./js/questions.js?v=b23-piles", "./js/characters.js": "./js/characters.js?v=b23-piles", "./js/engine.js": "./js/engine.js?v=b23-piles", "./js/fb.js": "./js/fb.js?v=b23-piles", "./js/bots.js": "./js/bots.js?v=b23-piles", "./js/finale.js": "./js/finale.js?v=b23-piles", "./js/views/player.js": "./js/views/player.js?v=b23-piles", "./js/views/screen.js": "./js/views/screen.js?v=b23-piles", "./js/views/host.js": "./js/views/host.js?v=b23-piles", "./js/views/swarm.js": "./js/views/swarm.js?v=b23-piles" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b24-arrowheads", "./js/questions.js": "./js/questions.js?v=b24-arrowheads", "./js/characters.js": "./js/characters.js?v=b24-arrowheads", "./js/engine.js": "./js/engine.js?v=b24-arrowheads", "./js/fb.js": "./js/fb.js?v=b24-arrowheads", "./js/bots.js": "./js/bots.js?v=b24-arrowheads", "./js/finale.js": "./js/finale.js?v=b24-arrowheads", "./js/views/player.js": "./js/views/player.js?v=b24-arrowheads", "./js/views/screen.js": "./js/views/screen.js?v=b24-arrowheads", "./js/views/host.js": "./js/views/host.js?v=b24-arrowheads", "./js/views/swarm.js": "./js/views/swarm.js?v=b24-arrowheads" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
