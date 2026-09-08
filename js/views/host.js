@@ -182,6 +182,7 @@ export async function mount(root) {
             <button id="next" ${canStartNext ? "" : "disabled"}>Start question ${n + 2}</button>
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
             <button id="finish">Finish \u2192 finale (any time)</button>
+            <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/4)</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
           <p class="dim">Rounds auto-close and settle when the clock runs out \u2014 keep this tab open and awake.</p>`}

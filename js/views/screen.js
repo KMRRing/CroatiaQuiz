@@ -350,22 +350,21 @@ export async function mount(root) {
           </div>`;
         return;
       }
+      const bd = f.board || [];
+      const cols = bd.length > 16 ? 2 : 1;
       root.innerHTML = `
-        <div class="screen">
-          <h1>Full time</h1>
-          <div class="cols">
-            <div>
-              <h2>Final board</h2>
-              <ol class="board">${(f.board || []).slice(0, 12).map((r) => `<li>${nameOf(r.token)} <span>${fmt(r.w)}</span></li>`).join("")}</ol>
-            </div>
-            <div>
-              <h2>Machine calibration (Brier \u2014 lower is better)</h2>
-              <ol class="board">${(f.aiCalib || []).map((r) => `<li>${nameOf(r.token)} <span>${r.brier.toFixed(3)} \u00b7 ${r.right}/${r.n}</span></li>`).join("")}</ol>
-              ${f.bestRound ? `<p>Biggest pot: question ${f.bestRound.n + 1} \u2014 ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7</p>` : ""}
-              ${f.biggestWin ? `<p>Best single round: ${nameOf(f.biggestWin.t)} +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})</p>` : ""}
-              ${f.biggestLoss ? `<p>Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</p>` : ""}
-            </div>
+        <div class="screen center">
+          <div class="finalboard">
+            <h1>Full time</h1>
+            <ol class="board finallb" style="columns:${cols}">
+              ${bd.map((r, i) => `<li><span>${i + 1}. ${nameOf(r.token)}</span><span>${fmt(r.w)}</span></li>`).join("")}
+            </ol>
           </div>
+          <p class="dim">${[
+            f.bestRound ? `Biggest pot: Q${f.bestRound.n + 1}, ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7` : "",
+            f.biggestWin ? `Best single round: ${nameOf(f.biggestWin.t)} +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})` : "",
+            f.biggestLoss ? `Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})` : "",
+          ].filter(Boolean).join(" \u00b7 ")}</p>
           <p class="dim">Finale screen 1 of 4 \u2014 the host advances.</p>
         </div>`;
       return;
