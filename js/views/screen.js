@@ -13,7 +13,7 @@ export async function mount(root) {
   const S = { state: null, players: {}, wealth: {}, betCount: 0, reveal: null, finale: null, timer: null, betsUnsub: null };
 
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
-  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question") renderBoard(S.wealth, null); });
+  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question" && root.querySelector("#lbList")) renderBoard(S.wealth, null); });
   onValue(gref("state"), async (s) => {
     S.state = s.val(); S.reveal = null;
     if (S.state && S.state.phase === "reveal") {
@@ -216,7 +216,16 @@ export async function mount(root) {
         </div>
         <div class="zone-l">
           <div id="clockwrap" class="fade show center">
-            <div id="clock" class="clock hugeclock"></div>
+            <svg class="bigring" viewBox="0 0 44 44">
+              <defs><linearGradient id="rg2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
+              </linearGradient></defs>
+              <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(10,10,20,.10)" stroke-width="3.4"/>
+              <circle id="ringfg2" cx="22" cy="22" r="18" fill="none" stroke="url(#rg2)" stroke-width="3.4"
+                pathLength="100" stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                transform="rotate(-90 22 22)"/>
+              <text id="clocknum2" x="22" y="27.5" text-anchor="middle" font-size="15" font-weight="700" fill="#0A0A14" font-family="Century Gothic,Questrial,Poppins,Arial">\u2014</text>
+            </svg>
           </div>
           <div id="potwrap" class="fade"></div>
         </div>
@@ -248,13 +257,19 @@ export async function mount(root) {
         `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span><span class="optpct">${share}%</span></div></div>`);
     });
     const cw = root.querySelector("#clockwrap"), pw = root.querySelector("#potwrap");
-    if (cw) cw.classList.remove("show");
-    if (pw) {
-      pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
-        ? potScene(rv, q, 780, 470, true, S.state.round)
-        : `<p class="dim">Settled on an older build \u2014 no flow data for this round.</p>`;
-      requestAnimationFrame(() => pw.classList.add("show"));
-    }
+    const num = root.querySelector("#clocknum2"), fg = root.querySelector("#ringfg2");
+    if (num) { num.textContent = "0"; num.setAttribute("fill", "#D93636"); }
+    if (fg) { fg.style.strokeDashoffset = "100"; fg.setAttribute("stroke", "#D93636"); }
+    clearTimeout(S.potTimer);
+    S.potTimer = setTimeout(() => {
+      if (cw) cw.classList.remove("show");
+      if (pw) {
+        pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
+          ? potScene(rv, q, 780, 470, true, S.state.round)
+          : `<p class="dim">Settled on an older build \u2014 no flow data for this round.</p>`;
+        requestAnimationFrame(() => pw.classList.add("show"));
+      }
+    }, 3000);
     // deltas for everyone (bot deltas derived from stakes + rightness)
     const wAfter = rv.wealthAfter || S.wealth;
     const deltas = Object.assign({}, rv.deltas || {});
