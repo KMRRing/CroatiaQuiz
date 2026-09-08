@@ -21,7 +21,6 @@
   #app { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:14px; }
   #app.app-wide { max-width:none; margin:0; padding:0; }
   .screen { max-width:1100px; margin:0 auto; padding:28px; }
-  .corner-logo { position:fixed; top:22px; left:26px; height:26px; z-index:2; }
   .logo { height:18px; display:block; margin:0 auto 14px; }
   .card .logo { margin-left:auto; margin-right:auto; }
   h1 { font-size:1.7rem; margin:.3em 0; color:var(--blue); font-weight:700; letter-spacing:.01em; }
@@ -59,7 +58,7 @@
   .poolW { height:100%; background:var(--blue); }
   .mult { font-size:1.9rem; color:var(--violet); font-weight:700; }
   .cols { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:14px; }
-  @media (max-width:700px){ .cols{grid-template-columns:1fr;} .optgrid{grid-template-columns:1fr;} .corner-logo{height:20px;} }
+  @media (max-width:700px){ .cols{grid-template-columns:1fr;} .optgrid{grid-template-columns:1fr;} }
   ol.board, ul.board { list-style-position:inside; padding:0; margin:.3em 0; }
   .board li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--line); }
   .pctbig { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:3rem; font-weight:700; color:var(--blue); text-align:center; line-height:1.1; font-variant-numeric:tabular-nums; }
@@ -154,7 +153,7 @@
   .avatar { position:relative; }
   .avatar .hat { position:absolute; left:-34px; top:-95px; width:200px; height:210px; pointer-events:none; z-index:2; }
   @media (prefers-reduced-motion: reduce) { .cf, .fw, .rocket { animation:none; display:none; } }
-  .chartstage { position:fixed; inset:6.5vh 1.2vw 1.2vh; padding:2.2vh 2.2vw 2vh; display:flex; flex-direction:column; gap:1vh; background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border:1px solid rgba(255,255,255,.25); border-radius:22px; box-shadow:0 18px 50px rgba(11,16,48,.28); }
+  .chartstage { position:fixed; inset:1.2vh 1.2vw; padding:2.2vh 2.2vw 2vh; display:flex; flex-direction:column; gap:1vh; background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border:1px solid rgba(255,255,255,.25); border-radius:22px; box-shadow:0 18px 50px rgba(11,16,48,.28); }
   .chartstage .chead { display:flex; justify-content:space-between; align-items:baseline; gap:2vw; }
   .chartstage h1 { margin:0; }
   .chartstage .cwrap { flex:1; min-height:0; }
@@ -165,7 +164,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b52-mean", "./js/questions.js": "./js/questions.js?v=b52-mean", "./js/characters.js": "./js/characters.js?v=b52-mean", "./js/engine.js": "./js/engine.js?v=b52-mean", "./js/fb.js": "./js/fb.js?v=b52-mean", "./js/bots.js": "./js/bots.js?v=b52-mean", "./js/finale.js": "./js/finale.js?v=b52-mean", "./js/views/player.js": "./js/views/player.js?v=b52-mean", "./js/views/screen.js": "./js/views/screen.js?v=b52-mean", "./js/views/host.js": "./js/views/host.js?v=b52-mean", "./js/views/swarm.js": "./js/views/swarm.js?v=b52-mean" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b53-nologo", "./js/questions.js": "./js/questions.js?v=b53-nologo", "./js/characters.js": "./js/characters.js?v=b53-nologo", "./js/engine.js": "./js/engine.js?v=b53-nologo", "./js/fb.js": "./js/fb.js?v=b53-nologo", "./js/bots.js": "./js/bots.js?v=b53-nologo", "./js/finale.js": "./js/finale.js?v=b53-nologo", "./js/views/player.js": "./js/views/player.js?v=b53-nologo", "./js/views/screen.js": "./js/views/screen.js?v=b53-nologo", "./js/views/host.js": "./js/views/host.js?v=b53-nologo", "./js/views/swarm.js": "./js/views/swarm.js?v=b53-nologo" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
@@ -208,11 +207,6 @@
       }
     }
     setInterval(checkVersion, 30000); checkVersion();
-    if (view === "screen" || view === "host") {
-      const l = document.createElement("img");
-      l.className = "corner-logo"; l.src = "assets/trafigura.svg"; l.alt = "Trafigura";
-      document.body.appendChild(l);
-    }
     import(`./js/views/${files[view] || "player"}.js`)
       .then((m) => m.mount(root))
       .catch((e) => { root.innerHTML = `<div class="card"><h1>Error</h1><p class="dim">${e.message}</p></div>`; });
