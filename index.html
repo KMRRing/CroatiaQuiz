@@ -85,7 +85,7 @@
   .optrows.cols2 { display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
   .optrows.cols2 .optrow { margin:0; }
   .optrow.plain { background:var(--wash); color:var(--ink); }
-  .optrow.right { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .optrow.right { background:var(--blue); color:#fff; border:2px solid #fff; }
   .optrow.wrong { background:var(--wash); color:var(--ink); }
   .optpct { position:absolute; right:14px; bottom:9px; font-weight:700; font-variant-numeric:tabular-nums; }
   .optfillwrap { position:absolute; inset:0; clip-path:inset(0 100% 0 0); animation:barfill 1s cubic-bezier(.2,.7,.2,1) .35s forwards; }
@@ -95,10 +95,10 @@
   @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
   .stage { position:fixed; inset:0; }
   .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; width:50vw; min-width:660px; max-height:92vh; }
-  .qcard { background:#0B1030; border-radius:24px; padding:22px 26px; box-shadow:0 18px 50px rgba(11,16,48,.28); display:flex; flex-direction:column; max-height:100%; }
+  .qcard { background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:24px; padding:22px 26px; box-shadow:0 18px 50px rgba(11,16,48,.28); display:flex; flex-direction:column; max-height:100%; }
   .qcard #optbox { overflow-y:auto; }
   .qcard .qtext { color:#fff; }
-  .qcard .qmeta { color:#A9B2D6; font-size:.95rem; }
+  .qcard .qmeta { color:rgba(255,255,255,.88); font-size:.95rem; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
@@ -128,7 +128,7 @@
   @media (prefers-reduced-motion: reduce) { .delta-badge { animation:none; opacity:1; transform:none; } .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
   .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
   @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
-  .finalboard { display:inline-block; background:#0B1030; border-radius:26px; padding:26px 40px 30px; box-shadow:0 18px 50px rgba(11,16,48,.28); max-height:84vh; overflow:hidden; text-align:left; margin-top:2vh; }
+  .finalboard { display:inline-block; background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:26px; padding:26px 40px 30px; box-shadow:0 18px 50px rgba(11,16,48,.28); max-height:84vh; overflow:hidden; text-align:left; margin-top:2vh; }
   .finalboard h1 { color:#fff; text-align:center; margin:.1em 0 .5em; }
   .finallb { column-gap:3.5vw; }
   .finallb li { break-inside:avoid; color:#fff; border-bottom:1px solid rgba(255,255,255,.16); font-size:1.3rem; padding:7px 4px; min-width:22vw; display:flex; justify-content:space-between; gap:2.5rem; font-variant-numeric:tabular-nums; }
@@ -153,7 +153,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b44-barechart", "./js/questions.js": "./js/questions.js?v=b44-barechart", "./js/characters.js": "./js/characters.js?v=b44-barechart", "./js/engine.js": "./js/engine.js?v=b44-barechart", "./js/fb.js": "./js/fb.js?v=b44-barechart", "./js/bots.js": "./js/bots.js?v=b44-barechart", "./js/finale.js": "./js/finale.js?v=b44-barechart", "./js/views/player.js": "./js/views/player.js?v=b44-barechart", "./js/views/screen.js": "./js/views/screen.js?v=b44-barechart", "./js/views/host.js": "./js/views/host.js?v=b44-barechart", "./js/views/swarm.js": "./js/views/swarm.js?v=b44-barechart" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b45-gradientcards", "./js/questions.js": "./js/questions.js?v=b45-gradientcards", "./js/characters.js": "./js/characters.js?v=b45-gradientcards", "./js/engine.js": "./js/engine.js?v=b45-gradientcards", "./js/fb.js": "./js/fb.js?v=b45-gradientcards", "./js/bots.js": "./js/bots.js?v=b45-gradientcards", "./js/finale.js": "./js/finale.js?v=b45-gradientcards", "./js/views/player.js": "./js/views/player.js?v=b45-gradientcards", "./js/views/screen.js": "./js/views/screen.js?v=b45-gradientcards", "./js/views/host.js": "./js/views/host.js?v=b45-gradientcards", "./js/views/swarm.js": "./js/views/swarm.js?v=b45-gradientcards" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
