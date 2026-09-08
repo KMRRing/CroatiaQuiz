@@ -162,7 +162,7 @@
   .lbleft { display:flex; align-items:center; gap:.45rem; }
   .lbrank { color:var(--dim); font-variant-numeric:tabular-nums; min-width:1.5rem; font-size:1.05rem; }
   img.boticon { height:1.8rem; width:1.8rem; object-fit:contain; border-radius:6px; vertical-align:-0.42em; }
-  .finallb img.boticon { height:1.45rem; width:1.45rem; vertical-align:-0.3em; }
+  .finallb img.boticon { height:1.9rem; width:1.9rem; vertical-align:-0.32em; }
   .zone-q .optrow { font-size:1.25rem; }
   .zone-q .qtext { font-size:2rem; }
   .qsmall { font-size:1.6rem; margin:.2em 0; }
@@ -179,13 +179,13 @@
   @media (prefers-reduced-motion: reduce) { body.urgent { animation:none; background:#F8C9C2; } .delta-badge { animation:none; opacity:1; transform:none; } .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
   .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
   @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
-  .finalboard { display:inline-block; background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:26px; padding:26px 40px 30px; box-shadow:0 18px 50px rgba(11,16,48,.28); max-height:84vh; overflow:hidden; text-align:left; margin-top:2vh; }
-  .finalboard h1 { color:#fff; text-align:center; margin:.1em 0 .5em; }
-  .finallb { column-gap:3.5vw; }
+  .finalboard { display:inline-block; background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:30px; padding:34px 52px 40px; box-shadow:0 18px 50px rgba(11,16,48,.28); max-height:88vh; overflow:hidden; text-align:left; margin-top:1vh; }
+  .finalboard h1 { color:#fff; text-align:center; margin:.1em 0 .5em; font-size:2.3rem; }
+  .finallb { column-gap:4.2vw; }
   .fbcols { display:grid; grid-template-columns:1fr 1fr; gap:0 3.5vw; align-items:start; }
-  .finallb li { break-inside:avoid; color:#fff; border-bottom:1px solid rgba(255,255,255,.16); font-size:1.3rem; padding:7px 4px; min-width:24vw; display:flex; justify-content:space-between; align-items:center; gap:1.6rem; font-variant-numeric:tabular-nums; }
-  .finallb .lbacc { color:rgba(255,255,255,.72); font-size:1.05rem; margin-left:auto; }
-  .finallb li span:last-child { min-width:4.5rem; text-align:right; }
+  .finallb li { break-inside:avoid; color:#fff; border-bottom:1px solid rgba(255,255,255,.16); font-size:1.7rem; padding:9px 5px; min-width:28vw; display:flex; justify-content:space-between; align-items:center; gap:2rem; font-variant-numeric:tabular-nums; }
+  .finallb .lbacc { color:rgba(255,255,255,.72); font-size:1.35rem; margin-left:auto; }
+  .finallb li span:last-child { min-width:5.8rem; text-align:right; }
   .confetti-layer { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:6; }
   .cf { position:fixed; top:-4vh; border-radius:2px; animation:cfall linear forwards; }
   @keyframes cfall { to { transform:translateY(112vh) rotate(720deg); } }
@@ -244,7 +244,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b97-phonechart", "./js/questions.js": "./js/questions.js?v=b97-phonechart", "./js/characters.js": "./js/characters.js?v=b97-phonechart", "./js/engine.js": "./js/engine.js?v=b97-phonechart", "./js/fb.js": "./js/fb.js?v=b97-phonechart", "./js/bots.js": "./js/bots.js?v=b97-phonechart", "./js/finale.js": "./js/finale.js?v=b97-phonechart", "./js/views/player.js": "./js/views/player.js?v=b97-phonechart", "./js/views/screen.js": "./js/views/screen.js?v=b97-phonechart", "./js/views/host.js": "./js/views/host.js?v=b97-phonechart", "./js/views/swarm.js": "./js/views/swarm.js?v=b97-phonechart" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b98-bigboard", "./js/questions.js": "./js/questions.js?v=b98-bigboard", "./js/characters.js": "./js/characters.js?v=b98-bigboard", "./js/engine.js": "./js/engine.js?v=b98-bigboard", "./js/fb.js": "./js/fb.js?v=b98-bigboard", "./js/bots.js": "./js/bots.js?v=b98-bigboard", "./js/finale.js": "./js/finale.js?v=b98-bigboard", "./js/views/player.js": "./js/views/player.js?v=b98-bigboard", "./js/views/screen.js": "./js/views/screen.js?v=b98-bigboard", "./js/views/host.js": "./js/views/host.js?v=b98-bigboard", "./js/views/swarm.js": "./js/views/swarm.js?v=b98-bigboard" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
