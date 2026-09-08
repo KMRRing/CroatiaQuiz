@@ -1,11 +1,19 @@
-// ---- paste your Firebase web-app config here (README step 2) ----
+// ---- Firebase web-app config (croatiabio) ----
 export const FIREBASE_CONFIG = {
-  apiKey: "PASTE_ME",
-  authDomain: "PASTE_ME.firebaseapp.com",
-  databaseURL: "https://PASTE_ME-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "PASTE_ME",
-  appId: "PASTE_ME",
+  apiKey: "AIzaSyCfl6mWI_7cf2VYnpxXB9WwTU_weoH8vA0",
+  authDomain: "croatiabio.firebaseapp.com",
+  projectId: "croatiabio",
+  storageBucket: "croatiabio.firebasestorage.app",
+  messagingSenderId: "113693793639",
+  appId: "1:113693793639:web:b24cbab9ade143042523c2",
 };
+
+// The Realtime Database URL depends on the region picked at creation.
+// The app probes these in order at startup and uses the first that exists.
+export const DB_URL_CANDIDATES = [
+  "https://croatiabio-default-rtdb.europe-west1.firebasedatabase.app",
+  "https://croatiabio-default-rtdb.firebaseio.com",
+];
 
 // ---- game rules ----
 export const RULES = {

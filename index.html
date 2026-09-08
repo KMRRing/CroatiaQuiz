@@ -56,7 +56,7 @@
   const view = (location.hash.replace("#", "").split("?")[0]) || "join";
   const files = { join: "player", screen: "screen", host: "host", swarm: "swarm" };
   window.addEventListener("hashchange", () => location.reload());
-  if (!initFb()) {
+  if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
     import(`./js/views/${files[view] || "player"}.js`)
