@@ -12,7 +12,7 @@ export async function mount(root) {
   const S = { state: null, players: {}, wealth: {}, betCount: 0, reveal: null, finale: null, timer: null, betsUnsub: null };
 
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
-  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; });
+  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question") renderBoard(S.wealth, null); });
   onValue(gref("state"), async (s) => {
     S.state = s.val(); S.reveal = null;
     if (S.state && S.state.phase === "reveal") {
@@ -116,14 +116,91 @@ export async function mount(root) {
     }).join("") + `</div>`;
   }
 
+
+  function renderBoard(wm, prevWm) {
+    const el = root.querySelector("#lbList");
+    if (!el || !wm) return;
+    const rank = (m) => Object.keys(m).sort((a, b) => m[b] - m[a]);
+    const after = rank(wm);
+    const prevIdx = {};
+    if (prevWm) rank(prevWm).forEach((t, i) => { prevIdx[t] = i; });
+    const rowH = 40;
+    el.innerHTML = after.slice(0, 10).map((t, i) => {
+      if (!prevWm) return `<li><span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+      const pi = prevIdx[t] != null ? prevIdx[t] : 12;
+      const enter = pi > 9;
+      return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${1200 + i * 80}ms">
+        <span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+    }).join("");
+  }
+
+  function buildStage(q, phase, rv) {
+    root.innerHTML = `
+      <div class="stage">
+        <div class="zone-q">
+          <div class="row spread">
+            <span class="dim">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</span>
+            <span class="dim" id="qres"></span>
+          </div>
+          <h1 class="qtext" id="qtext">${q.text}</h1>
+          <div id="optbox">${optionRows(q, null)}</div>
+        </div>
+        <div class="zone-l">
+          <div id="clockwrap" class="fade show center">
+            <div id="clock" class="clock hugeclock"></div>
+            <h2 id="locked">${lockLine()}</h2>
+          </div>
+          <div id="potwrap" class="fade"></div>
+        </div>
+        <div class="zone-r" id="zoneR"><h2>Top 10</h2><ol class="board lb biglb" id="lbList"></ol></div>
+      </div>`;
+    S.stageRound = S.state.round; S.revealApplied = false;
+    renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth, null);
+    if (phase === "question") { S.timer = setInterval(tick, 250); tick(); }
+    else if (rv) applyReveal(rv);
+  }
+
+  function applyReveal(rv) {
+    S.revealApplied = true;
+    clearInterval(S.timer);
+    const q = QUESTIONS[S.state.round];
+    const res = root.querySelector("#qres");
+    if (res) {
+      const letters = q.correct.split("").map((i) => String.fromCharCode(65 + +i)).join(" + ");
+      res.innerHTML = `answer <strong>${letters}</strong>${rv.nAnswered ? ` \u00b7 ${rv.nRight} of ${rv.nAnswered} right` : ""} \u00b7 <strong>${rv.rolled ? "rollover" : "\u00d7" + rv.mult.toFixed(2)}</strong>`;
+    }
+    const rows = root.querySelectorAll("#optbox .optrow");
+    rows.forEach((row, i) => {
+      const isC = q.correct.includes(String(i));
+      row.classList.remove("plain");
+      row.classList.add(isC ? "right" : "wrong");
+      const share = rv.optShare ? Math.round(rv.optShare[i] * 100) : null;
+      const label = row.querySelector(".optlabel") ? row.querySelector(".optlabel").textContent : "";
+      if (share != null) row.insertAdjacentHTML("beforeend",
+        `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span></div></div>`);
+    });
+    const cw = root.querySelector("#clockwrap"), pw = root.querySelector("#potwrap");
+    if (cw) cw.classList.remove("show");
+    if (pw) {
+      pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
+        ? potScene(rv, q, 780, 470, true)
+        : `<p class="dim">Settled on an older build \u2014 no flow data for this round.</p>`;
+      requestAnimationFrame(() => pw.classList.add("show"));
+    }
+    renderBoard(rv.wealthAfter || S.wealth, (S.prevReveal && S.prevReveal.wealthAfter) || null);
+  }
+
   function joinUrl() {
     return location.origin + location.pathname + location.search + "#join";
   }
 
   function render() {
-    clearInterval(S.timer);
     const ph = S.state ? S.state.phase : "lobby";
-
+    if ((ph === "question" || ph === "reveal") && S.state && S.stageRound === S.state.round && root.querySelector(".stage")) {
+      if (ph === "question") { const el = root.querySelector("#locked"); if (el) el.textContent = lockLine(); return; }
+      if (ph === "reveal") { if (!S.revealApplied && S.reveal) applyReveal(S.reveal); return; }
+    }
+    clearInterval(S.timer);
     if (!S.state || ph === "lobby") {
       const humans = Object.entries(S.players).filter(([t]) => !BOTS[t]);
       root.innerHTML = `
@@ -140,61 +217,12 @@ export async function mount(root) {
     }
 
     if (ph === "question") {
-      const q = QUESTIONS[S.state.round];
-      root.innerHTML = `
-        <div class="screen">
-          <div class="row spread">
-            <span class="dim">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag}</span>
-            <span id="clock" class="clock big-clock"></span>
-          </div>
-          <h1 class="qtext">${q.text}</h1>
-          ${optionRows(q, null)}
-          <p class="dim">${q.type === "multi" ? "Select all that apply." : "Pick one."} Minimum stake rides either way.</p>
-          <h2 id="locked">${lockLine()}</h2>
-        </div>`;
-      S.timer = setInterval(() => {
-        const el = root.querySelector("#clock"); if (!el) return;
-        const left = Math.max(0, S.state.closesAt - serverNow());
-        el.textContent = Math.ceil(left / 1000);
-        if (left <= 0) el.textContent = "\u23F3 settling";
-      }, 250);
+      buildStage(QUESTIONS[S.state.round], "question");
       return;
     }
 
     if (ph === "reveal" && S.reveal) {
-      const q = QUESTIONS[S.state.round];
-      const rv = S.reveal;
-      const wAfter = rv.wealthAfter || S.wealth;
-      const wBefore = (S.prevReveal && S.prevReveal.wealthAfter) || null;
-      const rank = (wm) => Object.keys(wm || {}).sort((a, b) => wm[b] - wm[a]);
-      const after = rank(wAfter), before = wBefore ? rank(wBefore) : after;
-      const prevIdx = {}; before.forEach((t, i) => { prevIdx[t] = i; });
-      const rowH = 34;
-      const lb = after.slice(0, 10).map((t, i) => {
-        const pi = prevIdx[t] != null ? prevIdx[t] : 12;
-        const dy = (pi - i) * rowH;
-        const enter = pi > 9;
-        return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 90 : dy}px; animation-delay:${1400 + i * 80}ms">
-          <span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wAfter[t])}</span></li>`;
-      }).join("");
-      const correctTxt = q.correct.split("").map((i) => String.fromCharCode(65 + +i)).join(" + ");
-      root.innerHTML = `
-        <div class="screen reveal2">
-          <div class="row spread"><span class="dim">Question ${S.state.round + 1} \u2014 the answer: <strong>${correctTxt}</strong>${rv.nAnswered ? ` \u00b7 ${rv.nRight} of ${rv.nAnswered} right` : ""}</span>
-            <span class="dim">${rv.rolled ? "rollover" : "winners paid " + rv.mult.toFixed(2) + "\u00d7"}</span></div>
-          <h1 class="qtext qsmall">${q.text}</h1>
-          ${optionRows(q, rv)}
-          <div class="revbottom">
-            <div>${(rv.stakes && Object.keys(rv.stakes).length) ? potScene(rv, q, 580, 340, true) : `<p class="dim">Settled on an older build \u2014 no flow data.</p>`}</div>
-            <div class="lbbox">
-              <h2>Top 10</h2>
-              <ol class="board lb">${lb}</ol>
-              <div class="grid" style="justify-content:flex-start; margin-top:8px">${Object.entries(rv.aiAnswers || {}).map(([t, a]) =>
-                `<span class="chip">${nameOf(t)} \u00b7 ${a == null || a === "" ? "\u2014" : a.split("").map((i) => String.fromCharCode(65 + +i)).join("")}</span>`).join("")}
-              </div>
-            </div>
-          </div>
-        </div>`;
+      buildStage(QUESTIONS[S.state.round], "reveal", S.reveal);
       return;
     }
 
