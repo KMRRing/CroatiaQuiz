@@ -32,8 +32,8 @@ const AI_META = [
 const kellyEvens = (c) => Math.max(0, 2 * c - 1);
 
 export function botRoster() {
-  const bots = AI_META.map(([token, name, emoji]) => ({
-    token, name, emoji, kind: "ai",
+  const bots = AI_META.map(([token, name, emoji, img]) => ({
+    token, name, emoji, img, kind: "ai",
     decide(q, qi, wealth) {
       const e = AI_ANSWERS[token][qi];
       if (!e) return { answer: null, frac: 0, conf: null };

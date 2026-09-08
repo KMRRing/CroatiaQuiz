@@ -39,6 +39,17 @@ export async function mount(root) {
     const p = S.players[t];
     return (p && CHARACTERS[p.ci] ? CHARACTERS[p.ci][0] : "\u{1F3AD}");
   };
+  const plainName = (t) => {
+    if (BOTS[t]) return BOTS[t].name;
+    const p = S.players[t];
+    return (p && CHARACTERS[p.ci] ? CHARACTERS[p.ci][1] : "?");
+  };
+  const iconHtml = (t) => BOTS[t] && BOTS[t].img
+    ? `<img class="boticon" src="${BOTS[t].img}" alt="${BOTS[t].name}">`
+    : `<span class="lbicon">${iconOf(t)}</span>`;
+  const svgIcon = (t, x, y, size, delay) => BOTS[t] && BOTS[t].img
+    ? `<image class="lbl" style="animation-delay:${delay}ms" href="${BOTS[t].img}" x="${(x - size / 2).toFixed(0)}" y="${(y - size / 2).toFixed(0)}" width="${size}" height="${size}"/>`
+    : `<text class="lbl" style="animation-delay:${delay}ms" x="${x.toFixed(0)}" y="${(y + size * 0.32).toFixed(0)}" text-anchor="middle" font-size="${size * 0.92}">${iconOf(t)}</text>`;
   const nameOf = (t) => {
     if (BOTS[t]) return BOTS[t].emoji + " " + BOTS[t].name;
     const p = S.players[t];
@@ -184,11 +195,11 @@ export async function mount(root) {
     el.innerHTML = after.slice(0, 10).map((t, i) => {
       const badge = deltas && deltas[t] != null && Math.abs(deltas[t]) >= 0.5
         ? `<span class="delta-badge ${deltas[t] >= 0 ? "pos" : "neg"}" style="animation-delay:${i * 70}ms">${deltas[t] >= 0 ? "+" : "\u2212"}${fmt(Math.abs(deltas[t]))}</span>` : "";
-      if (!prevWm) return `<li class="lbrow-static">${badge}<span class="lbicon">${iconOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+      if (!prevWm) return `<li class="lbrow-static">${badge}${iconHtml(t)}<span>${fmt(wm[t])}</span></li>`;
       const pi = prevIdx[t] != null ? prevIdx[t] : 12;
       const enter = pi > 9;
       return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${i * 70}ms">
-        ${badge}<span class="lbicon">${iconOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+        ${badge}${iconHtml(t)}<span>${fmt(wm[t])}</span></li>`;
     }).join("");
   }
 
@@ -308,7 +319,7 @@ export async function mount(root) {
         for (const t of tokens) if (BOTS[t]) { style[t] = { color: AI_COLORS[k % AI_COLORS.length], width: 3.2, dash: "7 4", label: BOTS[t].name }; k++; }
         if (f.board && f.board.length) {
           const win = f.board[0].token;
-          style[win] = { color: "#0000FF", width: 4.5, label: nameOf(win).split(" ").slice(1).join(" ") };
+          style[win] = { color: "#0000FF", width: 4.5, label: plainName(win) };
         }
         const chart = svgWealthChart(series, style, 1760, 760, 1.9)
           .replace('style="width:100%;height:auto"', 'style="width:100%;height:100%"');
@@ -356,7 +367,7 @@ export async function mount(root) {
           <div class="finalboard">
             <h1>Full time</h1>
             <ol class="board finallb" style="columns:${cols}">
-              ${bd.map((r, i) => `<li><span>${i + 1}. ${nameOf(r.token)}</span><span>${fmt(r.w)}</span></li>`).join("")}
+              ${bd.map((r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span>${fmt(r.w)}</span></li>`).join("")}
             </ol>
           </div>
           <p class="dim">${[
