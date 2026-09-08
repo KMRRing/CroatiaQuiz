@@ -33,7 +33,13 @@ export async function mount(root) {
     if (st && st.phase === "finished") loadFinale();
     render();
   });
-  onValue(gref("wealth", token), (s) => { S.wealth = s.val() || 0; patchWealth(); });
+  onValue(gref("wealth", token), (s) => {
+    const w = s.val() || 0;
+    const wasLocked = S.wealth <= RULES.minStake, isLocked = w <= RULES.minStake;
+    S.wealth = w;
+    if (S.state && S.state.phase === "question" && wasLocked !== isLocked) render();
+    else patchWealth();
+  });
 
   async function loadReveal(r) { S.reveal = await read("reveal", r); render(); }
   async function loadFinale() { S.finale = await read("finale"); S.reveals = await read("reveal"); render(); }
@@ -162,7 +168,8 @@ export async function mount(root) {
     if (ph === "question") {
       const q = QUESTIONS[S.state.round];
       const locked = S.wealth <= RULES.minStake;
-      if (locked) S.pct = 100;
+      if (locked) { S.pct = 100; S.pctForced = true; }
+      else if (S.pctForced) { S.pct = 0; S.pctForced = false; if (S.answer.size) saveBet(); }
       const stake = clampStake(S.pct, S.wealth, RULES.minStake);
       root.innerHTML = `
         ${barHtml([emoji, name], true)}
@@ -295,7 +302,12 @@ export async function mount(root) {
     const total = RULES.timerSec * 1000;
     const left = Math.max(0, S.state.closesAt - serverNow());
     num.textContent = Math.ceil(left / 1000);
-    if (fg) fg.style.strokeDashoffset = String(100 * (1 - left / total));
+    const low = left > 0 && left <= 5000;
+    if (fg) {
+      fg.style.strokeDashoffset = String(100 * (1 - left / total));
+      fg.setAttribute("stroke", low ? "#D93636" : "url(#rg)");
+    }
+    num.setAttribute("fill", low ? "#D93636" : "#0A0A14");
     const urgent = left > 0 && left <= 5000 && !S.answer.size;
     document.body.classList.toggle("urgent", urgent);
     if (left <= 0) {
