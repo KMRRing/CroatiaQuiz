@@ -5,50 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>Croatia Quiz</title>
 <style>
-  :root { --bg:#101418; --card:#1a2027; --ink:#e8ecef; --dim:#8b98a5; --acc:#ffd166; --up:#6fd08c; --down:#ef6f6c; }
+  @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@600;700&display=swap');
+  :root { --blue:#0000FF; --deep:#0A0ABA; --violet:#8200DE; --orange:#FF6432; --yellow:#FFD359; --sky:#0CA6FF;
+          --bg:#FFFFFF; --card:#FFFFFF; --ink:#0A0A14; --dim:#5A6070; --line:#E3E6EF; --wash:#F6F7FB;
+          --up:#0000FF; --down:#FF6432; --grad:linear-gradient(135deg,#0000FF 0%,#8200DE 55%,#FF6432 100%); }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
-  #app { max-width:640px; margin:0 auto; padding:14px; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 Arial,Helvetica,sans-serif; }
+  h1,h2,.clock,.mult,button.big { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; }
+  .motif { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  #app { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:14px; }
   .screen { max-width:1100px; margin:0 auto; padding:28px; }
-  h1 { font-size:1.6rem; margin:.3em 0; } .screen h1 { font-size:2.2rem; }
-  h2 { font-size:1.15rem; margin:.8em 0 .3em; }
-  .qtext { line-height:1.3; }
+  .corner-logo { position:fixed; top:22px; left:26px; height:26px; z-index:2; }
+  .logo { height:18px; display:block; margin:0 auto 14px; }
+  .card .logo { margin-left:auto; margin-right:auto; }
+  h1 { font-size:1.7rem; margin:.3em 0; color:var(--blue); font-weight:700; letter-spacing:.01em; }
+  .screen h1 { font-size:2.3rem; }
+  h2 { font-size:1.15rem; margin:.8em 0 .3em; color:var(--blue); font-weight:700; }
+  .qtext { line-height:1.3; color:var(--ink); }
   .dim { color:var(--dim); } .big-p { font-size:1.2rem; }
-  .card { background:var(--card); border-radius:14px; padding:18px; margin:10px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; margin:12px 0; }
   .center { text-align:center; }
-  .avatar { font-size:4rem; margin:.2em 0; }
-  .bar { display:flex; justify-content:space-between; align-items:center; padding:6px 4px; font-weight:600; }
+  .avatar { font-size:3.4rem; width:110px; height:110px; line-height:104px; margin:.4em auto; border-radius:50%;
+            border:3px solid transparent; background:linear-gradient(#fff,#fff) padding-box, var(--grad) border-box; }
+  .bar { display:flex; justify-content:space-between; align-items:center; padding:6px 4px; font-weight:700; }
   .row { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
   .spread { justify-content:space-between; }
-  .clock { color:var(--acc); font-variant-numeric:tabular-nums; }
-  .big-clock { font-size:2.4rem; font-weight:700; }
-  button { font:inherit; color:var(--ink); background:#26303a; border:1px solid #38434f; border-radius:12px; padding:12px 14px; cursor:pointer; }
-  button:disabled { opacity:.4; }
-  button.big { width:100%; font-size:1.15rem; padding:16px; background:var(--acc); color:#1a1a1a; border:none; font-weight:700; }
-  button.danger { border-color:var(--down); color:var(--down); background:transparent; }
-  .btnrow { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
-  .opt { display:block; width:100%; text-align:left; margin:8px 0; }
-  .opt.sel { background:var(--acc); color:#1a1a1a; font-weight:700; border-color:var(--acc); }
-  .opt-s { background:var(--card); border-radius:10px; padding:12px 14px; }
+  .clock { color:var(--blue); font-variant-numeric:tabular-nums; font-weight:700; }
+  .big-clock { font-size:2.6rem; }
+  button { font:inherit; color:var(--blue); background:#fff; border:1.5px solid var(--blue); border-radius:999px; padding:11px 16px; cursor:pointer; font-weight:700; }
+  button:disabled { opacity:.35; }
+  button.big { width:100%; font-size:1.1rem; padding:15px; background:var(--blue); color:#fff; border:none; }
+  button.danger { border-color:var(--orange); color:var(--orange); }
+  .btnrow { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .opt { display:block; width:100%; text-align:left; margin:8px 0; font-weight:400; color:var(--ink); border:1.5px solid var(--line); border-radius:14px; background:var(--wash); }
+  .opt.sel { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
+  .opt-s { background:var(--wash); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
   .optgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
-  .stakebox { margin-top:16px; border-top:1px solid #2c3640; padding-top:12px; }
-  input[type=range] { width:100%; accent-color:var(--acc); height:34px; }
+  .stakebox { margin-top:16px; border-top:1px solid var(--line); padding-top:12px; }
+  input[type=range] { width:100%; accent-color:var(--blue); height:34px; }
   .delta { font-size:2rem; font-weight:800; margin:.2em 0; }
   .up { color:var(--up); } .down { color:var(--down); }
-  .qr { display:inline-block; background:#fff; padding:14px; border-radius:10px; margin:12px 0; }
+  .qr { display:inline-block; background:#fff; padding:16px; margin:14px 0; border-radius:20px;
+        border:3px solid transparent; background:linear-gradient(#fff,#fff) padding-box, var(--grad) border-box; }
   .grid { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:14px 0; }
-  .chip { background:var(--card); border-radius:999px; padding:6px 12px; }
-  .poolbar { height:22px; background:var(--down); border-radius:999px; overflow:hidden; margin:14px 0 6px; }
-  .poolW { height:100%; background:var(--up); }
-  .mult { font-size:1.8rem; color:var(--acc); }
+  .chip { background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:6px 14px; }
+  .poolbar { height:22px; background:var(--orange); border-radius:999px; overflow:hidden; margin:14px 0 6px; }
+  .poolW { height:100%; background:var(--blue); }
+  .mult { font-size:1.9rem; color:var(--violet); font-weight:700; }
   .cols { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:14px; }
-  @media (max-width:700px){ .cols{grid-template-columns:1fr;} .optgrid{grid-template-columns:1fr;} }
+  @media (max-width:700px){ .cols{grid-template-columns:1fr;} .optgrid{grid-template-columns:1fr;} .corner-logo{height:20px;} }
   ol.board, ul.board { list-style-position:inside; padding:0; margin:.3em 0; }
-  .board li { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #232c35; }
-  .log { background:#0c1013; border-radius:10px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
+  .board li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--line); }
+  .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>
 <body>
+<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
 <script type="module">
   import { initFb } from "./js/fb.js";
@@ -59,6 +71,11 @@
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
+    if (view === "screen" || view === "host") {
+      const l = document.createElement("img");
+      l.className = "corner-logo"; l.src = "assets/trafigura.svg"; l.alt = "Trafigura";
+      document.body.appendChild(l);
+    }
     import(`./js/views/${files[view] || "player"}.js`)
       .then((m) => m.mount(root))
       .catch((e) => { root.innerHTML = `<div class="card"><h1>Error</h1><p class="dim">${e.message}</p></div>`; });

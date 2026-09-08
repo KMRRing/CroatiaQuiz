@@ -70,6 +70,7 @@ export async function mount(root) {
     if (!S.me) {
       root.innerHTML = `
         <div class="card center">
+          <img class="logo" src="assets/trafigura.svg" alt="Trafigura" />
           <h1>Croatia Quiz</h1>
           <p class="dim">Tap below and the house deals you a character. That's you for the night.</p>
           <button class="big" id="joinBtn">Deal me a character</button>
@@ -83,6 +84,7 @@ export async function mount(root) {
     if (!S.state || ph === "lobby") {
       root.innerHTML = `
         <div class="card center">
+          <img class="logo" src="assets/trafigura.svg" alt="Trafigura" />
           <div class="avatar">${emoji}</div>
           <h1>You are ${name}</h1>
           <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>
