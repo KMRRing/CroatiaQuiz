@@ -241,12 +241,12 @@ export async function mount(root) {
       root.innerHTML = `
         <div class="card center">
           <div class="avatar${won ? " winner" : ""}">${emoji}${won ? `
-            <svg class="hat" viewBox="0 0 40 42" aria-hidden="true">
+            <svg class="hat" viewBox="0 0 200 210" aria-hidden="true">
               <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
               </linearGradient></defs>
-              <path d="M20 3 L36 34 A 34 34 0 0 1 4 34 Z" fill="url(#hg)"/>
-              <circle cx="20" cy="4.5" r="4" fill="#FFD359"/>
+              <path d="M 171.4 10.1 L 50.1 108.0 A 54 54 0 0 1 136.6 162.1 Z" fill="url(#hg)"/>
+              <circle cx="171.4" cy="10.1" r="7" fill="#FFD359"/>
             </svg>` : ""}</div>
           ${mine || "<h2>Full time.</h2>"}
           <p class="dim">${won ? "Take a bow." : "Final boards are on the big screen \u2014 more coming."}</p>
