@@ -74,9 +74,9 @@ export async function mount(root) {
       const sy = spread(mkIn.length, i);
       const a = Math.PI * (150 + (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
       const ex = cx + R * Math.cos(a), ey = cy + R * Math.sin(a);
-      g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 60}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 17 : 22}">${iconOf(e.t)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 60}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 60)}ms" d="M ${compact ? 36 : 96} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 40 : 104}" y="${(sy - 8).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${nameOf(e.t)}${e.bot ? "" : " " + fmt(e.v)}</text>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 40 : 104}" y="${(sy - 8).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${e.bot ? "" : fmt(e.v)}</text>`;
     });
     const outDelay = mkIn.length * 60 + 700;
     mkOut.forEach((e, i) => {
@@ -84,8 +84,8 @@ export async function mount(root) {
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${W - (compact ? 36 : 96)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
-      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 20 : 60)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 17 : 22}">${iconOf(e.t)}</text>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 40 : 104)}" y="${(ey2 - 8).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#B4400F">${nameOf(e.t)} ${fmt(e.v)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 20 : 60)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 40 : 104)}" y="${(ey2 - 8).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
     const potHead = rv.rolled
       ? `<text x="${cx}" y="${compact ? 30 : 120}" text-anchor="middle" font-size="${hf * 0.75}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">NOBODY RIGHT \u2014 ${fmt(rv.pot)} ROLLS OVER</text>`
