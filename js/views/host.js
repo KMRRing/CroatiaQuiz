@@ -202,6 +202,13 @@ export async function mount(root) {
     log("Finale written. Full time.");
   }
 
+  async function giveUpHost() {
+    if (!confirm("Release hosting on this device? Rounds pause until another device claims host.")) return;
+    clearTimeout(S.closeTimer);
+    await set(gref("meta"), null);
+    log("Host released. Any device can now claim.");
+  }
+
   async function resetGame() {
     if (!confirm("Wipe the whole game (players, wealth, bets, reveals)?")) return;
     await set(gref(), { meta: { hostUid: user.uid, createdAt: serverTimestamp(), rules: RULES } });
@@ -237,6 +244,7 @@ export async function mount(root) {
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
             <button id="finish">Finish \u2192 finale (any time)</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
+            <button id="release" class="danger">Give up host</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
           <p class="dim">Rounds auto-close and settle when the clock runs out. Keep this tab open and awake.</p>`}
@@ -257,6 +265,7 @@ export async function mount(root) {
       update(gref(), { "state/finaleStage": next });
       log("Finale screen " + (next + 1) + " of 6.");
     };
+    if (q("#release")) q("#release").onclick = giveUpHost;
     if (q("#reset")) q("#reset").onclick = resetGame;
   }
 }
