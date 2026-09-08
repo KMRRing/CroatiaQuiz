@@ -56,7 +56,7 @@ export async function mount(root) {
     const c = p ? CHARACTERS[p.ci] || ["\u{1F3AD}", "?"] : ["\u{1F3AD}", "?"];
     return c[0] + " " + c[1];
   };
-  const humanCount = () => Object.entries(S.players).filter(([t]) => !BOTS[t]).length;
+  const humanCount = () => Object.entries(S.players).filter(([, p]) => !p.bot).length;
   const lockLine = () => `${S.betCount} of ${humanCount()} locked in`;
 
 
