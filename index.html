@@ -78,6 +78,12 @@
   ol.board, ul.board { list-style-position:inside; padding:0; margin:.3em 0; }
   .board li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--line); }
   .pctbig { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:3rem; font-weight:700; color:var(--blue); text-align:center; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .tick { display:inline-block; width:17px; height:17px; border:2px solid currentColor; border-radius:50%; margin-right:10px; vertical-align:-3px; flex:none; opacity:.75; }
+  .tick.sq { border-radius:5px; }
+  .opt { display:flex; align-items:center; text-align:left; }
+  .opt.sel .tick, .opt.res-c .tick { background:currentColor; opacity:1; }
+  .optrow .tick { width:14px; height:14px; margin-right:9px; vertical-align:-1px; }
+  .optrow.right .optfill .tick { background:currentColor; opacity:1; }
   .stakelink { background:none; border:none; font:inherit; font-weight:700; color:inherit; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; padding:4px 8px; border-radius:10px; cursor:pointer; }
   .stakelink:disabled { opacity:.4; text-decoration:none; }
   .refresh-btn.stale { border-color:var(--orange); color:var(--orange); font-weight:700; }
@@ -256,7 +262,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b126-nocluster", "./js/questions.js": "./js/questions.js?v=b126-nocluster", "./js/characters.js": "./js/characters.js?v=b126-nocluster", "./js/engine.js": "./js/engine.js?v=b126-nocluster", "./js/fb.js": "./js/fb.js?v=b126-nocluster", "./js/bots.js": "./js/bots.js?v=b126-nocluster", "./js/finale.js": "./js/finale.js?v=b126-nocluster", "./js/views/player.js": "./js/views/player.js?v=b126-nocluster", "./js/views/screen.js": "./js/views/screen.js?v=b126-nocluster", "./js/views/host.js": "./js/views/host.js?v=b126-nocluster", "./js/views/swarm.js": "./js/views/swarm.js?v=b126-nocluster", "./js/views/data.js": "./js/views/data.js?v=b126-nocluster" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b127-ticks", "./js/questions.js": "./js/questions.js?v=b127-ticks", "./js/characters.js": "./js/characters.js?v=b127-ticks", "./js/engine.js": "./js/engine.js?v=b127-ticks", "./js/fb.js": "./js/fb.js?v=b127-ticks", "./js/bots.js": "./js/bots.js?v=b127-ticks", "./js/finale.js": "./js/finale.js?v=b127-ticks", "./js/views/player.js": "./js/views/player.js?v=b127-ticks", "./js/views/screen.js": "./js/views/screen.js?v=b127-ticks", "./js/views/host.js": "./js/views/host.js?v=b127-ticks", "./js/views/swarm.js": "./js/views/swarm.js?v=b127-ticks", "./js/views/data.js": "./js/views/data.js?v=b127-ticks" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

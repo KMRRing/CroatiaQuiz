@@ -183,7 +183,7 @@ export async function mount(root) {
         <div class="card">
           <h2>${q.text}</h2>
           <div id="opts">${q.options.map((o, i) =>
-            `<button class="opt ${S.answer.has(i) ? "sel" : ""}" data-i="${i}">${o}</button>`).join("")}
+            `<button class="opt ${S.answer.has(i) ? "sel" : ""}" data-i="${i}"><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span><span>${o}</span></button>`).join("")}
           </div>
           <div class="stakebox">
             <div class="pctbig" id="pctbig">${effPct}%</div>
@@ -234,7 +234,7 @@ export async function mount(root) {
           <div>${q.options.map((o, i) => {
             const isC = q.correct.includes(String(i));
             const cls = isC ? "res-c" : (mineSet.has(i) ? "res-w" : "");
-            return `<button class="opt ${cls}" disabled>${o}</button>`;
+            return `<button class="opt ${cls}" disabled><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span><span>${o}</span></button>`;
           }).join("")}</div>
           <div class="stakebox resultbox">
             ${rv ? `
