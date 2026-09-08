@@ -62,7 +62,7 @@ export async function mount(root) {
     const players = (await read("players")) || {};
     const wealth = (await read("wealth")) || {};
     const updates = {};
-    for (const t of Object.keys(players)) updates["wealth/" + t] = (wealth[t] || 0) + RULES.stipend;
+    for (const t of Object.keys(players)) updates["wealth/" + t] = (wealth[t] != null ? wealth[t] : RULES.start) + RULES.stipend;
     updates["state"] = { phase: "preview", round: n, rollover: (S.state && S.state.rollover) || 0, closesAt: 0, timerSec: S.timerSec };
     await update(gref(), updates);
     log(`Question ${n + 1} on screen. Read it out, then start the timer.`);

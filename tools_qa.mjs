@@ -8,11 +8,11 @@ function runGame() {
   const nP = 26, late = 12, wipe = 3;
   const toks = Array.from({ length: nP }, (_, i) => "t" + i);
   const wealth = {};
-  toks.forEach((t, i) => { if (i < nP - 1) wealth[t] = 0; });
+  toks.forEach((t, i) => { if (i < nP - 1) wealth[t] = RULES.start; });
   let rollover = 0;
   const reveals = [];
   for (let n = 0; n < 25; n++) {
-    if (n === late) wealth[toks[nP - 1]] = 0;
+    if (n === late) wealth[toks[nP - 1]] = RULES.start;
     for (const t of Object.keys(wealth)) wealth[t] += RULES.stipend;
     const totBefore = Object.values(wealth).reduce((a, b) => a + b, 0) + rollover;
     const correct = "0";
