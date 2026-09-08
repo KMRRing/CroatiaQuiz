@@ -3,7 +3,7 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { RULES, BUILD } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { settle, clampStake, fmt, board } from "../engine.js";
-import { sizingReport, requiredAccuracy } from "../finale.js";
+import { sizingReport, requiredKnowledge } from "../finale.js";
 import { botRoster, botConf } from "../bots.js";
 
 const ROSTER = botRoster();
@@ -150,8 +150,8 @@ export async function mount(root) {
     const top10W = bd.length ? bd[topIdx].w : 0;
     const thresholds = {
       medianW, top10W,
-      pMedian: requiredAccuracy(reveals, medianW),
-      pTop10: requiredAccuracy(reveals, top10W),
+      kMedian: requiredKnowledge(reveals, medianW),
+      kTop10: requiredKnowledge(reveals, top10W),
       Obar: sizing.Obar,
     };
     await update(gref(), {

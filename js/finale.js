@@ -42,22 +42,21 @@ export function sizingReport(reveals, humanTokens) {
   return { Obar, rows };
 }
 
-// Accuracy a perfectly-sized (Kelly) outsider needed to end above `target`,
-// replaying this game's realised multiples. Expected-wealth recursion + bisection.
-export function requiredAccuracy(reveals, target) {
+// Fraction of the answers an outsider needed to KNOW (certain, Kelly-capped all-in on
+// those; no bet on the rest) to end above `target`, replaying this game's multiples.
+export function requiredKnowledge(reveals, target) {
   const rounds = reveals.map((r) => (r && !r.rolled && r.mult > 1.001 ? r.mult : null));
-  const finalW = (p) => {
+  const finalW = (k) => {
     let w = 0;
     for (const O of rounds) {
       w += RULES.stipend;
       if (O == null) continue;
-      const f = Math.max(0, p - (1 - p) / (O - 1));
-      w = w * (1 + f * (p * O - 1));
+      w = w * (k * (1 + 0.9 * (O - 1)) + (1 - k));
     }
     return w;
   };
-  if (finalW(0.99) < target) return null; // not reachable even at 99%
-  let lo = 0.01, hi = 0.99;
+  if (finalW(1) < target) return null;
+  let lo = 0, hi = 1;
   for (let i = 0; i < 40; i++) {
     const mid = (lo + hi) / 2;
     (finalW(mid) >= target ? (hi = mid) : (lo = mid));
