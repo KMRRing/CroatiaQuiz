@@ -328,30 +328,30 @@ export async function mount(root) {
         return;
       }
       if (stage === 2 && f.sizing) {
+        const t = f.thresholds || {};
+        const kM = t.kMedian != null ? t.kMedian : t.pMedian;
+        const kA = t.kMean;
+        const kT = t.kTop10 != null ? t.kTop10 : t.pTop10;
+        const cell = (k, label, w) => `<div class="thresh"><div class="mult">${k == null ? ">100%" : pc(k)}</div><p>needs to know ${k == null ? "more than all" : pc(k)} of the answers to beat the ${label} (${fmt(w)})</p></div>`;
+        const rows = f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
+              <td>${r.ratio == null ? "no edge" : r.ratio.toFixed(1) + "\u00d7 Kelly"}</td></tr>`);
+        const half = Math.ceil(rows.length / 2);
+        const thead = `<tr><th></th><th>accuracy</th><th>avg stake</th><th>Kelly says</th><th>verdict</th></tr>`;
+        const tbl = (rs) => `<table class="sizing">${thead}${rs.join("")}</table>`;
         root.innerHTML = `
           <div class="kstage">
             <div class="kcard">
             <h1>The right size, in one line</h1>
             ${KELLY_FORMULA_HTML}
-            <p class="dim">This game's average pool multiple: O\u0304 = ${f.thresholds ? f.thresholds.Obar.toFixed(2) : "?"}\u00d7.
-            Below: your realised accuracy, your average stake, and what the formula said it should have been.</p>
-            <table class="sizing"><tr><th></th><th>accuracy</th><th>avg stake</th><th>Kelly says</th><th>verdict</th></tr>
-            ${f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
-              <td>${r.ratio == null ? "no positive-edge stake existed" : r.ratio.toFixed(1) + "\u00d7 Kelly " + (r.ratio > 1.2 ? "\u2014 overcommitted" : r.ratio < 0.8 ? "\u2014 timid" : "\u2014 on the money")}</td></tr>`).join("")}
-            </table>
+            <div class="cols" style="gap:2.5vw; margin:.4em 0 1em;">
+              ${tbl(rows.slice(0, half))}${tbl(rows.slice(half))}
             </div>
-          </div>`;
-        return;
-      }
-      if (stage === 3 && f.thresholds) {
-        const t = f.thresholds;
-        root.innerHTML = `
-          <div class="screen center">
             <h1>What would it have taken?</h1>
-            <p class="big-p">An outsider betting the formula perfectly at this game's realised odds needed\u2026</p>
-            <div class="cols">
-              <div class="thresh"><div class="mult">${t.pMedian == null ? ">99%" : pc(t.pMedian)}</div><p>accuracy to beat the median (${fmt(t.medianW)})</p></div>
-              <div class="thresh"><div class="mult">${t.pTop10 == null ? ">99%" : pc(t.pTop10)}</div><p>accuracy to crack the top 10% (${fmt(t.top10W)})</p></div>
+            <div class="cols tcenter" style="grid-template-columns:${kA != null ? "1fr 1fr 1fr" : "1fr 1fr"}">
+              ${cell(kM, "median player", t.medianW)}
+              ${kA != null ? cell(kA, "mean player", t.meanW) : ""}
+              ${cell(kT, "top 10%", t.top10W)}
+            </div>
             </div>
           </div>`;
         return;
