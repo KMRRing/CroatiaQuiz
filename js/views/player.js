@@ -193,6 +193,7 @@ export async function mount(root) {
         </div>`;
       return;
     }
+  }
 
   function statusLine() {
     if (!S.answer.size) return "Pick an answer \u2014 no answer means the minimum stake is lost.";
