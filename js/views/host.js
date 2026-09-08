@@ -210,7 +210,7 @@ export async function mount(root) {
             <button id="next" ${canStartNext ? "" : "disabled"}>Start question ${n + 2}</button>
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
             <button id="finish">Finish \u2192 finale (any time)</button>
-            <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/3)</button>
+            <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
           <p class="dim">Rounds auto-close and settle when the clock runs out \u2014 keep this tab open and awake.</p>`}
@@ -224,9 +224,9 @@ export async function mount(root) {
     if (q("#close")) q("#close").onclick = closeAndSettle;
     if (q("#finish")) q("#finish").onclick = finish;
     if (q("#stage")) q("#stage").onclick = () => {
-      const next = (((S.state && S.state.finaleStage) || 0) + 1) % 3;
+      const next = (((S.state && S.state.finaleStage) || 0) + 1) % 6;
       update(gref(), { "state/finaleStage": next });
-      log("Finale screen " + (next + 1) + " of 3.");
+      log("Finale screen " + (next + 1) + " of 6.");
     };
     if (q("#reset")) q("#reset").onclick = resetGame;
   }

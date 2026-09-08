@@ -229,7 +229,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
-      if (stage === 1 && f && S.reveals) {
+      if (stage >= 1 && stage <= 4 && f && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = (f.board || []).map((r) => r.token);
         const series = wealthSeries(revArr, tokens);
@@ -239,7 +239,7 @@ export async function mount(root) {
         root.innerHTML = `<div><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
         return;
       }
-      if (stage === 2 && f && f.sizing) {
+      if (stage === 5 && f && f.sizing) {
         const mine = f.sizing.find((r) => r.token === token);
         root.innerHTML = `${barHtml([emoji, name], false)}<div class="card"><h2>Your sizing</h2>
           ${mine ? `
