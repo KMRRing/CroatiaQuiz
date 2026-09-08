@@ -23,7 +23,7 @@ export const RULES = {
   timerSec: 40,     // seconds per question
 };
 
-export const BUILD = "b70-bigqr";
+export const BUILD = "b71-paylabels";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";
