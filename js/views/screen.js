@@ -51,16 +51,19 @@ export async function mount(root) {
   function potScene(rv, q, W = 1200, H = 560, compact = false, roundIdx = 0) {
     const prog = Math.min(1, (roundIdx + 1) / N_ROUNDS);
     const cx = W / 2, cy = H * 0.54, R = compact ? Math.round(46 + 52 * prog) : Math.round(96 + 44 * prog);
+    // losers pay in on the left; winners draw their net winnings on the right
     const mkIn = [], mkOut = [];
-    for (const [t, st] of Object.entries(rv.stakes || {})) mkIn.push({ t, v: st, bot: false });
-    for (const [t, st] of Object.entries(rv.botStakes || {})) mkIn.push({ t, v: st, bot: true });
-    mkIn.sort((a, b) => b.v - a.v);
-    for (const e of mkIn) {
+    const all = [];
+    for (const [t, st] of Object.entries(rv.stakes || {})) all.push({ t, v: st, bot: false });
+    for (const [t, st] of Object.entries(rv.botStakes || {})) all.push({ t, v: st, bot: true });
+    for (const e of all) {
       const right = e.bot ? (rv.aiAnswers && rv.aiAnswers[e.t] === rv.correct) : (rv.deltas && rv.deltas[e.t] > 0);
-      if (right && !rv.rolled && rv.mult > 0) mkOut.push({ t: e.t, v: e.v * rv.mult, bot: e.bot });
+      if (right && !rv.rolled && rv.mult > 1) mkOut.push({ t: e.t, v: e.v * (rv.mult - 1), bot: e.bot });
+      else mkIn.push(e);
     }
+    mkIn.sort((a, b) => b.v - a.v);
     mkOut.sort((a, b) => b.v - a.v);
-    const totalIn = mkIn.reduce((a, e) => a + e.v, 0) + (rv.pot - rv.L);
+    const totalIn = rv.pot;
     const vmax = Math.max(1, mkIn[0] ? mkIn[0].v : 1, mkOut[0] ? mkOut[0].v : 1);
     const wOf = (v) => ((compact ? 1.2 : 1.5) + (compact ? 8 : 12) * Math.sqrt(v / vmax)).toFixed(1);
     const yTop = compact ? 66 : 90, yBot = H - (compact ? 16 : 50);
