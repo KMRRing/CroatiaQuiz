@@ -23,7 +23,7 @@ export const RULES = {
   timerSec: 40,     // seconds per question
 };
 
-export const BUILD = "b76-morph";
+export const BUILD = "b77-tickfix";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";

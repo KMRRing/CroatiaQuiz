@@ -203,6 +203,21 @@ export async function mount(root) {
     }).join("");
   }
 
+  function tick() {
+    const num = root.querySelector("#clocknum2");
+    const fg = root.querySelector("#ringfg2");
+    if (!num || !S.state || !S.state.closesAt) return;
+    const total = RULES.timerSec * 1000;
+    const left = Math.max(0, S.state.closesAt - serverNow());
+    num.textContent = Math.ceil(left / 1000);
+    const low = left <= 5000;
+    if (fg) {
+      fg.style.strokeDashoffset = String(100 * (1 - left / total));
+      fg.setAttribute("stroke", low ? "#D93636" : "url(#rg2)");
+    }
+    num.setAttribute("fill", low ? "#D93636" : "#0A0A14");
+  }
+
   function buildStage(q, phase, rv) {
     root.innerHTML = `
       <div class="stage">
