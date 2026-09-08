@@ -88,14 +88,25 @@ export async function mount(root) {
       }
     };
     const boom = () => {
-      const x = 15 + Math.random() * 70, y = 12 + Math.random() * 45;
-      for (let k = 0; k < 12; k++) {
-        const q2 = document.createElement("div"); q2.className = "fw";
-        q2.style.left = x + "vw"; q2.style.top = y + "vh"; q2.style.background = COLORS[k % COLORS.length];
-        const a = (k / 12) * 2 * Math.PI, r = 55 + Math.random() * 70;
-        q2.style.setProperty("--dx", Math.cos(a) * r + "px"); q2.style.setProperty("--dy", Math.sin(a) * r + "px");
-        layer.appendChild(q2); setTimeout(() => q2.remove(), 1000);
-      }
+      const tx = 22 + Math.random() * 56, ty = 10 + Math.random() * 40;
+      const fromLeft = Math.random() < 0.5;
+      const sy = 55 + Math.random() * 35;
+      const r0 = document.createElement("div"); r0.className = "rocket";
+      r0.style.left = (fromLeft ? -2 : 102) + "vw"; r0.style.top = sy + "vh";
+      r0.style.background = COLORS[(Math.random() * COLORS.length) | 0];
+      r0.style.setProperty("--tx", (tx - (fromLeft ? -2 : 102)) + "vw");
+      r0.style.setProperty("--ty", (ty - sy) + "vh");
+      layer.appendChild(r0);
+      setTimeout(() => {
+        r0.remove();
+        for (let k = 0; k < 16; k++) {
+          const q2 = document.createElement("div"); q2.className = "fw";
+          q2.style.left = tx + "vw"; q2.style.top = ty + "vh"; q2.style.background = COLORS[k % COLORS.length];
+          const a = (k / 16) * 2 * Math.PI, r = 90 + Math.random() * 70;
+          q2.style.setProperty("--dx", Math.cos(a) * r + "px"); q2.style.setProperty("--dy", Math.sin(a) * r + "px");
+          layer.appendChild(q2); setTimeout(() => q2.remove(), 1200);
+        }
+      }, 650);
     };
     conf(); boom();
     S.partyTimer = setInterval(conf, 650); S.partyTimer2 = setInterval(boom, 2200);
@@ -230,12 +241,12 @@ export async function mount(root) {
       root.innerHTML = `
         <div class="card center">
           <div class="avatar${won ? " winner" : ""}">${emoji}${won ? `
-            <svg class="hat" viewBox="0 0 40 40" aria-hidden="true">
+            <svg class="hat" viewBox="0 0 40 42" aria-hidden="true">
               <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
               </linearGradient></defs>
-              <path d="M20 3 L33 35 L7 35 Z" fill="url(#hg)"/>
-              <circle cx="20" cy="4.5" r="3.6" fill="#FFD359"/>
+              <path d="M20 3 L36 34 A 34 34 0 0 1 4 34 Z" fill="url(#hg)"/>
+              <circle cx="20" cy="4.5" r="4" fill="#FFD359"/>
             </svg>` : ""}</div>
           ${mine || "<h2>Full time.</h2>"}
           <p class="dim">${won ? "Take a bow." : "Final boards are on the big screen \u2014 more coming."}</p>
