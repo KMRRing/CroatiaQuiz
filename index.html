@@ -256,7 +256,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b122-inspector", "./js/questions.js": "./js/questions.js?v=b122-inspector", "./js/characters.js": "./js/characters.js?v=b122-inspector", "./js/engine.js": "./js/engine.js?v=b122-inspector", "./js/fb.js": "./js/fb.js?v=b122-inspector", "./js/bots.js": "./js/bots.js?v=b122-inspector", "./js/finale.js": "./js/finale.js?v=b122-inspector", "./js/views/player.js": "./js/views/player.js?v=b122-inspector", "./js/views/screen.js": "./js/views/screen.js?v=b122-inspector", "./js/views/host.js": "./js/views/host.js?v=b122-inspector", "./js/views/swarm.js": "./js/views/swarm.js?v=b122-inspector" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b123-inspector", "./js/questions.js": "./js/questions.js?v=b123-inspector", "./js/characters.js": "./js/characters.js?v=b123-inspector", "./js/engine.js": "./js/engine.js?v=b123-inspector", "./js/fb.js": "./js/fb.js?v=b123-inspector", "./js/bots.js": "./js/bots.js?v=b123-inspector", "./js/finale.js": "./js/finale.js?v=b123-inspector", "./js/views/player.js": "./js/views/player.js?v=b123-inspector", "./js/views/screen.js": "./js/views/screen.js?v=b123-inspector", "./js/views/host.js": "./js/views/host.js?v=b123-inspector", "./js/views/swarm.js": "./js/views/swarm.js?v=b123-inspector", "./js/views/data.js": "./js/views/data.js?v=b123-inspector" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
@@ -269,7 +269,7 @@
   document.addEventListener("dblclick", (e) => e.preventDefault(), { passive: false });
   const root = document.getElementById("app");
   const view = (location.hash.replace("#", "").split("?")[0]) || "join";
-  const files = { join: "player", screen: "screen", host: "host", swarm: "swarm" };
+  const files = { join: "player", screen: "screen", host: "host", swarm: "swarm", data: "data" };
   window.addEventListener("hashchange", () => location.reload());
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
