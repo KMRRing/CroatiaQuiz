@@ -58,6 +58,7 @@
   .board li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--line); }
   .pctbig { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:3rem; font-weight:700; color:var(--blue); text-align:center; line-height:1.1; font-variant-numeric:tabular-nums; }
   .refresh-btn.stale { border-color:var(--orange); color:var(--orange); font-weight:700; }
+  .refresh-btn.ok { color:#1E7A46; border-color:var(--line); }
   .refresh-btn { position:fixed; bottom:12px; right:12px; z-index:3; font-size:.75rem; padding:7px 12px; color:var(--dim); border-color:var(--line); background:#fff; }
   .formula { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:2rem; color:var(--violet); font-weight:700; margin:.4em 0; }
   table.sizing { width:100%; border-collapse:collapse; font-size:.95rem; }
@@ -78,6 +79,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b10-vercheck", "./js/questions.js": "./js/questions.js?v=b10-vercheck", "./js/characters.js": "./js/characters.js?v=b10-vercheck", "./js/engine.js": "./js/engine.js?v=b10-vercheck", "./js/fb.js": "./js/fb.js?v=b10-vercheck", "./js/bots.js": "./js/bots.js?v=b10-vercheck", "./js/finale.js": "./js/finale.js?v=b10-vercheck", "./js/views/player.js": "./js/views/player.js?v=b10-vercheck", "./js/views/screen.js": "./js/views/screen.js?v=b10-vercheck", "./js/views/host.js": "./js/views/host.js?v=b10-vercheck", "./js/views/swarm.js": "./js/views/swarm.js?v=b10-vercheck" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
@@ -88,33 +90,38 @@
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
-    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/finale.js",
-      "js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js","assets/trafigura.svg"];
+    const FILES = ["index.html","version.json","assets/trafigura.svg","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
     const bust = async () => { try { await Promise.all(FILES.map((f) => fetch(f, { cache: "reload" }))); } catch (e) {} };
-    let chip = null;
-    if (view !== "join" || SHOW_REFRESH) {
-      chip = document.createElement("button");
-      chip.className = "refresh-btn"; chip.textContent = "\u21bb " + BUILD;
-      chip.onclick = async () => { chip.textContent = "\u21bb fetching\u2026"; await bust(); location.reload(); };
-      document.body.appendChild(chip);
-    }
+    const chk = document.createElement("button");
+    chk.className = "refresh-btn"; chk.textContent = "running " + BUILD + " \u00b7 live \u2026";
+    document.body.appendChild(chk);
+    let liveBuild = null;
+    const doUpdate = async () => {
+      chk.textContent = "updating\u2026";
+      await bust(); location.reload();
+    };
+    chk.onclick = doUpdate;
     async function checkVersion() {
       try {
         const r = await fetch("version.json?t=" + Date.now(), { cache: "no-store" });
-        const v = (await r.json()).build;
-        if (v && v !== BUILD) {
-          if (view === "screen" || view === "host" || view === "swarm") { await bust(); location.reload(); }
-          else if (chip) { chip.classList.add("stale"); chip.textContent = "\u21bb update ready \u2014 tap"; }
-          else {
-            chip = document.createElement("button");
-            chip.className = "refresh-btn stale"; chip.textContent = "\u21bb update ready \u2014 tap";
-            chip.onclick = async () => { await bust(); location.reload(); };
-            document.body.appendChild(chip);
-          }
-        }
-      } catch (e) {}
+        liveBuild = (await r.json()).build || null;
+      } catch (e) { return; }
+      if (!liveBuild) return;
+      if (liveBuild === BUILD) {
+        chk.classList.remove("stale"); chk.classList.add("ok");
+        chk.textContent = BUILD + " \u2713 current";
+        return;
+      }
+      chk.classList.add("stale"); chk.classList.remove("ok");
+      chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + " \u2014 tap to update";
+      if (view === "screen" || view === "host" || view === "swarm") {
+        const key = "cq_upd_" + liveBuild;
+        const last = +(sessionStorage.getItem(key) || 0);
+        if (Date.now() - last > 90000) { sessionStorage.setItem(key, String(Date.now())); await doUpdate(); }
+        else chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + " \u2014 waiting for cache to clear";
+      }
     }
-    setInterval(checkVersion, 45000); checkVersion();
+    setInterval(checkVersion, 30000); checkVersion();
     if (view === "screen" || view === "host") {
       const l = document.createElement("img");
       l.className = "corner-logo"; l.src = "assets/trafigura.svg"; l.alt = "Trafigura";
