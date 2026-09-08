@@ -95,6 +95,8 @@ export async function mount(root) {
 
     if (ph === "question") {
       const q = QUESTIONS[S.state.round];
+      const locked = S.wealth <= RULES.minStake;
+      if (locked) S.pct = 100;
       const stake = clampStake(S.pct, S.wealth, RULES.minStake);
       root.innerHTML = `
         <div class="bar">
@@ -109,10 +111,10 @@ export async function mount(root) {
             `<button class="opt ${S.answer.has(i) ? "sel" : ""}" data-i="${i}">${o}</button>`).join("")}
           </div>
           <div class="stakebox">
-            <div class="row"><span>Your stake</span><strong id="stake">${fmt(stake)}</strong></div>
-            <input id="slider" type="range" min="0" max="100" value="${S.pct}" />
-            <div class="row dim"><span>minimum ${fmt(RULES.minStake)}</span><span>all in</span></div>
-            <div id="status" class="dim">${statusLine()}</div>
+            <div class="pctbig" id="pctbig">${S.pct}%</div>
+            <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked ? "disabled" : ""} />
+            <div class="row"><span class="dim">${locked ? "stack at the minimum" : "minimum " + fmt(RULES.minStake)}</span><strong id="stake">${fmt(stake)}</strong><span class="dim">all in</span></div>
+            <div id="status" class="dim">${locked ? "Your full " + fmt(Math.min(RULES.minStake, S.wealth)) + " rides on this answer \u2014 that's the minimum." : statusLine()}</div>
           </div>
         </div>`;
       root.querySelectorAll(".opt").forEach((b) => (b.onclick = () => pickOption(+b.dataset.i, q.type)));
@@ -120,6 +122,7 @@ export async function mount(root) {
       let deb = null;
       slider.oninput = () => {
         S.pct = +slider.value;
+        root.querySelector("#pctbig").textContent = S.pct + "%";
         root.querySelector("#stake").textContent = fmt(clampStake(S.pct, S.wealth, RULES.minStake));
         clearTimeout(deb); deb = setTimeout(saveBet, 250);
       };
