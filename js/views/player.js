@@ -226,7 +226,7 @@ export async function mount(root) {
         const kT = t.kTop10 != null ? t.kTop10 : t.pTop10;
         const mine = f.sizing ? f.sizing.find((r) => r.token === token) : null;
         root.innerHTML = `<div class="card center"><h2>What would it have taken?</h2>
-          <p>Needs to know <strong class="clock">${kM == null ? ">100%" : pc(kM)}</strong> of the answers to beat the median \u00b7
+          <p>Needs to know <strong class="clock">${kM == null ? ">100%" : pc(kM)}</strong> of the answers to beat the median${f.thresholds.kMean != null ? ` \u00b7 <strong class="clock">${pc(f.thresholds.kMean)}</strong> for the mean` : ""} \u00b7
              <strong class="clock">${kT == null ? ">100%" : pc(kT)}</strong> for the top 10%.</p>
           ${mine ? `<p class="dim">You answered ${pc(mine.pHat)} right.</p>` : ""}
         </div>`;

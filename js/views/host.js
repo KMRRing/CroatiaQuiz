@@ -172,11 +172,13 @@ export async function mount(root) {
     const sizing = sizingReport(reveals, humanTokens);
     const P = bd.length;
     const medianW = bd.length ? bd[Math.floor(P / 2)].w : 0;
+    const meanW = bd.length ? bd.reduce((a, r) => a + r.w, 0) / P : 0;
     const topIdx = Math.max(0, Math.ceil(P * 0.10) - 1);
     const top10W = bd.length ? bd[topIdx].w : 0;
     const thresholds = {
       medianW, top10W,
       kMedian: requiredKnowledge(reveals, medianW),
+      kMean: requiredKnowledge(reveals, meanW), meanW,
       kTop10: requiredKnowledge(reveals, top10W),
       Obar: sizing.Obar,
     };
