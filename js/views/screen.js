@@ -121,7 +121,7 @@ export async function mount(root) {
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${c2x.toFixed(0)} ${c2y.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}"/>`;
       if (row.kind === "one") {
         g += svgIcon(row.e.t, ix, sy, compact ? 32 : 42, i * 70);
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy - (compact ? 12 : 16)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
       } else {
         const mem = row.grp.members;
         if (mem.length === 1) {
@@ -136,7 +136,7 @@ export async function mount(root) {
             g += svgIcon(m, ix + dx, sy + dy - (compact ? 5 : 7), compact ? 22 : 28, i * 70 + j * 40);
           });
         }
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy - (compact ? 12 : 16)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.grp.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.grp.v)}</text>`;
       }
     });
     const outDelay = nIn * 60 + 700;
@@ -147,7 +147,7 @@ export async function mount(root) {
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${(W - (compact ? 86 : 156) - obow).toFixed(0)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}"/>`;
       g += svgIcon(e.t, W - (compact ? 70 : 120) - obow, ey2, compact ? 32 : 42, outDelay + i * 80);
-      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 + (compact ? 5 : 7)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
     const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
     const f2 = Math.round(f1 * 0.52);
