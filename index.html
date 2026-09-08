@@ -9,7 +9,7 @@
   :root { --blue:#0000FF; --deep:#0A0ABA; --violet:#8200DE; --orange:#FF6432; --yellow:#FFD359; --sky:#0CA6FF;
           --bg:#FFFFFF; --card:#FFFFFF; --ink:#0A0A14; --dim:#5A6070; --line:#E3E6EF; --wash:#F6F7FB;
           --up:#0000FF; --down:#FF6432; --grad:linear-gradient(135deg,#0000FF 0%,#8200DE 55%,#FF6432 100%); }
-  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 Arial,Helvetica,sans-serif; }
   h1,h2,.clock,.mult,button.big { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; }
   .motif { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
@@ -244,7 +244,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b102-autojoin", "./js/questions.js": "./js/questions.js?v=b102-autojoin", "./js/characters.js": "./js/characters.js?v=b102-autojoin", "./js/engine.js": "./js/engine.js?v=b102-autojoin", "./js/fb.js": "./js/fb.js?v=b102-autojoin", "./js/bots.js": "./js/bots.js?v=b102-autojoin", "./js/finale.js": "./js/finale.js?v=b102-autojoin", "./js/views/player.js": "./js/views/player.js?v=b102-autojoin", "./js/views/screen.js": "./js/views/screen.js?v=b102-autojoin", "./js/views/host.js": "./js/views/host.js?v=b102-autojoin", "./js/views/swarm.js": "./js/views/swarm.js?v=b102-autojoin" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b103-notapzoom", "./js/questions.js": "./js/questions.js?v=b103-notapzoom", "./js/characters.js": "./js/characters.js?v=b103-notapzoom", "./js/engine.js": "./js/engine.js?v=b103-notapzoom", "./js/fb.js": "./js/fb.js?v=b103-notapzoom", "./js/bots.js": "./js/bots.js?v=b103-notapzoom", "./js/finale.js": "./js/finale.js?v=b103-notapzoom", "./js/views/player.js": "./js/views/player.js?v=b103-notapzoom", "./js/views/screen.js": "./js/views/screen.js?v=b103-notapzoom", "./js/views/host.js": "./js/views/host.js?v=b103-notapzoom", "./js/views/swarm.js": "./js/views/swarm.js?v=b103-notapzoom" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
