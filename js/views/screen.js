@@ -136,7 +136,7 @@ export async function mount(root) {
             g += svgIcon(m, ix + dx, sy + dy - (compact ? 5 : 7), compact ? 22 : 28, i * 70 + j * 40);
           });
         }
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.grp.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (mem.length === 1 ? (compact ? 16 : 22) : (compact ? 46 : 58))).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.grp.v)}</text>`;
       }
     });
     const outDelay = nIn * 60 + 700;
