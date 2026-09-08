@@ -245,8 +245,8 @@ export async function mount(root) {
               <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
               </linearGradient></defs>
-              <path d="M 171.4 10.1 L 50.1 108.0 A 54 54 0 0 1 136.6 162.1 Z" fill="url(#hg)"/>
-              <circle cx="171.4" cy="10.1" r="7" fill="#FFD359"/>
+              <path d="M 153.9 38.1 L 72.8 97.2 A 54 54 0 0 0 136.4 136.9 Z" fill="url(#hg)"/>
+              <circle cx="153.9" cy="38.1" r="6" fill="#FFD359"/>
             </svg>` : ""}</div>
           ${mine || "<h2>Full time.</h2>"}
           <p class="dim">${won ? "Take a bow." : "Final boards are on the big screen \u2014 more coming."}</p>
