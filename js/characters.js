@@ -6,6 +6,6 @@ export const CHARACTERS = [
   ["\u{1F41A}","Shell"],["\u{1F433}","Whale"],["\u{1F989}","Owl"],["\u{1F438}","Frog"],
   ["\u{1F981}","Lion"],["\u{1F42B}","Camel"],["\u{1F999}","Llama"],["\u{1F9A9}","Flamingo"],
   ["\u{1F427}","Penguin"],["\u{1F988}","Shark"],["\u{1F9AB}","Beaver"],["\u{1F40E}","Horse"],
-  ["\u{1F9A6}","Otter"],["\u{1F42F}","Tiger"],["\u{1F999}","Alpaca"],["\u{1F9E8}","Firecracker"],
-  ["\u{1F9C0}","Cheese"],["\u{1F344}","Mushroom"],["\u{1F335}","Cactus"],["\u{1F419}","Kraken"],
+  ["\u{1F9A6}","Otter"],["\u{1F42F}","Tiger"],["\u{1F9A5}","Sloth"],["\u{1F9E8}","Firecracker"],
+  ["\u{1F9C0}","Cheese"],["\u{1F344}","Mushroom"],["\u{1F335}","Cactus"],["\u{1F991}","Squid"],
 ];

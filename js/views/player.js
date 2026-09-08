@@ -49,11 +49,16 @@ export async function mount(root) {
   async function loadFinale() { S.finale = await read("finale"); S.reveals = await read("reveal"); render(); }
 
   async function join() {
-    const players = (await read("players")) || {};
-    const taken = new Set(Object.values(players).map((p) => p.ci));
-    const free = CHARACTERS.map((_, i) => i).filter((i) => !taken.has(i));
-    const ci = free.length ? free[Math.floor(Math.random() * free.length)] : Math.floor(Math.random() * CHARACTERS.length);
-    await set(gref("players", token), { uid: user.uid, ci, joinedAt: serverTimestamp() });
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const players = (await read("players")) || {};
+      const taken = new Set(Object.entries(players).filter(([t2]) => t2 !== token).map(([, pl]) => pl.ci));
+      const free = CHARACTERS.map((_, i) => i).filter((i) => !taken.has(i));
+      const ci = free.length ? free[Math.floor(Math.random() * free.length)] : Math.floor(Math.random() * CHARACTERS.length);
+      await set(gref("players", token), { uid: user.uid, ci, joinedAt: serverTimestamp() });
+      const again = (await read("players")) || {};
+      const clash = Object.entries(again).filter(([t2, pl]) => t2 !== token && pl.ci === ci);
+      if (!clash.length || !clash.some(([t2]) => t2 < token)) return; // we keep it; any later token re-rolls
+    }
   }
 
   function saveBet() {
