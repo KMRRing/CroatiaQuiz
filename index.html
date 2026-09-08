@@ -90,9 +90,20 @@
   .optrow.right .optfill { font-weight:700; }
   @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
   .stage { position:fixed; inset:0; }
-  .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:4vh; width:46vw; min-width:640px; }
+  .toplock { position:absolute; top:2.2vh; left:50%; transform:translateX(-50%); font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:1.45rem; font-weight:700; color:var(--blue); }
+  .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:7.5vh; width:41vw; min-width:600px; }
+  .qcard { background:#0B1030; border-radius:24px; padding:24px 28px; box-shadow:0 18px 50px rgba(11,16,48,.28); }
+  .qcard .qtext { color:#fff; }
+  .qcard .qmeta { color:#A9B2D6; font-size:.95rem; }
+  .qcard .optrow.plain { background:#fff; border-color:#fff; }
+  .qcard .optrow.wrong { background:#fff; border-color:#fff; }
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
-  .zone-r { position:absolute; right:3vw; bottom:5vh; width:23vw; min-width:300px; }
+  .zone-r { position:absolute; right:8vw; bottom:5vh; width:21vw; min-width:290px; }
+  .lbrow, .lbrow-static { position:relative; }
+  .delta-badge { position:absolute; right:-7.2vw; top:2px; min-width:5.5vw; text-align:left; font-weight:800; font-variant-numeric:tabular-nums; opacity:0; transform:scale(.6); animation:popin .4s cubic-bezier(.2,.8,.3,1.2) forwards; }
+  .delta-badge.pos { color:#0E8A43; }
+  .delta-badge.neg { color:#D33A3A; }
+  @keyframes popin { to { opacity:1; transform:scale(1); } }
   .hugeclock { font-size:7.5rem; line-height:1; }
   .zone-l .center { text-align:center; padding-top:6vh; }
   .fade { opacity:0; transition:opacity .8s ease; }
@@ -107,7 +118,7 @@
   .lb .lbrow { opacity:0; transform:translateY(var(--dy)); animation:lbslide .7s cubic-bezier(.2,.7,.2,1) forwards; }
   .lb .lbrow.enter { opacity:0; }
   @keyframes lbslide { to { transform:translateY(0); opacity:1; } }
-  @media (prefers-reduced-motion: reduce) { .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce) { .delta-badge { animation:none; opacity:1; transform:none; } .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
   .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
   @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
@@ -116,7 +127,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b13-stage", "./js/questions.js": "./js/questions.js?v=b13-stage", "./js/characters.js": "./js/characters.js?v=b13-stage", "./js/engine.js": "./js/engine.js?v=b13-stage", "./js/fb.js": "./js/fb.js?v=b13-stage", "./js/bots.js": "./js/bots.js?v=b13-stage", "./js/finale.js": "./js/finale.js?v=b13-stage", "./js/views/player.js": "./js/views/player.js?v=b13-stage", "./js/views/screen.js": "./js/views/screen.js?v=b13-stage", "./js/views/host.js": "./js/views/host.js?v=b13-stage", "./js/views/swarm.js": "./js/views/swarm.js?v=b13-stage" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b14-polish", "./js/questions.js": "./js/questions.js?v=b14-polish", "./js/characters.js": "./js/characters.js?v=b14-polish", "./js/engine.js": "./js/engine.js?v=b14-polish", "./js/fb.js": "./js/fb.js?v=b14-polish", "./js/bots.js": "./js/bots.js?v=b14-polish", "./js/finale.js": "./js/finale.js?v=b14-polish", "./js/views/player.js": "./js/views/player.js?v=b14-polish", "./js/views/screen.js": "./js/views/screen.js?v=b14-polish", "./js/views/host.js": "./js/views/host.js?v=b14-polish", "./js/views/swarm.js": "./js/views/swarm.js?v=b14-polish" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

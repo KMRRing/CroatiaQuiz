@@ -33,6 +33,11 @@ export async function mount(root) {
     }
   }
 
+  const iconOf = (t) => {
+    if (BOTS[t]) return BOTS[t].emoji;
+    const p = S.players[t];
+    return (p && CHARACTERS[p.ci] ? CHARACTERS[p.ci][0] : "\u{1F3AD}");
+  };
   const nameOf = (t) => {
     if (BOTS[t]) return BOTS[t].emoji + " " + BOTS[t].name;
     const p = S.players[t];
@@ -43,8 +48,9 @@ export async function mount(root) {
   const lockLine = () => `${S.betCount} of ${humanCount()} locked in`;
 
 
-  function potScene(rv, q, W = 1200, H = 560, compact = false) {
-    const cx = W / 2, cy = H * 0.54, R = compact ? 64 : 118;
+  function potScene(rv, q, W = 1200, H = 560, compact = false, roundIdx = 0) {
+    const prog = Math.min(1, (roundIdx + 1) / N_ROUNDS);
+    const cx = W / 2, cy = H * 0.54, R = compact ? Math.round(46 + 52 * prog) : Math.round(96 + 44 * prog);
     const mkIn = [], mkOut = [];
     for (const [t, st] of Object.entries(rv.stakes || {})) mkIn.push({ t, v: st, bot: false });
     for (const [t, st] of Object.entries(rv.botStakes || {})) mkIn.push({ t, v: st, bot: true });
@@ -65,16 +71,18 @@ export async function mount(root) {
       const sy = spread(mkIn.length, i);
       const a = Math.PI * (150 + (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
       const ex = cx + R * Math.cos(a), ey = cy + R * Math.sin(a);
-      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 60)}ms" d="M ${compact ? 20 : 80} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 80}" y="${(sy - 8).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${nameOf(e.t)}${e.bot ? "" : " " + fmt(e.v)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 60}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 17 : 22}">${iconOf(e.t)}</text>`;
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 60)}ms" d="M ${compact ? 36 : 96} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 40 : 104}" y="${(sy - 8).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${nameOf(e.t)}${e.bot ? "" : " " + fmt(e.v)}</text>`;
     });
     const outDelay = mkIn.length * 60 + 700;
     mkOut.forEach((e, i) => {
       const ey2 = spread(mkOut.length, i);
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
-      g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${W - (compact ? 20 : 80)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 20 : 80)}" y="${(ey2 - 8).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#B4400F">${nameOf(e.t)} ${fmt(e.v)}</text>`;
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${W - (compact ? 36 : 96)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 20 : 60)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 17 : 22}">${iconOf(e.t)}</text>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 40 : 104)}" y="${(ey2 - 8).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#B4400F">${nameOf(e.t)} ${fmt(e.v)}</text>`;
     });
     const potHead = rv.rolled
       ? `<text x="${cx}" y="${compact ? 30 : 120}" text-anchor="middle" font-size="${hf * 0.75}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">NOBODY RIGHT \u2014 ${fmt(rv.pot)} ROLLS OVER</text>`
@@ -89,12 +97,12 @@ export async function mount(root) {
         <marker id="aout" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FF6432"/></marker>
       </defs>
       ${potHead}
+      ${g}
       <g class="potring" style="transform-origin:${cx}px ${cy}px">
         <circle cx="${cx}" cy="${cy}" r="${R}" fill="#fff" stroke="url(#tgw)" stroke-width="${compact ? 3.5 : 5}"/>
         <text x="${cx}" y="${cy - (compact ? 4 : 8)}" text-anchor="middle" font-size="${compact ? 26 : 46}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.rolled ? "\u21bb" : "\u00d7" + rv.mult.toFixed(2)}</text>
         <text x="${cx}" y="${cy + (compact ? 18 : 30)}" text-anchor="middle" font-size="${compact ? 11 : 17}" fill="#5A6070">${rv.rolled ? "carried over" : "paid to the right side"}</text>
       </g>
-      ${g}
     </svg>`;
   }
 
@@ -117,7 +125,7 @@ export async function mount(root) {
   }
 
 
-  function renderBoard(wm, prevWm) {
+  function renderBoard(wm, prevWm, deltas) {
     const el = root.querySelector("#lbList");
     if (!el || !wm) return;
     const rank = (m) => Object.keys(m).sort((a, b) => m[b] - m[a]);
@@ -126,21 +134,24 @@ export async function mount(root) {
     if (prevWm) rank(prevWm).forEach((t, i) => { prevIdx[t] = i; });
     const rowH = 40;
     el.innerHTML = after.slice(0, 10).map((t, i) => {
-      if (!prevWm) return `<li><span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+      const badge = deltas && deltas[t] != null && Math.abs(deltas[t]) >= 0.5
+        ? `<span class="delta-badge ${deltas[t] >= 0 ? "pos" : "neg"}" style="animation-delay:${i * 70}ms">${deltas[t] >= 0 ? "+" : "\u2212"}${fmt(Math.abs(deltas[t]))}</span>` : "";
+      if (!prevWm) return `<li class="lbrow-static">${badge}<span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
       const pi = prevIdx[t] != null ? prevIdx[t] : 12;
       const enter = pi > 9;
-      return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${1200 + i * 80}ms">
-        <span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
+      return `<li class="lbrow${enter ? " enter" : ""}" style="--dy:${enter ? 110 : (pi - i) * rowH}px; animation-delay:${i * 70}ms">
+        ${badge}<span>${i + 1}. ${nameOf(t)}</span><span>${fmt(wm[t])}</span></li>`;
     }).join("");
   }
 
   function buildStage(q, phase, rv) {
     root.innerHTML = `
       <div class="stage">
-        <div class="zone-q">
+        <div class="toplock" id="locked">${lockLine()}</div>
+        <div class="zone-q qcard">
           <div class="row spread">
-            <span class="dim">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</span>
-            <span class="dim" id="qres"></span>
+            <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</span>
+            <span class="qmeta" id="qres"></span>
           </div>
           <h1 class="qtext" id="qtext">${q.text}</h1>
           <div id="optbox">${optionRows(q, null)}</div>
@@ -148,7 +159,6 @@ export async function mount(root) {
         <div class="zone-l">
           <div id="clockwrap" class="fade show center">
             <div id="clock" class="clock hugeclock"></div>
-            <h2 id="locked">${lockLine()}</h2>
           </div>
           <div id="potwrap" class="fade"></div>
         </div>
@@ -183,11 +193,22 @@ export async function mount(root) {
     if (cw) cw.classList.remove("show");
     if (pw) {
       pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
-        ? potScene(rv, q, 780, 470, true)
+        ? potScene(rv, q, 780, 470, true, S.state.round)
         : `<p class="dim">Settled on an older build \u2014 no flow data for this round.</p>`;
       requestAnimationFrame(() => pw.classList.add("show"));
     }
-    renderBoard(rv.wealthAfter || S.wealth, (S.prevReveal && S.prevReveal.wealthAfter) || null);
+    // deltas for everyone (bot deltas derived from stakes + rightness)
+    const wAfter = rv.wealthAfter || S.wealth;
+    const deltas = Object.assign({}, rv.deltas || {});
+    for (const [t, st] of Object.entries(rv.botStakes || {})) {
+      const right = rv.aiAnswers && rv.aiAnswers[t] === rv.correct;
+      deltas[t] = right && !rv.rolled && rv.mult > 0 ? st * (rv.mult - 1) : -st;
+    }
+    const wBefore = {};
+    for (const t of Object.keys(wAfter)) wBefore[t] = wAfter[t] - (deltas[t] || 0);
+    clearTimeout(S.lbTimer);
+    setTimeout(() => renderBoard(wBefore, null, deltas), 350);
+    S.lbTimer = setTimeout(() => renderBoard(wAfter, wBefore, null), 2300);
   }
 
   function joinUrl() {
