@@ -70,22 +70,60 @@ export async function mount(root) {
     const spread = (n, i) => yTop + (n <= 1 ? (yBot - yTop) / 2 : (i / (n - 1)) * (yBot - yTop));
     const fs = compact ? 13 : 19, hf = compact ? 21 : 40;
     let g = "";
-    mkIn.forEach((e, i) => {
-      const sy = spread(mkIn.length, i);
-      const a = Math.PI * (210 - (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
-      const ex = cx + R * Math.cos(a), ey = cy + R * Math.sin(a);
-      g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 60}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
-      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 60)}ms" d="M ${compact ? 36 : 96} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 40 : 104}" y="${(sy - 8).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${e.bot ? "" : fmt(e.v)}</text>`;
+    const bow = compact ? 16 : 24;
+    const bowOff = (n, i) => bow * (1 - (n <= 1 ? 0 : Math.sin(Math.PI * (i / (n - 1)))));
+    // top 3 losing stakes individually; the rest piled into one arrow per wrong answer chosen
+    const top3 = mkIn.slice(0, 3);
+    const rest = mkIn.slice(3);
+    const groups = {};
+    for (const e of rest) {
+      const raw = e.bot ? (rv.aiAnswers ? rv.aiAnswers[e.t] : "") : (rv.answers ? rv.answers[e.t] : null);
+      const key = raw == null ? "?" : (raw === "" ? "\u2205" : raw);
+      (groups[key] = groups[key] || { key, v: 0, members: [] });
+      groups[key].v += e.v; groups[key].members.push(e.t);
+    }
+    let gl = Object.values(groups).sort((x, y) => y.v - x.v);
+    if (gl.length > 6) {
+      const keep = gl.slice(0, 5), misc = gl.slice(5);
+      keep.push({ key: "\u2026", v: misc.reduce((a2, g2) => a2 + g2.v, 0), members: misc.flatMap((g2) => g2.members) });
+      gl = keep;
+    }
+    const inRows = top3.map((e) => ({ kind: "one", e })).concat(gl.map((grp) => ({ kind: "grp", grp })));
+    const nIn = inRows.length;
+    inRows.forEach((row, i) => {
+      const sy = spread(nIn, i);
+      const ix = (compact ? 20 : 60) + bowOff(nIn, i);
+      const ax = ix + (compact ? 16 : 36);
+      const t2 = nIn <= 1 ? 0.5 : i / (nIn - 1);
+      const ang = Math.PI * (210 - (30 + t2 * 60) * (nIn <= 1 ? 1 : 1)) / 180;
+      const a2 = Math.PI * (210 - (nIn <= 1 ? 30 : t2 * 60)) / 180;
+      const ex = cx + R * Math.cos(a2), ey = cy + R * Math.sin(a2);
+      const v = row.kind === "one" ? row.e.v : row.grp.v;
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}" marker-end="url(#ain)"/>`;
+      if (row.kind === "one") {
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(row.e.t)}</text>`;
+        if (!row.e.bot) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 20 : 26)).toFixed(0)}" y="${(sy - 10).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
+      } else {
+        const shown = row.grp.members.slice(0, 7);
+        shown.forEach((m, j) => {
+          const dx = (j % 4) * (compact ? 13 : 17) - (compact ? 6 : 8);
+          const dy = Math.floor(j / 4) * (compact ? 14 : 18) - (compact ? 16 : 22) - ((j * 5) % 6);
+          g += `<text class="lbl" style="animation-delay:${(i * 70 + j * 40)}ms" x="${(ix + dx).toFixed(0)}" y="${(sy + dy).toFixed(0)}" text-anchor="middle" font-size="${compact ? 16 : 21}">${iconOf(m)}</text>`;
+        });
+        if (row.grp.members.length > 7) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 26 : 34)).toFixed(0)}" y="${(sy + 4).toFixed(0)}" font-size="${fs}" fill="#5A6070">+${row.grp.members.length - 7}</text>`;
+        const tag = row.grp.key === "\u2205" ? "\u2014" : (row.grp.key === "\u2026" ? "\u2026" : row.grp.key.split("").map((c) => String.fromCharCode(65 + +c)).join(""));
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + (compact ? 22 : 28)).toFixed(0)}" text-anchor="middle" font-size="${compact ? 11 : 14}" fill="#5A6070">${tag}</text>`;
+      }
     });
-    const outDelay = mkIn.length * 60 + 700;
+    const outDelay = nIn * 60 + 700;
     mkOut.forEach((e, i) => {
       const ey2 = spread(mkOut.length, i);
+      const obow = bowOff(mkOut.length, i);
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
-      g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${W - (compact ? 86 : 156)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
-      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 70 : 120)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${W - (compact ? 54 : 98)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${(W - (compact ? 86 : 156) - obow).toFixed(0)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 70 : 120) - obow).toFixed(0)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
     const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
     const f2 = Math.round(f1 * 0.52);
@@ -151,10 +189,9 @@ export async function mount(root) {
   function buildStage(q, phase, rv) {
     root.innerHTML = `
       <div class="stage">
-        <div class="toplock" id="locked">${lockLine()}</div>
         <div class="zone-q qcard">
           <div class="row spread">
-            <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</span>
+            <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"} \u00b7 <span id="locked">${lockLine()}</span></span>
             <span class="qmeta" id="qres"></span>
           </div>
           <h1 class="qtext" id="qtext">${q.text}</h1>

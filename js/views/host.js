@@ -92,11 +92,11 @@ export async function mount(root) {
       const optShare = optCount.map((c) => (nAnswered ? c / nAnswered : 0));
       const updates = {};
       let gain = null, loss = null;
-      const deltas = {}, aiAnswers = {}, stakes = {}, botStakes = {};
+      const deltas = {}, aiAnswers = {}, stakes = {}, botStakes = {}, answers = {};
       for (const [t, e] of Object.entries(entries)) {
         updates["wealth/" + t] = ((wealth && wealth[t]) || 0) + r.deltas[t];
         if (players[t].bot) { aiAnswers[t] = e.answer == null ? "" : e.answer; botStakes[t] = e.stake; continue; }
-        deltas[t] = r.deltas[t]; stakes[t] = e.stake;
+        deltas[t] = r.deltas[t]; stakes[t] = e.stake; answers[t] = e.answer == null ? "" : e.answer;
         if (!gain || r.deltas[t] > r.deltas[gain]) gain = t;
         if (!loss || r.deltas[t] < r.deltas[loss]) loss = t;
       }
@@ -105,7 +105,7 @@ export async function mount(root) {
       updates["reveal/" + n] = {
         correct: q.correct, W: r.W, L: r.L, pot: r.pot, mult: r.mult, rolled: r.rolled, wealthAfter,
         nRight: Object.values(r.right).filter(Boolean).length,
-        deltas, stakes, aiAnswers, botStakes, optShare, nAnswered,
+        deltas, stakes, aiAnswers, botStakes, answers, optShare, nAnswered,
         top: gain ? { gainT: gain, gainD: r.deltas[gain], lossT: loss, lossD: r.deltas[loss] } : null,
       };
       updates["state"] = { phase: "reveal", round: n, rollover: r.newRollover, closesAt: 0 };
