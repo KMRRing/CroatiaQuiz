@@ -99,7 +99,12 @@ export async function mount(root) {
       const a2 = Math.PI * (210 - (nIn <= 1 ? 30 : t2 * 60)) / 180;
       const ex = cx + R * Math.cos(a2), ey = cy + R * Math.sin(a2);
       const v = row.kind === "one" ? row.e.v : row.grp.v;
-      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}" marker-end="url(#ain)"/>`;
+      // final control point sits on the radial line, so the visible approach and the
+      // auto-oriented head both point into the centre of the pot
+      const dxr = cx - ex, dyr = cy - ey, dl = Math.hypot(dxr, dyr) || 1;
+      const L2 = compact ? 46 : 92;
+      const c2x = ex - (dxr / dl) * L2, c2y = ey - (dyr / dl) * L2;
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${c2x.toFixed(0)} ${c2y.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}" marker-end="url(#ain)"/>`;
       if (row.kind === "one") {
         g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 30 : 38}">${iconOf(row.e.t)}</text>`;
         if (!row.e.bot) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 26 : 34)).toFixed(0)}" y="${(sy - 14).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
