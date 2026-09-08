@@ -275,7 +275,7 @@ export async function mount(root) {
               <circle cx="153.9" cy="38.1" r="6" fill="#FFD359"/>
             </svg>` : ""}</div>
           ${mine || "<h2>Full time.</h2>"}
-          <p class="dim">${won ? "Take a bow." : "Final boards are on the big screen \u2014 more coming."}</p>
+          ${won ? `<p class="dim">Take a bow.</p>` : ""}
         </div>`;
       if (won) startParty();
       return;
