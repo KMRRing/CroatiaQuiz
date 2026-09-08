@@ -86,6 +86,10 @@
   table.sizing th, table.sizing td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
   table.sizing th { color:var(--dim); font-weight:400; }
   .thresh { border:1px solid var(--line); border-radius:18px; padding:22px; }
+  .tcenter { text-align:center; }
+  .kcard .thresh { border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.09); border-radius:20px; }
+  .kcard .thresh .mult { color:#FFD359; }
+  .kcard .thresh p { color:rgba(255,255,255,.88); }
   .flow path.arrow { fill:none; stroke:url(#tgw); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; animation:drawin .7s ease-out forwards; opacity:.85; }
   .flow text.lbl { opacity:0; animation:fadein .5s ease-out forwards; }
   .flow .potring { animation:potpop 1s ease-out; }
@@ -165,7 +169,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b54-kcenter", "./js/questions.js": "./js/questions.js?v=b54-kcenter", "./js/characters.js": "./js/characters.js?v=b54-kcenter", "./js/engine.js": "./js/engine.js?v=b54-kcenter", "./js/fb.js": "./js/fb.js?v=b54-kcenter", "./js/bots.js": "./js/bots.js?v=b54-kcenter", "./js/finale.js": "./js/finale.js?v=b54-kcenter", "./js/views/player.js": "./js/views/player.js?v=b54-kcenter", "./js/views/screen.js": "./js/views/screen.js?v=b54-kcenter", "./js/views/host.js": "./js/views/host.js?v=b54-kcenter", "./js/views/swarm.js": "./js/views/swarm.js?v=b54-kcenter" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b55-threshcard", "./js/questions.js": "./js/questions.js?v=b55-threshcard", "./js/characters.js": "./js/characters.js?v=b55-threshcard", "./js/engine.js": "./js/engine.js?v=b55-threshcard", "./js/fb.js": "./js/fb.js?v=b55-threshcard", "./js/bots.js": "./js/bots.js?v=b55-threshcard", "./js/finale.js": "./js/finale.js?v=b55-threshcard", "./js/views/player.js": "./js/views/player.js?v=b55-threshcard", "./js/views/screen.js": "./js/views/screen.js?v=b55-threshcard", "./js/views/host.js": "./js/views/host.js?v=b55-threshcard", "./js/views/swarm.js": "./js/views/swarm.js?v=b55-threshcard" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
