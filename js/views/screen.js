@@ -119,7 +119,7 @@ export async function mount(root) {
       return `<div class="optrow ${isC ? "right" : "wrong"}">
         <span class="optlabel">${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}
         <div class="optfillwrap" style="--w:${share == null ? 0 : share}%">
-          <div class="optfill"><span class="optlabel">${label}</span></div>
+          <div class="optfill"><span class="optlabel">${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}</div>
         </div>
       </div>`;
     }).join("") + `</div>`;
@@ -188,7 +188,7 @@ export async function mount(root) {
       const share = rv.optShare ? Math.round(rv.optShare[i] * 100) : null;
       const label = row.querySelector(".optlabel") ? row.querySelector(".optlabel").textContent : "";
       if (share != null) row.insertAdjacentHTML("beforeend",
-        `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span></div></div>`);
+        `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span><span class="optpct">${share}%</span></div></div>`);
     });
     const cw = root.querySelector("#clockwrap"), pw = root.querySelector("#potwrap");
     if (cw) cw.classList.remove("show");
