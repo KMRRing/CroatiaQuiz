@@ -23,8 +23,9 @@ export const RULES = {
   timerSec: 40,     // seconds per question
 };
 
-export const BUILD = "b47-kellycard";
+export const BUILD = "b48-testbots";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";
+export const TEST_MODE = /^test/i.test(GAME_ID);
 export const configured = () => FIREBASE_CONFIG.apiKey !== "PASTE_ME";

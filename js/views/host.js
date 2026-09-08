@@ -1,7 +1,15 @@
 import { ensureAuth, gref, onValue, get, update, set, serverNow, serverTimestamp, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
-import { RULES, BUILD } from "../config.js";
+import { RULES, BUILD, TEST_MODE } from "../config.js";
 import { CHARACTERS } from "../characters.js";
+
+function randomAnswerFor(q) {
+  if (q.type === "single") return String(Math.floor(Math.random() * q.options.length));
+  const picks = [];
+  for (let i = 0; i < q.options.length; i++) if (Math.random() < 0.5) picks.push(i);
+  if (!picks.length) picks.push(Math.floor(Math.random() * q.options.length));
+  return picks.join("");
+}
 import { settle, clampStake, fmt, board } from "../engine.js";
 import { sizingReport, requiredKnowledge } from "../finale.js";
 import { botRoster, botConf } from "../bots.js";
@@ -38,6 +46,14 @@ export async function mount(root) {
       updates["players/" + b.token] = { uid: user.uid, bot: true, name: b.name, emoji: b.emoji, joinedAt: serverTimestamp() };
       updates["wealth/" + b.token] = 0;
     }
+    if (TEST_MODE) {
+      const idx = [...Array(CHARACTERS.length).keys()];
+      for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+      for (let i = 0; i < 20; i++) {
+        updates["players/tb_" + i] = { uid: user.uid, bot: true, test: true, ci: idx[i % idx.length], joinedAt: serverTimestamp() };
+        updates["wealth/tb_" + i] = 0;
+      }
+    }
     await update(gref(), updates);
     log("Lobby open \u2014 QR is live on the big screen.");
   }
@@ -72,8 +88,18 @@ export async function mount(root) {
         const w = (wealth && wealth[t]) || 0;
         if (p.bot) {
           const bot = BOTS[t];
-          const d = bot ? bot.decide(q, n, w) : { answer: null, frac: 0, conf: null };
-          entries[t] = { answer: d.answer, stake: Math.min(w, Math.max(Math.min(RULES.minStake, w), d.frac * w)) };
+          let d, stake;
+          if (bot) {
+            d = bot.decide(q, n, w);
+            stake = Math.min(w, Math.max(Math.min(RULES.minStake, w), d.frac * w));
+          } else if (p.test) {
+            d = { answer: Math.random() < 0.5 ? q.correct : randomAnswerFor(q) };
+            stake = Math.min(w, RULES.minStake + Math.random() * Math.max(0, w - RULES.minStake));
+          } else {
+            d = { answer: null };
+            stake = Math.min(RULES.minStake, w);
+          }
+          entries[t] = { answer: d.answer, stake };
         } else {
           const b = bets && bets[t];
           const late = b && b.at && S.state.closesAt && b.at > S.state.closesAt + 1500;
