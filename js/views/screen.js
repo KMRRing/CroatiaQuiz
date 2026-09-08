@@ -358,13 +358,16 @@ export async function mount(root) {
       }
       const bd = f.board || [];
       const cols = bd.length > 16 ? 2 : 1;
+      const acc = {};
+      (f.sizing || []).forEach((r) => { acc[r.token] = r.pHat; });
+      (f.aiCalib || []).forEach((r) => { if (r.n) acc[r.token] = r.right / r.n; });
       root.innerHTML = `
         <div class="kstage">
         <div class="tcenter">
           <div class="finalboard">
             <h1>Final leaderboard</h1>
             <ol class="board finallb" style="columns:${cols}">
-              ${bd.map((r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span>${fmt(r.w)}</span></li>`).join("")}
+              ${bd.map((r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u2014"}</span><span>${fmt(r.w)}</span></li>`).join("")}
             </ol>
           </div>
           <p class="dim">${[
