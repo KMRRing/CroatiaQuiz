@@ -234,6 +234,10 @@
   .lobbystage { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:4vh; gap:3vh; }
   .lobbyicons { max-width:80vw; }
   .joinicon { font-size:2.6rem; line-height:1; opacity:0; transform:scale(.4); animation:hlpop .4s cubic-bezier(.2,.8,.3,1.2) forwards; }
+  .hostq { margin:8px 0 14px; }
+  .hqt { font-weight:700; margin:.3em 0 .5em; }
+  .hopt { padding:6px 10px; border:1px solid var(--line); border-radius:10px; margin:4px 0; font-size:.95rem; }
+  .hopt-c { background:var(--blue); color:#fff; border-color:var(--blue); }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>
@@ -246,7 +250,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b112-timer", "./js/questions.js": "./js/questions.js?v=b112-timer", "./js/characters.js": "./js/characters.js?v=b112-timer", "./js/engine.js": "./js/engine.js?v=b112-timer", "./js/fb.js": "./js/fb.js?v=b112-timer", "./js/bots.js": "./js/bots.js?v=b112-timer", "./js/finale.js": "./js/finale.js?v=b112-timer", "./js/views/player.js": "./js/views/player.js?v=b112-timer", "./js/views/screen.js": "./js/views/screen.js?v=b112-timer", "./js/views/host.js": "./js/views/host.js?v=b112-timer", "./js/views/swarm.js": "./js/views/swarm.js?v=b112-timer" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b113-hostscript", "./js/questions.js": "./js/questions.js?v=b113-hostscript", "./js/characters.js": "./js/characters.js?v=b113-hostscript", "./js/engine.js": "./js/engine.js?v=b113-hostscript", "./js/fb.js": "./js/fb.js?v=b113-hostscript", "./js/bots.js": "./js/bots.js?v=b113-hostscript", "./js/finale.js": "./js/finale.js?v=b113-hostscript", "./js/views/player.js": "./js/views/player.js?v=b113-hostscript", "./js/views/screen.js": "./js/views/screen.js?v=b113-hostscript", "./js/views/host.js": "./js/views/host.js?v=b113-hostscript", "./js/views/swarm.js": "./js/views/swarm.js?v=b113-hostscript" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

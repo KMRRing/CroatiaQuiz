@@ -250,6 +250,14 @@ export async function mount(root) {
             <button id="reset" class="danger">Reset game</button>
           </div>
           <p class="dim">Rounds auto-close and settle when the clock runs out. Keep this tab open and awake.</p>`}
+        ${(ph === "preview" || ph === "question" || ph === "reveal") && S.state && S.state.round >= 0 ? (() => {
+          const q2 = QUESTIONS[S.state.round];
+          return `<h2>On screen: Q${S.state.round + 1}</h2>
+            <div class="hostq">
+              <p class="hqt">${q2.text}</p>
+              ${q2.options.map((o, i) => `<div class="hopt${ph === "reveal" && q2.correct.includes(String(i)) ? " hopt-c" : ""}">${String.fromCharCode(65 + i)}. ${o}</div>`).join("")}
+            </div>`;
+        })() : ""}
         <h2>Log</h2>
         <pre class="log">${S.log.join("\n")}</pre>
       </div>`;
