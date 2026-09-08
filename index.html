@@ -244,7 +244,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b106-fifty", "./js/questions.js": "./js/questions.js?v=b106-fifty", "./js/characters.js": "./js/characters.js?v=b106-fifty", "./js/engine.js": "./js/engine.js?v=b106-fifty", "./js/fb.js": "./js/fb.js?v=b106-fifty", "./js/bots.js": "./js/bots.js?v=b106-fifty", "./js/finale.js": "./js/finale.js?v=b106-fifty", "./js/views/player.js": "./js/views/player.js?v=b106-fifty", "./js/views/screen.js": "./js/views/screen.js?v=b106-fifty", "./js/views/host.js": "./js/views/host.js?v=b106-fifty", "./js/views/swarm.js": "./js/views/swarm.js?v=b106-fifty" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b107-plainspeak", "./js/questions.js": "./js/questions.js?v=b107-plainspeak", "./js/characters.js": "./js/characters.js?v=b107-plainspeak", "./js/engine.js": "./js/engine.js?v=b107-plainspeak", "./js/fb.js": "./js/fb.js?v=b107-plainspeak", "./js/bots.js": "./js/bots.js?v=b107-plainspeak", "./js/finale.js": "./js/finale.js?v=b107-plainspeak", "./js/views/player.js": "./js/views/player.js?v=b107-plainspeak", "./js/views/screen.js": "./js/views/screen.js?v=b107-plainspeak", "./js/views/host.js": "./js/views/host.js?v=b107-plainspeak", "./js/views/swarm.js": "./js/views/swarm.js?v=b107-plainspeak" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
@@ -285,12 +285,12 @@
         return;
       }
       chk.classList.add("stale"); chk.classList.remove("ok");
-      chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + " \u2014 tap to update";
+      chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + ". Tap to update";
       if (view === "screen" || view === "host" || view === "swarm") {
         const key = "cq_upd_" + liveBuild;
         const last = +(sessionStorage.getItem(key) || 0);
         if (Date.now() - last > 90000) { sessionStorage.setItem(key, String(Date.now())); await doUpdate(); }
-        else chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + " \u2014 waiting for cache to clear";
+        else chk.textContent = "running " + BUILD + " \u00b7 live " + liveBuild + ". Waiting for cache to clear";
       }
     }
     setInterval(checkVersion, 30000); checkVersion();

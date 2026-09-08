@@ -307,7 +307,7 @@ export async function mount(root) {
               <circle id="ringfg2" cx="22" cy="22" r="18" fill="none" stroke="url(#rg2)" stroke-width="3.4"
                 pathLength="100" stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
                 transform="rotate(-90 22 22)"/>
-              <text id="clocknum2" x="22" y="27.5" text-anchor="middle" font-size="15" font-weight="700" fill="#0A0A14" font-family="Century Gothic,Questrial,Poppins,Arial">\u2014</text>
+              <text id="clocknum2" x="22" y="27.5" text-anchor="middle" font-size="15" font-weight="700" fill="#0A0A14" font-family="Century Gothic,Questrial,Poppins,Arial"></text>
             </svg>
           </div>
           <div id="potwrap" class="fade"></div>
@@ -355,7 +355,7 @@ export async function mount(root) {
       if (pw) {
         pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
           ? potScene(rv, q, 780, 470, true, S.state.round)
-          : `<p class="dim">Settled on an older build \u2014 no flow data for this round.</p>`;
+          : `<p class="dim">Settled on an older build. No flow data for this round.</p>`;
         requestAnimationFrame(() => pw.classList.add("show"));
       }
     }, 3000);
@@ -421,7 +421,7 @@ export async function mount(root) {
     if (ph === "finished" && S.finale) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
-      const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
+      const pc = (x) => x == null ? "\u00b7" : (x * 100).toFixed(0) + "%";
       if (stage >= 1 && stage <= 4 && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
@@ -461,7 +461,6 @@ export async function mount(root) {
         root.innerHTML = `
           <div class="kstage">
             <div class="kcard">
-            <h1>The right size, in one line</h1>
             ${KELLY_FORMULA_HTML}
             <div class="cols" style="gap:2.5vw; margin:.4em 0 1em;">
               ${tbl(rows.slice(0, half))}${tbl(rows.slice(half))}
@@ -487,7 +486,7 @@ export async function mount(root) {
           <div class="finalboard">
             <h1>Final leaderboard</h1>
             ${(() => {
-              const row = (r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u2014"}</span><span>${fmt(r.w)}</span></li>`;
+              const row = (r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u00b7"}</span><span>${fmt(r.w)}</span></li>`;
               const rows = bd.map(row);
               if (!twoCol) return `<ol class="board finallb">${rows.join("")}</ol>`;
               const half = Math.ceil(rows.length / 2);

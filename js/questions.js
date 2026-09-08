@@ -10,7 +10,7 @@ export const QUESTIONS = [
     options: ["True", "False"], correct: "1" },
   { id: 3, tag: "UK / RTFO", type: "single", roomP: 0.60,
     text: "E-ethanol supplied into UK marine bunkering in a 50/50 blend with fossil methanol generates:",
-    options: ["2\u00d7 development RTFCs (dRTFCs)", "2\u00d7 standard RTFCs, on the ethanol volume only", "1\u00d7 standard RTFC on the full blend", "No credit \u2014 marine is out of scope"], correct: "1" },
+    options: ["2\u00d7 development RTFCs (dRTFCs)", "2\u00d7 standard RTFCs, on the ethanol volume only", "1\u00d7 standard RTFC on the full blend", "No credit, marine is out of scope"], correct: "1" },
   { id: 4, tag: "ISCC EU", type: "single", roomP: 0.70,
     text: "You purchase on-spec FAME and detect a fossil additive (<2%). The supplier has issued a PoS for the full delivered quantity. You may book the full delivered quantity into your mass balance as sustainable.",
     options: ["True", "False"], correct: "1" },

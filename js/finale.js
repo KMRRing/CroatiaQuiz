@@ -135,14 +135,12 @@ export const KELLY_FORMULA_HTML = `
     <div>
       <div class="klabel">Kelly, fixed odds</div>
       <div class="formula">f\u2009* = p \u2212 (1 \u2212 p) / b</div>
-      <p class="dim">p is your probability of being right; b the net odds a bookmaker fixes for you.
-      Bet your edge over the price.</p>
+      <p class="dim">p is your chance of being right. b is the net odds. Bet your edge over the price.</p>
     </div>
     <div>
-      <div class="klabel">Kelly, adjusted for a parimutuel pool</div>
+      <div class="klabel">Kelly, in a parimutuel pool</div>
       <div class="formula">f\u2009* = p \u2212 (1 \u2212 p) / (O \u2212 1)</div>
-      <p class="dim">Same shape, but O \u2014 the pool's gross multiple \u2014 is set by the crowd, not fixed:
-      it is roughly 1 over the share of money that's right, and your own stake pushes it down as you size up.
-      When the pool's money is as accurate as you are, p\u00b7O \u2248 1 and the right stake is zero.</p>
+      <p class="dim">Here O is set by the crowd: roughly 1 over the share of money on the right answer.
+      Your own stake pushes it down. If the crowd is as accurate as you, the right stake is zero.</p>
     </div>
   </div>`;

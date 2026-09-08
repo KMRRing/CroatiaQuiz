@@ -55,7 +55,7 @@ export async function mount(root) {
       }
     }
     await update(gref(), updates);
-    log("Lobby open \u2014 QR is live on the big screen.");
+    log("Lobby open. QR is live on the big screen.");
   }
 
   async function showQuestion(n) {
@@ -65,13 +65,13 @@ export async function mount(root) {
     for (const t of Object.keys(players)) updates["wealth/" + t] = (wealth[t] || 0) + RULES.stipend;
     updates["state"] = { phase: "preview", round: n, rollover: (S.state && S.state.rollover) || 0, closesAt: 0, timerSec: S.timerSec };
     await update(gref(), updates);
-    log(`Question ${n + 1} on screen \u2014 read it out, then start the timer.`);
+    log(`Question ${n + 1} on screen. Read it out, then start the timer.`);
   }
 
   async function startQuestion() {
     if (!S.state || S.state.phase !== "preview") return;
     await update(gref(), { "state/phase": "question", "state/closesAt": serverNow() + S.timerSec * 1000, "state/timerSec": S.timerSec });
-    log(`Timer running \u2014 ${S.timerSec}s.`);
+    log(`Timer running: ${S.timerSec}s.`);
   }
 
   function nextAction() {
@@ -239,7 +239,7 @@ export async function mount(root) {
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
             <button id="reset" class="danger">Reset game</button>
           </div>
-          <p class="dim">Rounds auto-close and settle when the clock runs out \u2014 keep this tab open and awake.</p>`}
+          <p class="dim">Rounds auto-close and settle when the clock runs out. Keep this tab open and awake.</p>`}
         <h2>Log</h2>
         <pre class="log">${S.log.join("\n")}</pre>
       </div>`;

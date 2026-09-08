@@ -225,7 +225,7 @@ export async function mount(root) {
           <div class="stakebox resultbox">
             ${rv ? `
               <p class="delta ${d >= 0 ? "up" : "down"}">${d == null ? "" : (d >= 0 ? "+" : "\u2212") + fmt(Math.abs(d))}</p>
-              ${rv.rolled ? `<p class="dim">Nobody had it \u2014 the pot rolls over.</p>` : ""}
+              ${rv.rolled ? `<p class="dim">Nobody had it. The pot rolls over.</p>` : ""}
             ` : `<p class="dim">Settling\u2026</p>`}
           </div>
         </div>`;
@@ -235,7 +235,7 @@ export async function mount(root) {
     if (ph === "finished") {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
-      const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
+      const pc = (x) => x == null ? "\u00b7" : (x * 100).toFixed(0) + "%";
       if (stage >= 1 && stage <= 4 && f && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = (f.board || []).map((r) => r.token);
@@ -247,7 +247,7 @@ export async function mount(root) {
           if (!rv) return "";
           const d = rv.deltas ? rv.deltas[token] : null;
           const a = rv.answers ? rv.answers[token] : null;
-          const mark = d == null ? "\u2014" : (d > 0 ? "\u2713" : (a === "" || a == null ? "\u2014" : "\u2717"));
+          const mark = d == null ? "\u00b7" : (d > 0 ? "\u2713" : (a === "" || a == null ? "\u00b7" : "\u2717"));
           const dTxt = d == null ? "" : (d >= 0 ? "+" : "\u2212") + fmt(Math.abs(d));
           return `<div class="qsrow"><span>Q${i + 1} ${mark}</span><span class="${d >= 0 ? "up" : "down"}">${dTxt}</span></div>`;
         }).join("");
@@ -273,7 +273,7 @@ export async function mount(root) {
         const idx = f.board.findIndex((r) => r.token === token);
         won = idx === 0;
         if (idx >= 0) mine = won
-          ? `<h2>\u{1F3C6} You won the night \u2014 ${fmt(f.board[idx].w)}</h2>`
+          ? `<h2>\u{1F3C6} You won the night: ${fmt(f.board[idx].w)}</h2>`
           : `<h2>You finished ${idx + 1}${["st","nd","rd"][idx] || "th"} with ${fmt(f.board[idx].w)}</h2>`;
       }
       root.innerHTML = `
