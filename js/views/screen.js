@@ -357,7 +357,7 @@ export async function mount(root) {
         return;
       }
       const bd = f.board || [];
-      const cols = bd.length > 16 ? 2 : 1;
+      const twoCol = bd.length > 16;
       const acc = {};
       (f.sizing || []).forEach((r) => { acc[r.token] = r.pHat; });
       (f.aiCalib || []).forEach((r) => { if (r.n) acc[r.token] = r.right / r.n; });
@@ -366,9 +366,13 @@ export async function mount(root) {
         <div class="tcenter">
           <div class="finalboard">
             <h1>Final leaderboard</h1>
-            <ol class="board finallb" style="columns:${cols}">
-              ${bd.map((r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u2014"}</span><span>${fmt(r.w)}</span></li>`).join("")}
-            </ol>
+            ${(() => {
+              const row = (r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u2014"}</span><span>${fmt(r.w)}</span></li>`;
+              const rows = bd.map(row);
+              if (!twoCol) return `<ol class="board finallb">${rows.join("")}</ol>`;
+              const half = Math.ceil(rows.length / 2);
+              return `<div class="fbcols"><ol class="board finallb">${rows.slice(0, half).join("")}</ol><ol class="board finallb">${rows.slice(half).join("")}</ol></div>`;
+            })()}
           </div>
           <p class="dim">${[
             f.bestRound ? `Biggest pot: Q${f.bestRound.n + 1}, ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7` : "",
