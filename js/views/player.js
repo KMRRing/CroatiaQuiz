@@ -281,9 +281,7 @@ export async function mount(root) {
     }
   }
 
-  function statusLine() {
-    return S.answer.size && S.saved ? "Locked in \u2014 you can still change it until the clock runs out." : "";
-  }
+  function statusLine() { return ""; }
   function patchStatus() { const el = root.querySelector("#status"); if (el) el.textContent = statusLine(); }
   function patchWealth() {
     const el = root.querySelector("#wealth"); if (el) el.textContent = fmt(S.wealth);
