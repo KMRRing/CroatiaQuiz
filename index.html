@@ -32,7 +32,9 @@
   .center { text-align:center; }
   .avatar { font-size:3.4rem; width:110px; height:110px; line-height:104px; margin:.4em auto; border-radius:50%;
             border:3px solid transparent; background:linear-gradient(#fff,#fff) padding-box, var(--grad) border-box; }
-  .bar { display:flex; justify-content:space-between; align-items:center; padding:6px 4px; font-weight:700; }
+  .bar { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:6px 4px; font-weight:700; }
+  .bar .clock { text-align:center; }
+  .bar .barname { text-align:right; }
   .row { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
   .spread { justify-content:space-between; }
   .clock { color:var(--blue); font-variant-numeric:tabular-nums; font-weight:700; }
@@ -163,13 +165,27 @@
   .chartstage h1 { margin:0; }
   .chartstage .cwrap { flex:1; min-height:0; }
   .chartstage .cwrap svg { display:block; }
+  @media (max-width:700px) {
+    .card { background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border:none; color:#fff; }
+    .card h1, .card h2 { color:#fff; }
+    .card .dim { color:rgba(255,255,255,.82); }
+    .card .opt { background:#fff; border-color:#fff; color:var(--ink); }
+    .card .opt.sel { background:var(--blue); color:#fff; border:2px solid #fff; }
+    .card .pctbig { color:#FFD359; }
+    .card .stakebox { border-top-color:rgba(255,255,255,.3); }
+    .card .avatar { background:#fff; border:3px solid rgba(255,255,255,.9); }
+    .card .up { color:#FFD359; }
+    .card .down { color:#FFC9B8; }
+    .card .clock { color:#FFD359; }
+    .card input[type=range] { accent-color:#FFD359; }
+  }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b55-threshcard", "./js/questions.js": "./js/questions.js?v=b55-threshcard", "./js/characters.js": "./js/characters.js?v=b55-threshcard", "./js/engine.js": "./js/engine.js?v=b55-threshcard", "./js/fb.js": "./js/fb.js?v=b55-threshcard", "./js/bots.js": "./js/bots.js?v=b55-threshcard", "./js/finale.js": "./js/finale.js?v=b55-threshcard", "./js/views/player.js": "./js/views/player.js?v=b55-threshcard", "./js/views/screen.js": "./js/views/screen.js?v=b55-threshcard", "./js/views/host.js": "./js/views/host.js?v=b55-threshcard", "./js/views/swarm.js": "./js/views/swarm.js?v=b55-threshcard" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b56-mobilegrad", "./js/questions.js": "./js/questions.js?v=b56-mobilegrad", "./js/characters.js": "./js/characters.js?v=b56-mobilegrad", "./js/engine.js": "./js/engine.js?v=b56-mobilegrad", "./js/fb.js": "./js/fb.js?v=b56-mobilegrad", "./js/bots.js": "./js/bots.js?v=b56-mobilegrad", "./js/finale.js": "./js/finale.js?v=b56-mobilegrad", "./js/views/player.js": "./js/views/player.js?v=b56-mobilegrad", "./js/views/screen.js": "./js/views/screen.js?v=b56-mobilegrad", "./js/views/host.js": "./js/views/host.js?v=b56-mobilegrad", "./js/views/swarm.js": "./js/views/swarm.js?v=b56-mobilegrad" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

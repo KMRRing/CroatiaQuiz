@@ -145,9 +145,9 @@ export async function mount(root) {
       const stake = clampStake(S.pct, S.wealth, RULES.minStake);
       root.innerHTML = `
         <div class="bar">
-          <span>${emoji} ${name}</span>
           <span id="wealth">${fmt(S.wealth)}</span>
           <span id="clock" class="clock"></span>
+          <span class="barname">${emoji} ${name}</span>
         </div>
         <div class="card">
           <div class="dim">Question ${S.state.round + 1} of ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"}</div>
@@ -180,7 +180,7 @@ export async function mount(root) {
       const rv = S.reveal;
       const d = rv && rv.deltas ? rv.deltas[token] : null;
       root.innerHTML = `
-        <div class="bar"><span>${emoji} ${name}</span><span>${fmt(S.wealth)}</span></div>
+        <div class="bar"><span>${fmt(S.wealth)}</span><span></span><span class="barname">${emoji} ${name}</span></div>
         <div class="card">
           <div class="dim">Question ${S.state.round + 1} \u2014 the answer</div>
           <h2>${q.type === "single" ? q.options[+q.correct] : q.correct.split("").map((i) => q.options[+i]).join(" \u00b7 ")}</h2>
