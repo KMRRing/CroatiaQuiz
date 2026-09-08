@@ -97,7 +97,18 @@ export function svgWealthChart(series, style, width, height, fscale = 1) {
 
 export const AI_COLORS = ["#0000FF", "#8200DE", "#FF6432", "#0CA6FF", "#0A0ABA", "#C79A00"];
 export const KELLY_FORMULA_HTML = `
-  <div class="formula">f\u2009* = p \u2212 (1 \u2212 p) / (O \u2212 1)</div>
-  <p class="dim">The growth-optimal stake, as a fraction of your stack: p is your probability of being right,
-  O the pool's gross payout multiple. Bet your edge over the room \u2014 when the crowd's money is as accurate
-  as you are, p\u00b7O \u2248 1 and the right stake is zero.</p>`;
+  <div class="krow">
+    <div>
+      <div class="klabel">Kelly, fixed odds</div>
+      <div class="formula">f\u2009* = p \u2212 (1 \u2212 p) / b</div>
+      <p class="dim">p is your probability of being right; b the net odds a bookmaker fixes for you.
+      Bet your edge over the price.</p>
+    </div>
+    <div>
+      <div class="klabel">Kelly, adjusted for a parimutuel pool</div>
+      <div class="formula">f\u2009* = p \u2212 (1 \u2212 p) / (O \u2212 1)</div>
+      <p class="dim">Same shape, but O \u2014 the pool's gross multiple \u2014 is set by the crowd, not fixed:
+      it is roughly 1 over the share of money that's right, and your own stake pushes it down as you size up.
+      When the pool's money is as accurate as you are, p\u00b7O \u2248 1 and the right stake is zero.</p>
+    </div>
+  </div>`;
