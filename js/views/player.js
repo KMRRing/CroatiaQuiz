@@ -177,6 +177,7 @@ export async function mount(root) {
       if (locked) { S.pct = 100; S.pctForced = true; }
       else if (S.pctForced) { S.pct = 0; S.pctForced = false; if (S.answer.size) saveBet(); }
       const stake = clampStake(S.pct, S.wealth, RULES.minStake);
+      const effPct = S.wealth > 0 ? Math.round(100 * stake / S.wealth) : 0;
       root.innerHTML = `
         ${barHtml([emoji, name], true)}
         <div class="card">
@@ -185,21 +186,32 @@ export async function mount(root) {
             `<button class="opt ${S.answer.has(i) ? "sel" : ""}" data-i="${i}">${o}</button>`).join("")}
           </div>
           <div class="stakebox">
-            <div class="pctbig" id="pctbig">${S.pct}%</div>
+            <div class="pctbig" id="pctbig">${effPct}%</div>
             <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked ? "disabled" : ""} />
-            <div class="row"><span class="dim">${locked ? "stack at the minimum" : "minimum " + fmt(RULES.minStake)}</span><strong id="stake">${fmt(stake)}</strong><span class="dim">all in</span></div>
+            <div class="row"><button class="stakelink" id="minBtn" ${locked ? "disabled" : ""}>${fmt(RULES.minStake)}</button><strong id="stake">${fmt(stake)}</strong><button class="stakelink" id="allinBtn" ${locked ? "disabled" : ""}>all in</button></div>
             <div id="status" class="dim">${statusLine()}</div>
           </div>
         </div>`;
       root.querySelectorAll(".opt").forEach((b) => { b.onclick = () => pickOption(+b.dataset.i, q.type); });
       const slider = root.querySelector("#slider");
       let deb = null;
+      const showStake = () => {
+        const st2 = clampStake(S.pct, S.wealth, RULES.minStake);
+        const ep = S.wealth > 0 ? Math.round(100 * st2 / S.wealth) : 0;
+        const pb = root.querySelector("#pctbig"); if (pb) pb.textContent = ep + "%";
+        const se = root.querySelector("#stake"); if (se) se.textContent = fmt(st2);
+      };
       slider.oninput = () => {
         S.pct = +slider.value;
-        root.querySelector("#pctbig").textContent = S.pct + "%";
-        root.querySelector("#stake").textContent = fmt(clampStake(S.pct, S.wealth, RULES.minStake));
+        showStake();
         clearTimeout(deb); deb = setTimeout(saveBet, 250);
       };
+      const minBtn = root.querySelector("#minBtn"), allBtn = root.querySelector("#allinBtn");
+      if (minBtn) minBtn.onclick = () => {
+        S.pct = S.wealth > 0 ? Math.min(100, Math.ceil(100 * RULES.minStake / S.wealth)) : 0;
+        slider.value = String(S.pct); showStake(); saveBet();
+      };
+      if (allBtn) allBtn.onclick = () => { S.pct = 100; slider.value = "100"; showStake(); saveBet(); };
       if (previewing) {
         const num = root.querySelector("#clocknum");
         if (num) num.textContent = (S.state.timerSec || RULES.timerSec);
@@ -303,6 +315,8 @@ export async function mount(root) {
     const el = root.querySelector("#wealth"); if (el) el.textContent = fmt(S.wealth);
     const st = root.querySelector("#stake");
     if (st) st.textContent = fmt(clampStake(S.pct, S.wealth, RULES.minStake));
+    const pb = root.querySelector("#pctbig");
+    if (pb && S.wealth > 0) pb.textContent = Math.round(100 * clampStake(S.pct, S.wealth, RULES.minStake) / S.wealth) + "%";
   }
   function tick() {
     const num = root.querySelector("#clocknum");

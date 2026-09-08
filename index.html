@@ -78,6 +78,8 @@
   ol.board, ul.board { list-style-position:inside; padding:0; margin:.3em 0; }
   .board li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--line); }
   .pctbig { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:3rem; font-weight:700; color:var(--blue); text-align:center; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .stakelink { background:none; border:none; font:inherit; font-weight:700; color:inherit; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:3px; padding:4px 8px; border-radius:10px; cursor:pointer; }
+  .stakelink:disabled { opacity:.4; text-decoration:none; }
   .refresh-btn.stale { border-color:var(--orange); color:var(--orange); font-weight:700; }
   .refresh-btn.ok { color:#1E7A46; border-color:var(--line); }
   .refresh-btn { position:fixed; bottom:12px; right:12px; z-index:3; font-size:.75rem; padding:7px 12px; color:var(--dim); border-color:var(--line); background:#fff; }
@@ -244,7 +246,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b108-preselect", "./js/questions.js": "./js/questions.js?v=b108-preselect", "./js/characters.js": "./js/characters.js?v=b108-preselect", "./js/engine.js": "./js/engine.js?v=b108-preselect", "./js/fb.js": "./js/fb.js?v=b108-preselect", "./js/bots.js": "./js/bots.js?v=b108-preselect", "./js/finale.js": "./js/finale.js?v=b108-preselect", "./js/views/player.js": "./js/views/player.js?v=b108-preselect", "./js/views/screen.js": "./js/views/screen.js?v=b108-preselect", "./js/views/host.js": "./js/views/host.js?v=b108-preselect", "./js/views/swarm.js": "./js/views/swarm.js?v=b108-preselect" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b109-stakebtns", "./js/questions.js": "./js/questions.js?v=b109-stakebtns", "./js/characters.js": "./js/characters.js?v=b109-stakebtns", "./js/engine.js": "./js/engine.js?v=b109-stakebtns", "./js/fb.js": "./js/fb.js?v=b109-stakebtns", "./js/bots.js": "./js/bots.js?v=b109-stakebtns", "./js/finale.js": "./js/finale.js?v=b109-stakebtns", "./js/views/player.js": "./js/views/player.js?v=b109-stakebtns", "./js/views/screen.js": "./js/views/screen.js?v=b109-stakebtns", "./js/views/host.js": "./js/views/host.js?v=b109-stakebtns", "./js/views/swarm.js": "./js/views/swarm.js?v=b109-stakebtns" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
