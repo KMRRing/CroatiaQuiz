@@ -78,21 +78,24 @@
   @keyframes fadein { to { opacity:1; } }
   @keyframes potpop { 0% { transform:scale(.9); } 65% { transform:scale(1.05); } 100% { transform:scale(1); } }
   .optrows { margin:14px 0; }
-  .optrow { position:relative; overflow:hidden; border-radius:14px; padding:11px 16px; margin:8px 0; font-size:1.15rem; border:1px solid var(--line); }
+  .optrow { position:relative; overflow:hidden; border-radius:14px; padding:11px 58px 11px 16px; margin:8px 0; font-size:1.15rem; border:1px solid var(--line); }
+  .optrows.cols2 { display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+  .optrows.cols2 .optrow { margin:0; }
   .optrow.plain { background:var(--wash); color:var(--ink); }
   .optrow.right { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
   .optrow.wrong { background:var(--wash); color:var(--ink); }
-  .optpct { position:absolute; right:14px; top:11px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .optpct { position:absolute; right:14px; bottom:9px; font-weight:700; font-variant-numeric:tabular-nums; }
   .optfillwrap { position:absolute; inset:0; clip-path:inset(0 100% 0 0); animation:barfill 1s cubic-bezier(.2,.7,.2,1) .35s forwards; }
   .optrow.right .optfillwrap { background:var(--orange); color:#0B1030; }
   .optrow.wrong .optfillwrap { background:#141B2E; color:#fff; }
-  .optfill { padding:11px 16px; font-size:1.15rem; white-space:nowrap; }
+  .optfill { padding:11px 58px 11px 16px; font-size:1.15rem; white-space:nowrap; }
   .optrow.right .optfill { font-weight:700; }
   @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
   .stage { position:fixed; inset:0; }
   .toplock { position:absolute; top:2.2vh; left:50%; transform:translateX(-50%); font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:1.45rem; font-weight:700; color:var(--blue); }
-  .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:7.5vh; width:41vw; min-width:600px; }
-  .qcard { background:#0B1030; border-radius:24px; padding:24px 28px; box-shadow:0 18px 50px rgba(11,16,48,.28); }
+  .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:7.5vh; width:47vw; min-width:640px; max-height:88vh; }
+  .qcard { background:#0B1030; border-radius:24px; padding:22px 26px; box-shadow:0 18px 50px rgba(11,16,48,.28); display:flex; flex-direction:column; max-height:100%; }
+  .qcard #optbox { overflow-y:auto; }
   .qcard .qtext { color:#fff; }
   .qcard .qmeta { color:#A9B2D6; font-size:.95rem; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
@@ -128,7 +131,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b21-lb", "./js/questions.js": "./js/questions.js?v=b21-lb", "./js/characters.js": "./js/characters.js?v=b21-lb", "./js/engine.js": "./js/engine.js?v=b21-lb", "./js/fb.js": "./js/fb.js?v=b21-lb", "./js/bots.js": "./js/bots.js?v=b21-lb", "./js/finale.js": "./js/finale.js?v=b21-lb", "./js/views/player.js": "./js/views/player.js?v=b21-lb", "./js/views/screen.js": "./js/views/screen.js?v=b21-lb", "./js/views/host.js": "./js/views/host.js?v=b21-lb", "./js/views/swarm.js": "./js/views/swarm.js?v=b21-lb" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b22-grid", "./js/questions.js": "./js/questions.js?v=b22-grid", "./js/characters.js": "./js/characters.js?v=b22-grid", "./js/engine.js": "./js/engine.js?v=b22-grid", "./js/fb.js": "./js/fb.js?v=b22-grid", "./js/bots.js": "./js/bots.js?v=b22-grid", "./js/finale.js": "./js/finale.js?v=b22-grid", "./js/views/player.js": "./js/views/player.js?v=b22-grid", "./js/views/screen.js": "./js/views/screen.js?v=b22-grid", "./js/views/host.js": "./js/views/host.js?v=b22-grid", "./js/views/swarm.js": "./js/views/swarm.js?v=b22-grid" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

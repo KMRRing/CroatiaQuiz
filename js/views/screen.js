@@ -110,7 +110,10 @@ export async function mount(root) {
   // Shared option rows: plain during the question, knockout-bar treatment at reveal.
   function optionRows(q, rv) {
     const shares = rv && rv.optShare ? rv.optShare : null;
-    return `<div class="optrows">` + q.options.map((o, i) => {
+    const n = q.options.length;
+    const maxLen = Math.max(...q.options.map((o) => o.length));
+    const twoCol = n >= 4 && maxLen <= (n >= 6 ? 62 : 95);
+    return `<div class="optrows${twoCol ? " cols2" : ""}">` + q.options.map((o, i) => {
       const isC = q.correct.includes(String(i));
       const letter = String.fromCharCode(65 + i);
       const label = `${letter}. ${o}`;
