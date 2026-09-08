@@ -330,7 +330,8 @@ export async function mount(root) {
       }
       if (stage === 2 && f.sizing) {
         root.innerHTML = `
-          <div class="screen">
+          <div class="screen center">
+            <div class="kcard">
             <h1>The right size, in one line</h1>
             ${KELLY_FORMULA_HTML}
             <p class="dim">This game's average pool multiple: O\u0304 = ${f.thresholds ? f.thresholds.Obar.toFixed(2) : "?"}\u00d7.
@@ -339,6 +340,7 @@ export async function mount(root) {
             ${f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
               <td>${r.ratio == null ? "no positive-edge stake existed" : r.ratio.toFixed(1) + "\u00d7 Kelly " + (r.ratio > 1.2 ? "\u2014 overcommitted" : r.ratio < 0.8 ? "\u2014 timid" : "\u2014 on the money")}</td></tr>`).join("")}
             </table>
+            </div>
           </div>`;
         return;
       }

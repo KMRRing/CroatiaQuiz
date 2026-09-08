@@ -69,6 +69,12 @@
   .krow { display:grid; grid-template-columns:1fr 1fr; gap:3vw; margin:.6em 0 1em; }
   @media (max-width:700px){ .krow { grid-template-columns:1fr; gap:14px; } }
   .klabel { color:var(--dim); font-size:.95rem; }
+  .kcard { display:inline-block; text-align:left; background:#fff; border:1px solid var(--line); border-radius:24px; box-shadow:0 18px 50px rgba(11,16,48,.15); padding:3vh 3vw; max-width:90vw; margin-top:1.5vh; }
+  .kcard h1 { margin-top:0; }
+  .kcard .formula { font-size:3.3rem; }
+  .kcard .klabel { font-size:1.15rem; }
+  .kcard table.sizing { font-size:1.08rem; }
+  @media (max-width:700px){ .formula { font-size:7.4vw; white-space:nowrap; } }
   .formula { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; font-size:2rem; color:var(--violet); font-weight:700; margin:.4em 0; }
   table.sizing { width:100%; border-collapse:collapse; font-size:.95rem; }
   table.sizing th, table.sizing td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
@@ -153,7 +159,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b46-finaltitle", "./js/questions.js": "./js/questions.js?v=b46-finaltitle", "./js/characters.js": "./js/characters.js?v=b46-finaltitle", "./js/engine.js": "./js/engine.js?v=b46-finaltitle", "./js/fb.js": "./js/fb.js?v=b46-finaltitle", "./js/bots.js": "./js/bots.js?v=b46-finaltitle", "./js/finale.js": "./js/finale.js?v=b46-finaltitle", "./js/views/player.js": "./js/views/player.js?v=b46-finaltitle", "./js/views/screen.js": "./js/views/screen.js?v=b46-finaltitle", "./js/views/host.js": "./js/views/host.js?v=b46-finaltitle", "./js/views/swarm.js": "./js/views/swarm.js?v=b46-finaltitle" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b47-kellycard", "./js/questions.js": "./js/questions.js?v=b47-kellycard", "./js/characters.js": "./js/characters.js?v=b47-kellycard", "./js/engine.js": "./js/engine.js?v=b47-kellycard", "./js/fb.js": "./js/fb.js?v=b47-kellycard", "./js/bots.js": "./js/bots.js?v=b47-kellycard", "./js/finale.js": "./js/finale.js?v=b47-kellycard", "./js/views/player.js": "./js/views/player.js?v=b47-kellycard", "./js/views/screen.js": "./js/views/screen.js?v=b47-kellycard", "./js/views/host.js": "./js/views/host.js?v=b47-kellycard", "./js/views/swarm.js": "./js/views/swarm.js?v=b47-kellycard" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
