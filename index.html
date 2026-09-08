@@ -170,7 +170,9 @@
   .revbottom { display:grid; grid-template-columns:1.15fr 1fr; gap:24px; align-items:start; margin-top:10px; }
   .lbbox { padding-left:10px; }
   #lbList { position:relative; }
-  .lb li { transition:transform .85s cubic-bezier(.2,.7,.2,1), opacity .55s ease; }
+  .lb li { position:relative; transition:transform .85s cubic-bezier(.2,.7,.2,1), opacity .55s ease; }
+  .lb li.flipset { transition:none !important; }
+  .delta-badge.fadeout { opacity:0 !important; transition:opacity .5s ease; }
   .lb li.leave { z-index:0; }
   .lb li.enter { opacity:0; transform:translateY(26px); }
   .lb li.enter-in { opacity:1; transform:translateY(0); }
@@ -240,7 +242,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b93-flip", "./js/questions.js": "./js/questions.js?v=b93-flip", "./js/characters.js": "./js/characters.js?v=b93-flip", "./js/engine.js": "./js/engine.js?v=b93-flip", "./js/fb.js": "./js/fb.js?v=b93-flip", "./js/bots.js": "./js/bots.js?v=b93-flip", "./js/finale.js": "./js/finale.js?v=b93-flip", "./js/views/player.js": "./js/views/player.js?v=b93-flip", "./js/views/screen.js": "./js/views/screen.js?v=b93-flip", "./js/views/host.js": "./js/views/host.js?v=b93-flip", "./js/views/swarm.js": "./js/views/swarm.js?v=b93-flip" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b94-flipfix", "./js/questions.js": "./js/questions.js?v=b94-flipfix", "./js/characters.js": "./js/characters.js?v=b94-flipfix", "./js/engine.js": "./js/engine.js?v=b94-flipfix", "./js/fb.js": "./js/fb.js?v=b94-flipfix", "./js/bots.js": "./js/bots.js?v=b94-flipfix", "./js/finale.js": "./js/finale.js?v=b94-flipfix", "./js/views/player.js": "./js/views/player.js?v=b94-flipfix", "./js/views/screen.js": "./js/views/screen.js?v=b94-flipfix", "./js/views/host.js": "./js/views/host.js?v=b94-flipfix", "./js/views/swarm.js": "./js/views/swarm.js?v=b94-flipfix" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

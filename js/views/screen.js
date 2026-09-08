@@ -248,12 +248,16 @@ export async function mount(root) {
       if (prev == null) return;
       const dy = prev - li.offsetTop;
       if (!dy) return;
-      li.style.transition = "none";
+      li.classList.add("flipset");
       li.style.transform = `translateY(${dy}px)`;
       void li.offsetHeight;
-      li.style.transition = "";
+      li.classList.remove("flipset");
       li.style.transform = "";
     });
+    setTimeout(() => {
+      root.querySelectorAll("#lbList .delta-badge").forEach((b) => b.classList.add("fadeout"));
+      setTimeout(() => root.querySelectorAll("#lbList .delta-badge").forEach((b) => b.remove()), 600);
+    }, 1600);
     requestAnimationFrame(() => entrants.forEach((li, k) => {
       li.style.transitionDelay = (0.35 + k * 0.12) + "s";
       li.classList.add("enter-in");
