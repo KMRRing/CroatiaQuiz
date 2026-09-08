@@ -82,6 +82,14 @@ export async function mount(root) {
         }
       }
       const r = settle({ entries, bonus: RULES.bonus, rollover: (S.state.rollover || 0), correct: q.correct });
+      const optCount = new Array(q.options.length).fill(0);
+      let nAnswered = 0;
+      for (const e of Object.values(entries)) {
+        if (e.answer == null) continue;
+        nAnswered++;
+        for (const ch of String(e.answer)) { const i = +ch; if (i >= 0 && i < optCount.length) optCount[i]++; }
+      }
+      const optShare = optCount.map((c) => (nAnswered ? c / nAnswered : 0));
       const updates = {};
       let gain = null, loss = null;
       const deltas = {}, aiAnswers = {}, stakes = {}, botStakes = {};
@@ -97,7 +105,7 @@ export async function mount(root) {
       updates["reveal/" + n] = {
         correct: q.correct, W: r.W, L: r.L, pot: r.pot, mult: r.mult, rolled: r.rolled, wealthAfter,
         nRight: Object.values(r.right).filter(Boolean).length,
-        deltas, stakes, aiAnswers, botStakes,
+        deltas, stakes, aiAnswers, botStakes, optShare, nAnswered,
         top: gain ? { gainT: gain, gainD: r.deltas[gain], lossT: loss, lossD: r.deltas[loss] } : null,
       };
       updates["state"] = { phase: "reveal", round: n, rollover: r.newRollover, closesAt: 0 };

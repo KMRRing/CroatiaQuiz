@@ -13,6 +13,11 @@
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 Arial,Helvetica,sans-serif; }
   h1,h2,.clock,.mult,button.big { font-family:'Century Gothic','Questrial','Poppins',Arial,sans-serif; }
   .motif { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .motif circle { transform-box:fill-box; transform-origin:center; }
+  .motif circle:first-of-type { animation:spinA 46s linear infinite; }
+  .motif circle:last-of-type { animation:spinB 64s linear infinite; }
+  @keyframes spinA { to { transform:rotate(360deg); } }
+  @keyframes spinB { to { transform:rotate(-360deg); } }
   #app { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:14px; }
   .screen { max-width:1100px; margin:0 auto; padding:28px; }
   .corner-logo { position:fixed; top:22px; left:26px; height:26px; z-index:2; }
@@ -71,6 +76,26 @@
   @keyframes drawin { to { stroke-dashoffset:0; } }
   @keyframes fadein { to { opacity:1; } }
   @keyframes potpop { 0% { transform:scale(.9); } 65% { transform:scale(1.05); } 100% { transform:scale(1); } }
+  .optrows { margin:14px 0; }
+  .optrow { position:relative; overflow:hidden; border-radius:14px; padding:11px 16px; margin:8px 0; font-size:1.15rem; border:1px solid var(--line); }
+  .optrow.plain { background:var(--wash); color:var(--ink); }
+  .optrow.right { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
+  .optrow.wrong { background:var(--wash); color:var(--ink); }
+  .optpct { position:absolute; right:14px; top:11px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .optfillwrap { position:absolute; inset:0; clip-path:inset(0 100% 0 0); animation:barfill 1s cubic-bezier(.2,.7,.2,1) .35s forwards; }
+  .optrow.right .optfillwrap { background:#fff; color:var(--blue); }
+  .optrow.wrong .optfillwrap { background:#141B2E; color:#fff; }
+  .optfill { padding:11px 16px; font-size:1.15rem; white-space:nowrap; }
+  .optrow.right .optfill { font-weight:700; }
+  @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
+  .qsmall { font-size:1.6rem; margin:.2em 0; }
+  .reveal2 { padding-top:20px; }
+  .revbottom { display:grid; grid-template-columns:1.15fr 1fr; gap:24px; align-items:start; margin-top:10px; }
+  .lbbox { padding-left:10px; }
+  .lb .lbrow { opacity:0; transform:translateY(var(--dy)); animation:lbslide .7s cubic-bezier(.2,.7,.2,1) forwards; }
+  .lb .lbrow.enter { opacity:0; }
+  @keyframes lbslide { to { transform:translateY(0); opacity:1; } }
+  @media (prefers-reduced-motion: reduce) { .motif circle { animation:none; } .optfillwrap { animation:none; clip-path:inset(0 calc(100% - var(--w)) 0 0); } .lb .lbrow { animation:none; opacity:1; transform:none; } }
   .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
   @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
@@ -79,7 +104,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b11-keys", "./js/questions.js": "./js/questions.js?v=b11-keys", "./js/characters.js": "./js/characters.js?v=b11-keys", "./js/engine.js": "./js/engine.js?v=b11-keys", "./js/fb.js": "./js/fb.js?v=b11-keys", "./js/bots.js": "./js/bots.js?v=b11-keys", "./js/finale.js": "./js/finale.js?v=b11-keys", "./js/views/player.js": "./js/views/player.js?v=b11-keys", "./js/views/screen.js": "./js/views/screen.js?v=b11-keys", "./js/views/host.js": "./js/views/host.js?v=b11-keys", "./js/views/swarm.js": "./js/views/swarm.js?v=b11-keys" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b12-screen", "./js/questions.js": "./js/questions.js?v=b12-screen", "./js/characters.js": "./js/characters.js?v=b12-screen", "./js/engine.js": "./js/engine.js?v=b12-screen", "./js/fb.js": "./js/fb.js?v=b12-screen", "./js/bots.js": "./js/bots.js?v=b12-screen", "./js/finale.js": "./js/finale.js?v=b12-screen", "./js/views/player.js": "./js/views/player.js?v=b12-screen", "./js/views/screen.js": "./js/views/screen.js?v=b12-screen", "./js/views/host.js": "./js/views/host.js?v=b12-screen", "./js/views/swarm.js": "./js/views/swarm.js?v=b12-screen" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
