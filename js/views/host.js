@@ -1,6 +1,6 @@
 import { ensureAuth, gref, onValue, get, update, set, serverNow, serverTimestamp, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
-import { RULES } from "../config.js";
+import { RULES, BUILD } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { settle, clampStake, fmt, board } from "../engine.js";
 import { sizingReport, requiredAccuracy } from "../finale.js";
@@ -167,7 +167,7 @@ export async function mount(root) {
     root.innerHTML = `
       <div class="card">
         <h1>Host console</h1>
-        <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)}</p>
+        <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)} \u00b7 build ${BUILD}</p>
         ${!isHost() ? `<button class="big" id="claim">Claim host on this device</button>` : `
           <div class="btnrow">
             <button id="lobby">Open lobby</button>

@@ -23,5 +23,7 @@ export const RULES = {
   timerSec: 40,     // seconds per question
 };
 
+export const BUILD = "b6-finale";
+
 export const GAME_ID = new URLSearchParams(location.search).get("g") || "croatia";
 export const configured = () => FIREBASE_CONFIG.apiKey !== "PASTE_ME";
