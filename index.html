@@ -134,7 +134,7 @@
   .zone-c #clockwrap.morph { transform:scale(1.5); opacity:0; }
   .zone-c #potwrap { position:absolute; inset:0; }
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
-  .zone-r { position:absolute; right:8vw; bottom:5vh; width:21vw; min-width:290px; }
+  .zone-r { position:absolute; right:8vw; top:50%; transform:translateY(-50%); width:21vw; min-width:290px; }
   .lbrow, .lbrow-static { position:relative; }
   .delta-badge { position:absolute; right:-7.2vw; top:2px; min-width:5.5vw; text-align:left; font-weight:800; font-variant-numeric:tabular-nums; opacity:0; transform:scale(.6); animation:popin .4s cubic-bezier(.2,.8,.3,1.2) forwards; }
   .delta-badge.pos { color:#0E8A43; }
@@ -216,9 +216,9 @@
 </style>
 </head>
 <body>
-<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
+<svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1300" cy="320" r="380" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b77-tickfix", "./js/questions.js": "./js/questions.js?v=b77-tickfix", "./js/characters.js": "./js/characters.js?v=b77-tickfix", "./js/engine.js": "./js/engine.js?v=b77-tickfix", "./js/fb.js": "./js/fb.js?v=b77-tickfix", "./js/bots.js": "./js/bots.js?v=b77-tickfix", "./js/finale.js": "./js/finale.js?v=b77-tickfix", "./js/views/player.js": "./js/views/player.js?v=b77-tickfix", "./js/views/screen.js": "./js/views/screen.js?v=b77-tickfix", "./js/views/host.js": "./js/views/host.js?v=b77-tickfix", "./js/views/swarm.js": "./js/views/swarm.js?v=b77-tickfix" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b78-circleframe", "./js/questions.js": "./js/questions.js?v=b78-circleframe", "./js/characters.js": "./js/characters.js?v=b78-circleframe", "./js/engine.js": "./js/engine.js?v=b78-circleframe", "./js/fb.js": "./js/fb.js?v=b78-circleframe", "./js/bots.js": "./js/bots.js?v=b78-circleframe", "./js/finale.js": "./js/finale.js?v=b78-circleframe", "./js/views/player.js": "./js/views/player.js?v=b78-circleframe", "./js/views/screen.js": "./js/views/screen.js?v=b78-circleframe", "./js/views/host.js": "./js/views/host.js?v=b78-circleframe", "./js/views/swarm.js": "./js/views/swarm.js?v=b78-circleframe" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
