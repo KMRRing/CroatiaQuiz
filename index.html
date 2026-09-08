@@ -35,7 +35,10 @@
   .center { text-align:center; }
   .avatar { font-size:3.4rem; width:110px; height:110px; line-height:104px; margin:.4em auto; border-radius:50%;
             border:3px solid transparent; background:linear-gradient(#fff,#fff) padding-box, var(--grad) border-box; }
-  .bar { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:8px 6px; font-weight:700; position:sticky; top:0; z-index:4; background:var(--bg); }
+  .bar { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; font-weight:700; position:sticky; top:0; z-index:4;
+    margin:-14px -14px 12px; padding:calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+    background:linear-gradient(135deg, rgba(0,0,255,.07) 0%, rgba(130,0,222,.07) 55%, rgba(255,100,50,.09) 100%), #fff;
+    border-bottom:1.5px solid; border-image:linear-gradient(90deg,#0000FF,#8200DE,#FF6432) 1; }
   .bar .clock { text-align:center; }
   .clockcell { text-align:center; }
   .ring { width:44px; height:44px; display:inline-block; vertical-align:middle; }
@@ -235,7 +238,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b86-ringtrack", "./js/questions.js": "./js/questions.js?v=b86-ringtrack", "./js/characters.js": "./js/characters.js?v=b86-ringtrack", "./js/engine.js": "./js/engine.js?v=b86-ringtrack", "./js/fb.js": "./js/fb.js?v=b86-ringtrack", "./js/bots.js": "./js/bots.js?v=b86-ringtrack", "./js/finale.js": "./js/finale.js?v=b86-ringtrack", "./js/views/player.js": "./js/views/player.js?v=b86-ringtrack", "./js/views/screen.js": "./js/views/screen.js?v=b86-ringtrack", "./js/views/host.js": "./js/views/host.js?v=b86-ringtrack", "./js/views/swarm.js": "./js/views/swarm.js?v=b86-ringtrack" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b87-barband", "./js/questions.js": "./js/questions.js?v=b87-barband", "./js/characters.js": "./js/characters.js?v=b87-barband", "./js/engine.js": "./js/engine.js?v=b87-barband", "./js/fb.js": "./js/fb.js?v=b87-barband", "./js/bots.js": "./js/bots.js?v=b87-barband", "./js/finale.js": "./js/finale.js?v=b87-barband", "./js/views/player.js": "./js/views/player.js?v=b87-barband", "./js/views/screen.js": "./js/views/screen.js?v=b87-barband", "./js/views/host.js": "./js/views/host.js?v=b87-barband", "./js/views/swarm.js": "./js/views/swarm.js?v=b87-barband" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
