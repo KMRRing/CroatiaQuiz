@@ -21,7 +21,11 @@ export async function mount(root) {
     reveal: null, finale: null, timer: null,
   };
 
-  onValue(gref("players", token), (s) => { S.me = s.val(); render(); });
+  onValue(gref("players", token), (s) => {
+    S.me = s.val();
+    if (!S.me && !S.joining) { S.joining = true; join().catch(() => { S.joining = false; }); }
+    render();
+  });
   onValue(gref("state"), (s) => {
     const st = s.val();
     const newRound = st && st.round !== (S.state && S.state.round);
@@ -142,13 +146,7 @@ export async function mount(root) {
     document.body.classList.remove("urgent");
     clearInterval(S.timer);
     if (!S.me) {
-      root.innerHTML = `
-        <div class="card center">
-          <h1>Croatia Quiz</h1>
-          <p class="dim">Tap below and the house deals you a character. That's you for the night.</p>
-          <button class="big" id="joinBtn">Deal me a character</button>
-        </div>`;
-      root.querySelector("#joinBtn").onclick = join;
+      root.innerHTML = `<div class="card center"><div class="avatar">\u2026</div><p class="dim">Dealing you a character\u2026</p></div>`;
       return;
     }
     const [emoji, name] = charOf(S.me);
