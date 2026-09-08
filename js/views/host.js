@@ -21,7 +21,7 @@ export async function mount(root) {
   const user = await ensureAuth();
   const S = { meta: null, state: null, timerSec: RULES.timerSec, players: {}, wealth: {}, betCount: 0, closing: false, closeTimer: null, log: [] };
 
-  onValue(gref("meta"), (s) => { S.meta = s.val(); render(); });
+  onValue(gref("meta"), (s) => { S.meta = s.val(); S.claimTries = 0; render(); });
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
   onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; });
   onValue(gref("state"), (s) => {
@@ -35,7 +35,15 @@ export async function mount(root) {
 
   async function claim() {
     const cur = await read("meta");
-    if (cur && cur.hostUid && cur.hostUid !== user.uid) return log("Already hosted by another device.");
+    if (cur && cur.hostUid && cur.hostUid !== user.uid) {
+      S.claimTries = (S.claimTries || 0) + 1;
+      if (S.claimTries < 3) {
+        return log(`Hosted on another device. Press claim ${3 - S.claimTries} more time${S.claimTries === 2 ? "" : "s"} to take over.`);
+      }
+      S.claimTries = 0;
+      await update(gref(), { meta: { hostUid: user.uid, createdAt: serverTimestamp(), rules: RULES, takeover: true } });
+      return log("Took over hosting on this device. The other device has been demoted.");
+    }
     await update(gref(), { meta: { hostUid: user.uid, createdAt: serverTimestamp(), rules: RULES } });
     log("You are the host on this device. Keep this tab open.");
   }
@@ -90,6 +98,7 @@ export async function mount(root) {
   }
 
   async function closeAndSettle() {
+    if (!isHost()) return;
     if (S.closing || !S.state || S.state.phase !== "question") return;
     S.closing = true;
     try {
