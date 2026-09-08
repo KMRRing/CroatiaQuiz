@@ -249,7 +249,7 @@ export async function mount(root) {
           return `<div class="qsrow"><span>Q${i + 1} ${mark}</span><span class="${d >= 0 ? "up" : "down"}">${dTxt}</span></div>`;
         }).join("");
         root.innerHTML = `${barHtml([emoji, name], false)}
-          <div class="card"><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340, 1, null, true)}</div>
+          <div class="card">${svgWealthChart(series, style, 620, 340, 1, null, true)}</div>
           <div class="card"><h2>Question by question</h2><div class="qsummary">${qrows}</div></div>`;
         return;
       }
