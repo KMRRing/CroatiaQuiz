@@ -275,6 +275,15 @@ export async function mount(root) {
 
   function render() {
     const ph = S.state ? S.state.phase : "lobby";
+    if ((!S.state || ph === "lobby") && root.querySelector(".lobbystage")) {
+      const el = root.querySelector(".lobbyicons");
+      if (el) {
+        const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
+        el.innerHTML = humans.map(([t], i) =>
+          `<span class="joinicon" style="animation-delay:${Math.min(i, 8) * 40}ms">${nameOf(t).split(" ")[0]}</span>`).join("");
+      }
+      return;
+    }
     if ((ph === "question" || ph === "reveal") && S.state && S.stageRound === S.state.round && root.querySelector(".stage")) {
       if (ph === "question") { const el = root.querySelector("#locked"); if (el) el.textContent = lockLine(); return; }
       if (ph === "reveal") { if (!S.revealApplied && S.reveal) applyReveal(S.reveal); return; }
