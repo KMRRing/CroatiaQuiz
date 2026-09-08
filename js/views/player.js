@@ -164,7 +164,7 @@ export async function mount(root) {
         ${barHtml([emoji, name], false)}
         <div class="card center">
           <div class="avatar">${emoji}</div>
-          <h1>You are ${name}</h1>
+          <h1>You are ${"AEIO".includes(name[0]) ? "an" : "a"} ${name}</h1>
           <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>
         </div>`;
       return;
