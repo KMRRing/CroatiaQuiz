@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Quiz Night</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@600;700&display=swap');
@@ -244,10 +244,17 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b103-notapzoom", "./js/questions.js": "./js/questions.js?v=b103-notapzoom", "./js/characters.js": "./js/characters.js?v=b103-notapzoom", "./js/engine.js": "./js/engine.js?v=b103-notapzoom", "./js/fb.js": "./js/fb.js?v=b103-notapzoom", "./js/bots.js": "./js/bots.js?v=b103-notapzoom", "./js/finale.js": "./js/finale.js?v=b103-notapzoom", "./js/views/player.js": "./js/views/player.js?v=b103-notapzoom", "./js/views/screen.js": "./js/views/screen.js?v=b103-notapzoom", "./js/views/host.js": "./js/views/host.js?v=b103-notapzoom", "./js/views/swarm.js": "./js/views/swarm.js?v=b103-notapzoom" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b104-tapguard", "./js/questions.js": "./js/questions.js?v=b104-tapguard", "./js/characters.js": "./js/characters.js?v=b104-tapguard", "./js/engine.js": "./js/engine.js?v=b104-tapguard", "./js/fb.js": "./js/fb.js?v=b104-tapguard", "./js/bots.js": "./js/bots.js?v=b104-tapguard", "./js/finale.js": "./js/finale.js?v=b104-tapguard", "./js/views/player.js": "./js/views/player.js?v=b104-tapguard", "./js/views/screen.js": "./js/views/screen.js?v=b104-tapguard", "./js/views/host.js": "./js/views/host.js?v=b104-tapguard", "./js/views/swarm.js": "./js/views/swarm.js?v=b104-tapguard" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
+  let __lastTouch = 0;
+  document.addEventListener("touchend", (e) => {
+    const now = Date.now();
+    if (now - __lastTouch < 350) e.preventDefault();
+    __lastTouch = now;
+  }, { passive: false });
+  document.addEventListener("dblclick", (e) => e.preventDefault(), { passive: false });
   const root = document.getElementById("app");
   const view = (location.hash.replace("#", "").split("?")[0]) || "join";
   const files = { join: "player", screen: "screen", host: "host", swarm: "swarm" };
