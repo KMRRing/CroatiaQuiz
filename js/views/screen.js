@@ -72,7 +72,7 @@ export async function mount(root) {
     let g = "";
     mkIn.forEach((e, i) => {
       const sy = spread(mkIn.length, i);
-      const a = Math.PI * (150 + (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
+      const a = Math.PI * (210 - (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
       const ex = cx + R * Math.cos(a), ey = cy + R * Math.sin(a);
       g += `<text class="lbl" style="animation-delay:${(i * 60)}ms" x="${compact ? 20 : 60}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 60)}ms" d="M ${compact ? 36 : 96} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
