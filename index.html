@@ -206,6 +206,11 @@
   @media (max-width:700px) {
     .card { background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border:none; color:#fff; }
     .card h1, .card h2 { color:#fff; }
+    .card .log, .card .hostq { background:#fff; color:var(--ink); }
+    .card .log { border-color:rgba(255,255,255,.4); }
+    .card .hostq .hopt { color:var(--ink); background:#fff; }
+    .card .hostq .hopt-c { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .card .hostq .hqt { color:#fff; }
     .card .dim { color:rgba(255,255,255,.82); }
     .card .opt { background:#fff; border-color:#fff; color:var(--ink); }
     .card button.big { background:#fff; color:var(--blue); }
@@ -235,6 +240,7 @@
   .lobbyicons { max-width:80vw; }
   .joinicon { font-size:2.6rem; line-height:1; opacity:0; transform:scale(.4); animation:hlpop .4s cubic-bezier(.2,.8,.3,1.2) forwards; }
   .hostq { margin:8px 0 14px; }
+  .nextbig { width:100%; padding:14px; font-size:1.05rem; font-weight:700; margin:2px 0 12px; }
   .hqt { font-weight:700; margin:.3em 0 .5em; }
   .hopt { padding:6px 10px; border:1px solid var(--line); border-radius:10px; margin:4px 0; font-size:.95rem; }
   .hopt-c { background:var(--blue); color:#fff; border-color:var(--blue); }
@@ -250,7 +256,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="card center"><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b115-polish", "./js/questions.js": "./js/questions.js?v=b115-polish", "./js/characters.js": "./js/characters.js?v=b115-polish", "./js/engine.js": "./js/engine.js?v=b115-polish", "./js/fb.js": "./js/fb.js?v=b115-polish", "./js/bots.js": "./js/bots.js?v=b115-polish", "./js/finale.js": "./js/finale.js?v=b115-polish", "./js/views/player.js": "./js/views/player.js?v=b115-polish", "./js/views/screen.js": "./js/views/screen.js?v=b115-polish", "./js/views/host.js": "./js/views/host.js?v=b115-polish", "./js/views/swarm.js": "./js/views/swarm.js?v=b115-polish" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b116-hostmobile", "./js/questions.js": "./js/questions.js?v=b116-hostmobile", "./js/characters.js": "./js/characters.js?v=b116-hostmobile", "./js/engine.js": "./js/engine.js?v=b116-hostmobile", "./js/fb.js": "./js/fb.js?v=b116-hostmobile", "./js/bots.js": "./js/bots.js?v=b116-hostmobile", "./js/finale.js": "./js/finale.js?v=b116-hostmobile", "./js/views/player.js": "./js/views/player.js?v=b116-hostmobile", "./js/views/screen.js": "./js/views/screen.js?v=b116-hostmobile", "./js/views/host.js": "./js/views/host.js?v=b116-hostmobile", "./js/views/swarm.js": "./js/views/swarm.js?v=b116-hostmobile" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

@@ -286,6 +286,11 @@ export async function mount(root) {
               ${q2.options.map((o, i) => `<div class="hopt${ph === "reveal" && q2.correct.includes(String(i)) ? " hopt-c" : ""}">${String.fromCharCode(65 + i)}. ${o}</div>`).join("")}
             </div>`;
         })() : ""}
+        ${isHost() ? `<button id="nextbig" class="nextbig" ${ph === "preview" || ((ph === "lobby" || ph === "reveal") && n + 1 < N_ROUNDS) ? "" : "disabled"}>${
+          ph === "preview" ? `Start timer (${S.timerSec}s)` :
+          ((ph === "lobby" || ph === "reveal") && n + 1 < N_ROUNDS) ? `Show question ${n + 2}` :
+          ph === "question" ? "Round running\u2026" : "\u2026"
+        }</button>` : ""}
         <h2>Log</h2>
         <pre class="log">${S.log.join("\n")}</pre>
       </div>`;
@@ -293,6 +298,7 @@ export async function mount(root) {
     if (q("#claim")) q("#claim").onclick = claim;
     if (q("#lobby")) q("#lobby").onclick = openLobby;
     if (q("#show")) q("#show").onclick = () => showQuestion(n + 1);
+    if (q("#nextbig")) q("#nextbig").onclick = nextAction;
     if (q("#start")) q("#start").onclick = startQuestion;
     if (q("#tminus")) q("#tminus").onclick = () => { S.timerSec = Math.max(5, S.timerSec - 1); render(); };
     if (q("#tminus10")) q("#tminus10").onclick = () => { S.timerSec = S.timerSec < 15 ? 5 : S.timerSec - 10; render(); };
