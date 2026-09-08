@@ -146,7 +146,7 @@ export async function mount(root) {
         <div class="screen">
           <div class="dim">Question ${S.state.round + 1} \u2014 the answer</div>
           <h1 class="qtext">${correctTxt}</h1>
-          ${potScene(rv, q)}
+          ${(rv.stakes && Object.keys(rv.stakes).length) ? potScene(rv, q) : `<p class="dim">This round was settled by an older host build \u2014 pot animation available from the next round.</p>`}
           <div class="strip">
             <div><h2>The machines said</h2>
               <div class="grid" style="justify-content:flex-start">${Object.entries(rv.aiAnswers || {}).map(([t, a]) =>
@@ -163,6 +163,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
+      const stageFoot = `<p class="dim">Finale screen ${stage + 1} of 4 \u2014 the host advances.</p>`;
       if (stage === 1 && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
@@ -180,6 +181,7 @@ export async function mount(root) {
             <h1>The money, round by round</h1>
             <p class="dim">Humans in grey, machines dashed, the winner in blue. Everyone sees their own line on their phone.</p>
             ${svgWealthChart(series, style, 1040, 460)}
+            ${stageFoot}
           </div>`;
         return;
       }
@@ -194,6 +196,7 @@ export async function mount(root) {
             ${f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
               <td>${r.ratio == null ? "no positive-edge stake existed" : r.ratio.toFixed(1) + "\u00d7 Kelly " + (r.ratio > 1.2 ? "\u2014 overcommitted" : r.ratio < 0.8 ? "\u2014 timid" : "\u2014 on the money")}</td></tr>`).join("")}
             </table>
+            ${stageFoot}
           </div>`;
         return;
       }
@@ -208,6 +211,7 @@ export async function mount(root) {
               <div class="thresh"><div class="mult">${t.pTop10 == null ? ">99%" : pc(t.pTop10)}</div><p>accuracy to crack the top 10% (${fmt(t.top10W)})</p></div>
             </div>
             <p class="dim">Perfect sizing buys surprisingly little without the accuracy to back it \u2014 and past the pool's own accuracy, every extra point compounds.</p>
+            ${stageFoot}
           </div>`;
         return;
       }
@@ -227,6 +231,7 @@ export async function mount(root) {
               ${f.biggestLoss ? `<p>Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</p>` : ""}
             </div>
           </div>
+          <p class="dim">Finale screen 1 of 4 \u2014 the host advances.</p>
         </div>`;
       return;
     }
