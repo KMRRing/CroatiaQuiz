@@ -26,7 +26,7 @@ export async function mount(root) {
     const st = s.val();
     const newRound = st && st.round !== (S.state && S.state.round);
     S.state = st;
-    if (st && st.phase === "question" && (newRound || S.round !== st.round)) {
+    if (st && (st.phase === "question" || st.phase === "preview") && (newRound || S.round !== st.round)) {
       S.round = st.round; S.answer = new Set(); S.pct = 0; S.saved = false; S.reveal = null;
     }
     if (st && st.phase === "reveal") loadReveal(st.round);
@@ -165,7 +165,8 @@ export async function mount(root) {
       return;
     }
 
-    if (ph === "question") {
+    if (ph === "question" || ph === "preview") {
+      const previewing = ph === "preview";
       const q = QUESTIONS[S.state.round];
       const locked = S.wealth <= RULES.minStake;
       if (locked) { S.pct = 100; S.pctForced = true; }
@@ -180,12 +181,12 @@ export async function mount(root) {
           </div>
           <div class="stakebox">
             <div class="pctbig" id="pctbig">${S.pct}%</div>
-            <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked ? "disabled" : ""} />
+            <input id="slider" type="range" min="0" max="100" step="5" value="${S.pct}" ${locked || previewing ? "disabled" : ""} />
             <div class="row"><span class="dim">${locked ? "stack at the minimum" : "minimum " + fmt(RULES.minStake)}</span><strong id="stake">${fmt(stake)}</strong><span class="dim">all in</span></div>
             <div id="status" class="dim">${statusLine()}</div>
           </div>
         </div>`;
-      root.querySelectorAll(".opt").forEach((b) => (b.onclick = () => pickOption(+b.dataset.i, q.type)));
+      root.querySelectorAll(".opt").forEach((b) => { b.disabled = previewing; b.onclick = () => pickOption(+b.dataset.i, q.type); });
       const slider = root.querySelector("#slider");
       let deb = null;
       slider.oninput = () => {
@@ -194,7 +195,10 @@ export async function mount(root) {
         root.querySelector("#stake").textContent = fmt(clampStake(S.pct, S.wealth, RULES.minStake));
         clearTimeout(deb); deb = setTimeout(saveBet, 250);
       };
-      S.timer = setInterval(tick, 250); tick();
+      if (previewing) {
+        const num = root.querySelector("#clocknum");
+        if (num) num.textContent = (S.state.timerSec || RULES.timerSec);
+      } else { S.timer = setInterval(tick, 250); tick(); }
       return;
     }
 
@@ -289,7 +293,7 @@ export async function mount(root) {
     const num = root.querySelector("#clocknum");
     const fg = root.querySelector("#ringfg");
     if (!num || !S.state || !S.state.closesAt) return;
-    const total = RULES.timerSec * 1000;
+    const total = ((S.state && S.state.timerSec) || RULES.timerSec) * 1000;
     const left = Math.max(0, S.state.closesAt - serverNow());
     num.textContent = Math.ceil(left / 1000);
     const low = left > 0 && left <= 5000;

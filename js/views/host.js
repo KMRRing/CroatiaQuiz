@@ -19,7 +19,7 @@ const BOTS = Object.fromEntries(ROSTER.map((b) => [b.token, b]));
 
 export async function mount(root) {
   const user = await ensureAuth();
-  const S = { meta: null, state: null, players: {}, wealth: {}, betCount: 0, closing: false, closeTimer: null, log: [] };
+  const S = { meta: null, state: null, timerSec: RULES.timerSec, players: {}, wealth: {}, betCount: 0, closing: false, closeTimer: null, log: [] };
 
   onValue(gref("meta"), (s) => { S.meta = s.val(); render(); });
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
@@ -58,14 +58,27 @@ export async function mount(root) {
     log("Lobby open \u2014 QR is live on the big screen.");
   }
 
-  async function startRound(n) {
+  async function showQuestion(n) {
     const players = (await read("players")) || {};
     const wealth = (await read("wealth")) || {};
     const updates = {};
     for (const t of Object.keys(players)) updates["wealth/" + t] = (wealth[t] || 0) + RULES.stipend;
-    updates["state"] = { phase: "question", round: n, rollover: (S.state && S.state.rollover) || 0, closesAt: serverNow() + RULES.timerSec * 1000 };
+    updates["state"] = { phase: "preview", round: n, rollover: (S.state && S.state.rollover) || 0, closesAt: 0, timerSec: S.timerSec };
     await update(gref(), updates);
-    log(`Question ${n + 1} open \u2014 ${RULES.timerSec}s.`);
+    log(`Question ${n + 1} on screen \u2014 read it out, then start the timer.`);
+  }
+
+  async function startQuestion() {
+    if (!S.state || S.state.phase !== "preview") return;
+    await update(gref(), { "state/phase": "question", "state/closesAt": serverNow() + S.timerSec * 1000, "state/timerSec": S.timerSec });
+    log(`Timer running \u2014 ${S.timerSec}s.`);
+  }
+
+  function nextAction() {
+    const ph = S.state ? S.state.phase : null;
+    const n = S.state ? S.state.round : -1;
+    if (ph === "preview") return startQuestion();
+    if ((ph === "lobby" || ph === "reveal") && n + 1 < N_ROUNDS) return showQuestion(n + 1);
   }
 
   function armAutoClose() {
@@ -200,6 +213,16 @@ export async function mount(root) {
     const n = S.state ? S.state.round : -1;
     const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
     const canStartNext = isHost() && S.state && (ph === "lobby" || ph === "reveal") && n + 1 < N_ROUNDS;
+    if (!S.keysBound) {
+      S.keysBound = true;
+      window.addEventListener("keydown", (e) => {
+        if (e.code !== "Space" || e.repeat) return;
+        const t = e.target;
+        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+        e.preventDefault();
+        if (isHost()) nextAction();
+      });
+    }
     root.innerHTML = `
       <div class="card">
         <h1>Host console</h1>
@@ -207,7 +230,10 @@ export async function mount(root) {
         ${!isHost() ? `<button class="big" id="claim">Claim host on this device</button>` : `
           <div class="btnrow">
             <button id="lobby">Open lobby</button>
-            <button id="next" ${canStartNext ? "" : "disabled"}>Start question ${n + 2}</button>
+            <button id="show" ${canStartNext ? "" : "disabled"}>Show question ${n + 2}</button>
+            <button id="start" ${ph === "preview" ? "" : "disabled"}>Start timer (${S.timerSec}s)</button>
+            <button id="tminus">\u22121s</button>
+            <button id="tplus">+1s</button>
             <button id="close" ${ph === "question" ? "" : "disabled"}>Close betting now</button>
             <button id="finish">Finish \u2192 finale (any time)</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
@@ -220,7 +246,10 @@ export async function mount(root) {
     const q = (id) => root.querySelector(id);
     if (q("#claim")) q("#claim").onclick = claim;
     if (q("#lobby")) q("#lobby").onclick = openLobby;
-    if (q("#next")) q("#next").onclick = () => startRound(n + 1);
+    if (q("#show")) q("#show").onclick = () => showQuestion(n + 1);
+    if (q("#start")) q("#start").onclick = startQuestion;
+    if (q("#tminus")) q("#tminus").onclick = () => { S.timerSec = Math.max(5, S.timerSec - 1); render(); };
+    if (q("#tplus")) q("#tplus").onclick = () => { S.timerSec = Math.min(180, S.timerSec + 1); render(); };
     if (q("#close")) q("#close").onclick = closeAndSettle;
     if (q("#finish")) q("#finish").onclick = finish;
     if (q("#stage")) q("#stage").onclick = () => {

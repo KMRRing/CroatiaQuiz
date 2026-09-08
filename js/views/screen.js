@@ -212,7 +212,7 @@ export async function mount(root) {
     const num = root.querySelector("#clocknum2");
     const fg = root.querySelector("#ringfg2");
     if (!num || !S.state || !S.state.closesAt) return;
-    const total = RULES.timerSec * 1000;
+    const total = ((S.state && S.state.timerSec) || RULES.timerSec) * 1000;
     const left = Math.max(0, S.state.closesAt - serverNow());
     num.textContent = Math.ceil(left / 1000);
     const low = left <= 5000;
@@ -252,9 +252,14 @@ export async function mount(root) {
         </div>
         <div class="zone-r" id="zoneR"><ol class="board lb biglb" id="lbList"></ol></div>
       </div>`;
-    S.stageRound = S.state.round; S.revealApplied = false;
+    S.stageRound = S.state.round; S.revealApplied = false; S.stagePhase = phase;
     renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth, null);
     if (phase === "question") { S.timer = setInterval(tick, 250); tick(); }
+    else if (phase === "preview") {
+      const num = root.querySelector("#clocknum2"), fg = root.querySelector("#ringfg2");
+      if (num) num.textContent = (S.state.timerSec || RULES.timerSec);
+      if (fg) fg.style.strokeDashoffset = "0";
+    }
     else if (rv) applyReveal(rv);
   }
 
@@ -320,8 +325,12 @@ export async function mount(root) {
       }
       return;
     }
-    if ((ph === "question" || ph === "reveal") && S.state && S.stageRound === S.state.round && root.querySelector(".stage")) {
-      if (ph === "question") { const el = root.querySelector("#locked"); if (el) el.textContent = lockLine(); return; }
+    if ((ph === "question" || ph === "reveal" || ph === "preview") && S.state && S.stageRound === S.state.round && root.querySelector(".stage")) {
+      if (ph === "preview") return;
+      if (ph === "question") {
+        if (S.stagePhase !== "question") { S.stagePhase = "question"; clearInterval(S.timer); S.timer = setInterval(tick, 250); tick(); }
+        const el = root.querySelector("#locked"); if (el) el.textContent = lockLine(); return;
+      }
       if (ph === "reveal") { if (!S.revealApplied && S.reveal) applyReveal(S.reveal); return; }
     }
     clearInterval(S.timer);
@@ -338,8 +347,8 @@ export async function mount(root) {
       return;
     }
 
-    if (ph === "question") {
-      buildStage(QUESTIONS[S.state.round], "question");
+    if (ph === "question" || ph === "preview") {
+      buildStage(QUESTIONS[S.state.round], ph);
       return;
     }
 
