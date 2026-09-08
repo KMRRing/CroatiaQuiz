@@ -123,7 +123,7 @@ export async function mount(root) {
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${(W - (compact ? 86 : 156) - obow).toFixed(0)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
       g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 70 : 120) - obow).toFixed(0)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 30 : 38}">${iconOf(e.t)}</text>`;
-      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
     const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
     const f2 = Math.round(f1 * 0.52);
