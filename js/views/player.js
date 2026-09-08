@@ -3,7 +3,7 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { RULES, GAME_ID } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { clampStake, fmt } from "../engine.js";
-import { wealthSeries, svgWealthChart, KELLY_FORMULA_HTML } from "../finale.js";
+import { wealthSeries, svgWealthChart } from "../finale.js";
 
 const TOKEN_KEY = "cq_token_" + GAME_ID;
 
@@ -229,7 +229,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
-      if (stage === 2 && f && S.reveals) {
+      if (stage === 1 && f && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = (f.board || []).map((r) => r.token);
         const series = wealthSeries(revArr, tokens);
@@ -239,22 +239,18 @@ export async function mount(root) {
         root.innerHTML = `<div><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
         return;
       }
-      if (stage === 3 && f && f.sizing) {
+      if (stage === 2 && f && f.sizing) {
         const mine = f.sizing.find((r) => r.token === token);
-        const t = f.thresholds || {};
-        const kM = t.kMedian != null ? t.kMedian : t.pMedian;
-        const kT = t.kTop10 != null ? t.kTop10 : t.pTop10;
-        root.innerHTML = `${barHtml([emoji, name], false)}<div class="card"><h2>The right size</h2>${KELLY_FORMULA_HTML}
-          ${mine ? `<p>You were right <strong>${pc(mine.pHat)}</strong> of the time and staked
-          <strong>${pc(mine.fAvg)}</strong> of your stack on average. At this game's odds the formula said
-          <strong>${pc(mine.fStar)}</strong> \u2014 ${mine.ratio == null ? "no positive-edge stake existed at your accuracy." :
-          "you bet <strong>" + mine.ratio.toFixed(1) + "\u00d7 Kelly</strong>" + (mine.ratio > 1.2 ? " \u2014 overcommitted." : mine.ratio < 0.8 ? " \u2014 timid." : " \u2014 on the money.")}</p>` : ""}
-          <p>Needs to know <strong class="clock">${kM == null ? ">100%" : pc(kM)}</strong> of the answers to beat the median${t.kMean != null ? ` \u00b7 <strong class="clock">${pc(t.kMean)}</strong> for the mean` : ""} \u00b7
-             <strong class="clock">${kT == null ? ">100%" : pc(kT)}</strong> for the top 10%.</p>
-          ${mine ? `<p class="dim">You answered ${pc(mine.pHat)} right.</p>` : ""}
+        root.innerHTML = `${barHtml([emoji, name], false)}<div class="card"><h2>Your sizing</h2>
+          ${mine ? `
+          <div class="statrow"><span>Accuracy</span><strong>${pc(mine.pHat)}</strong></div>
+          <div class="statrow"><span>Average stake</span><strong>${pc(mine.fAvg)}</strong></div>
+          <div class="statrow"><span>The right stake at your accuracy and this game's odds</span><strong>${pc(mine.fStar)}</strong></div>
+          ` : `<p class="dim">No settled rounds on your record.</p>`}
         </div>`;
         return;
       }
+
       let mine = "", won = false;
       if (f && f.board) {
         const idx = f.board.findIndex((r) => r.token === token);
