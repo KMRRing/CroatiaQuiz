@@ -127,6 +127,12 @@
   .qcard .qmeta { color:rgba(255,255,255,.88); font-size:.95rem; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
+  .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
+  .colmid .zone-q { position:static; left:auto; transform:none; width:100%; min-width:0; max-height:48vh; }
+  .zone-c { position:relative; width:100%; min-height:44vh; }
+  .zone-c #clockwrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:transform .7s ease, opacity .7s ease; }
+  .zone-c #clockwrap.morph { transform:scale(1.5); opacity:0; }
+  .zone-c #potwrap { position:absolute; inset:0; }
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
   .zone-r { position:absolute; right:8vw; bottom:5vh; width:21vw; min-width:290px; }
   .lbrow, .lbrow-static { position:relative; }
@@ -135,7 +141,7 @@
   .delta-badge.neg { color:#D33A3A; }
   @keyframes popin { to { opacity:1; transform:scale(1); } }
   .hugeclock { font-size:7.5rem; line-height:1; }
-  .bigring { width:27vh; height:27vh; }
+  .bigring { width:30vh; height:30vh; }
   .zone-l .center { text-align:center; padding-top:6vh; }
   .fade { opacity:0; transition:opacity .8s ease; }
   .fade.show { opacity:1; }
@@ -212,7 +218,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b75-bigring", "./js/questions.js": "./js/questions.js?v=b75-bigring", "./js/characters.js": "./js/characters.js?v=b75-bigring", "./js/engine.js": "./js/engine.js?v=b75-bigring", "./js/fb.js": "./js/fb.js?v=b75-bigring", "./js/bots.js": "./js/bots.js?v=b75-bigring", "./js/finale.js": "./js/finale.js?v=b75-bigring", "./js/views/player.js": "./js/views/player.js?v=b75-bigring", "./js/views/screen.js": "./js/views/screen.js?v=b75-bigring", "./js/views/host.js": "./js/views/host.js?v=b75-bigring", "./js/views/swarm.js": "./js/views/swarm.js?v=b75-bigring" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b76-morph", "./js/questions.js": "./js/questions.js?v=b76-morph", "./js/characters.js": "./js/characters.js?v=b76-morph", "./js/engine.js": "./js/engine.js?v=b76-morph", "./js/fb.js": "./js/fb.js?v=b76-morph", "./js/bots.js": "./js/bots.js?v=b76-morph", "./js/finale.js": "./js/finale.js?v=b76-morph", "./js/views/player.js": "./js/views/player.js?v=b76-morph", "./js/views/screen.js": "./js/views/screen.js?v=b76-morph", "./js/views/host.js": "./js/views/host.js?v=b76-morph", "./js/views/swarm.js": "./js/views/swarm.js?v=b76-morph" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

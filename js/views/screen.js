@@ -206,6 +206,7 @@ export async function mount(root) {
   function buildStage(q, phase, rv) {
     root.innerHTML = `
       <div class="stage">
+        <div class="colmid">
         <div class="zone-q qcard">
           <div class="row spread">
             <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"} \u00b7 <span id="locked">${lockLine()}</span></span>
@@ -214,7 +215,7 @@ export async function mount(root) {
           <h1 class="qtext" id="qtext">${q.text}</h1>
           <div id="optbox">${optionRows(q, null)}</div>
         </div>
-        <div class="zone-l">
+        <div class="zone-c">
           <div id="clockwrap" class="fade show center">
             <svg class="bigring" viewBox="0 0 44 44">
               <defs><linearGradient id="rg2" x1="0" y1="0" x2="1" y2="1">
@@ -228,6 +229,7 @@ export async function mount(root) {
             </svg>
           </div>
           <div id="potwrap" class="fade"></div>
+        </div>
         </div>
         <div class="zone-r" id="zoneR"><ol class="board lb biglb" id="lbList"></ol></div>
       </div>`;
@@ -262,7 +264,7 @@ export async function mount(root) {
     if (fg) { fg.style.strokeDashoffset = "100"; fg.setAttribute("stroke", "#D93636"); }
     clearTimeout(S.potTimer);
     S.potTimer = setTimeout(() => {
-      if (cw) cw.classList.remove("show");
+      if (cw) cw.classList.add("morph");
       if (pw) {
         pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
           ? potScene(rv, q, 780, 470, true, S.state.round)
