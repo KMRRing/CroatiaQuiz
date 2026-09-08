@@ -20,12 +20,12 @@ const AI_ANSWERS = {
 };
 
 const AI_META = [
-  ["bot_grok", "Grok", "\u{1F916}"],
-  ["bot_chatgpt", "ChatGPT", "\u{1F7E2}"],
-  ["bot_deepseek", "DeepSeek", "\u{1F433}"],
-  ["bot_claude", "Claude", "\u{1F7E0}"],
-  ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F"],
-  ["bot_gemini", "Gemini", "\u{264A}"],
+  ["bot_grok", "Grok", "\u{1F916}", "assets/bots/grok.png"],
+  ["bot_chatgpt", "ChatGPT", "\u{1F7E2}", "assets/bots/chatgpt.png"],
+  ["bot_deepseek", "DeepSeek", "\u{1F433}", "assets/bots/deepseek.png"],
+  ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png"],
+  ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png"],
+  ["bot_gemini", "Gemini", "\u{264A}", "assets/bots/gemini.png"],
 ];
 
 // stake helpers -----------------------------------------------------
