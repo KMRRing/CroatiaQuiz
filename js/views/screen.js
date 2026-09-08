@@ -289,7 +289,7 @@ export async function mount(root) {
             `<span class="joinicon" style="animation-delay:${i * 50}ms">${nameOf(t).split(" ")[0]}</span>`).join("")}
           </div>
         </div>`;
-      drawQr(root.querySelector("#qr"), joinUrl(), Math.round(window.innerHeight * 0.5));
+      drawQr(root.querySelector("#qr"), joinUrl(), Math.round(window.innerHeight * 0.62));
       return;
     }
 

@@ -201,7 +201,7 @@
   @keyframes hlpop { to { opacity:1; transform:translateY(0); } }
   .statrow { display:flex; justify-content:space-between; gap:1rem; align-items:baseline; padding:12px 2px; border-bottom:1px solid rgba(255,255,255,.28); font-size:1.1rem; }
   .statrow strong { color:#FFD359; font-size:1.35rem; font-variant-numeric:tabular-nums; }
-  .lobbystage { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3.5vh; }
+  .lobbystage { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:4vh; gap:3vh; }
   .lobbyicons { max-width:80vw; }
   .joinicon { font-size:2.6rem; line-height:1; opacity:0; transform:scale(.4); animation:hlpop .4s cubic-bezier(.2,.8,.3,1.2) forwards; }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
@@ -210,7 +210,7 @@
 <body>
 <svg class="motif" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset="0.55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs><circle cx="150" cy="-60" r="270" fill="none" stroke="url(#tg)" stroke-width="2.2"/><circle cx="1120" cy="600" r="400" fill="none" stroke="url(#tg)" stroke-width="2.2"/></svg>
 <div id="app"><div class="card center"><h1>Croatia Quiz</h1><p class="dim">Loading&#8230;</p></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b71-paylabels", "./js/questions.js": "./js/questions.js?v=b71-paylabels", "./js/characters.js": "./js/characters.js?v=b71-paylabels", "./js/engine.js": "./js/engine.js?v=b71-paylabels", "./js/fb.js": "./js/fb.js?v=b71-paylabels", "./js/bots.js": "./js/bots.js?v=b71-paylabels", "./js/finale.js": "./js/finale.js?v=b71-paylabels", "./js/views/player.js": "./js/views/player.js?v=b71-paylabels", "./js/views/screen.js": "./js/views/screen.js?v=b71-paylabels", "./js/views/host.js": "./js/views/host.js?v=b71-paylabels", "./js/views/swarm.js": "./js/views/swarm.js?v=b71-paylabels" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b72-qrxl", "./js/questions.js": "./js/questions.js?v=b72-qrxl", "./js/characters.js": "./js/characters.js?v=b72-qrxl", "./js/engine.js": "./js/engine.js?v=b72-qrxl", "./js/fb.js": "./js/fb.js?v=b72-qrxl", "./js/bots.js": "./js/bots.js?v=b72-qrxl", "./js/finale.js": "./js/finale.js?v=b72-qrxl", "./js/views/player.js": "./js/views/player.js?v=b72-qrxl", "./js/views/screen.js": "./js/views/screen.js?v=b72-qrxl", "./js/views/host.js": "./js/views/host.js?v=b72-qrxl", "./js/views/swarm.js": "./js/views/swarm.js?v=b72-qrxl" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
