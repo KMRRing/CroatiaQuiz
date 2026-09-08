@@ -13,7 +13,7 @@ export async function mount(root) {
   const S = { state: null, players: {}, wealth: {}, betCount: 0, reveal: null, finale: null, timer: null, betsUnsub: null };
 
   onValue(gref("players"), (s) => { S.players = s.val() || {}; render(); });
-  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question" && root.querySelector("#lbList")) renderBoard(S.wealth); });
+  onValue(gref("wealth"), (s) => { S.wealth = s.val() || {}; if (S.state && S.state.phase === "question" && S.state.closesAt && serverNow() < S.state.closesAt - 250 && root.querySelector("#lbList")) renderBoard(S.wealth); });
   onValue(gref("state"), async (s) => {
     S.state = s.val(); S.reveal = null;
     if (S.state && S.state.phase === "reveal") {
@@ -202,6 +202,7 @@ export async function mount(root) {
     const el = root.querySelector("#lbList");
     if (!el) return;
     [...el.children].forEach((li, i) => {
+      if (li.querySelector(".delta-badge")) return;
       const d = deltas[li.dataset.t];
       if (d == null || Math.abs(d) < 0.5) return;
       li.insertAdjacentHTML("afterbegin",
@@ -363,7 +364,7 @@ export async function mount(root) {
     }
     clearTimeout(S.lbTimer); clearTimeout(S.lbTimer2);
     S.lbTimer = setTimeout(() => addBadges(deltas), 4500);
-    S.lbTimer2 = setTimeout(() => flipBoard(wAfter), 6400);
+    S.lbTimer2 = setTimeout(() => flipBoard(wAfter), 5500);
   }
 
   function joinUrl() {
