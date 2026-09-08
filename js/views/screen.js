@@ -163,7 +163,7 @@ export async function mount(root) {
           </div>
           <div id="potwrap" class="fade"></div>
         </div>
-        <div class="zone-r" id="zoneR"><h2>Top 10</h2><ol class="board lb biglb" id="lbList"></ol></div>
+        <div class="zone-r" id="zoneR"><ol class="board lb biglb" id="lbList"></ol></div>
       </div>`;
     S.stageRound = S.state.round; S.revealApplied = false;
     renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth, null);
