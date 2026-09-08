@@ -229,8 +229,7 @@ export async function mount(root) {
         <div class="colmid">
         <div class="zone-q qcard">
           <div class="row spread">
-            <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS} \u00b7 ${q.tag} \u00b7 ${q.type === "multi" ? "select all that apply" : "pick one"} \u00b7 <span id="locked">${lockLine()}</span></span>
-            <span class="qmeta" id="qres"></span>
+            <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS}</span>
           </div>
           <h1 class="qtext" id="qtext">${q.text}</h1>
           <div id="optbox">${optionRows(q, null)}</div>
