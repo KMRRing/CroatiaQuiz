@@ -298,7 +298,6 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
-      const stageFoot = `<p class="dim">Finale screen ${stage + 1} of 4 \u2014 the host advances.</p>`;
       if (stage === 1 && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
@@ -317,7 +316,7 @@ export async function mount(root) {
           <div class="chartstage">
             <div class="chead">
               <h1>The money, round by round</h1>
-              <span class="dim">Humans in grey, machines dashed, the winner in blue \u00b7 finale screen ${stage + 1} of 4</span>
+              <span class="dim">Humans in grey, machines dashed, the winner in blue</span>
             </div>
             <div class="cwrap">${chart}</div>
           </div>`;
@@ -334,7 +333,6 @@ export async function mount(root) {
             ${f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
               <td>${r.ratio == null ? "no positive-edge stake existed" : r.ratio.toFixed(1) + "\u00d7 Kelly " + (r.ratio > 1.2 ? "\u2014 overcommitted" : r.ratio < 0.8 ? "\u2014 timid" : "\u2014 on the money")}</td></tr>`).join("")}
             </table>
-            ${stageFoot}
           </div>`;
         return;
       }
@@ -348,8 +346,6 @@ export async function mount(root) {
               <div class="thresh"><div class="mult">${t.pMedian == null ? ">99%" : pc(t.pMedian)}</div><p>accuracy to beat the median (${fmt(t.medianW)})</p></div>
               <div class="thresh"><div class="mult">${t.pTop10 == null ? ">99%" : pc(t.pTop10)}</div><p>accuracy to crack the top 10% (${fmt(t.top10W)})</p></div>
             </div>
-            <p class="dim">Perfect sizing buys surprisingly little without the accuracy to back it \u2014 and past the pool's own accuracy, every extra point compounds.</p>
-            ${stageFoot}
           </div>`;
         return;
       }
@@ -368,7 +364,6 @@ export async function mount(root) {
             f.biggestWin ? `Best single round: ${nameOf(f.biggestWin.t)} +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})` : "",
             f.biggestLoss ? `Worst beat: ${nameOf(f.biggestLoss.t)} \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})` : "",
           ].filter(Boolean).join(" \u00b7 ")}</p>
-          <p class="dim">Finale screen 1 of 4 \u2014 the host advances.</p>
         </div>`;
       return;
     }
