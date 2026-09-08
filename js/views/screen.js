@@ -101,18 +101,18 @@ export async function mount(root) {
       const v = row.kind === "one" ? row.e.v : row.grp.v;
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${(ex - (compact ? 60 : 150)).toFixed(0)} ${ey.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}" marker-end="url(#ain)"/>`;
       if (row.kind === "one") {
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(row.e.t)}</text>`;
-        if (!row.e.bot) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 20 : 26)).toFixed(0)}" y="${(sy - 10).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 30 : 38}">${iconOf(row.e.t)}</text>`;
+        if (!row.e.bot) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 26 : 34)).toFixed(0)}" y="${(sy - 14).toFixed(0)}" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
       } else {
         const shown = row.grp.members.slice(0, 7);
         shown.forEach((m, j) => {
-          const dx = (j % 4) * (compact ? 13 : 17) - (compact ? 6 : 8);
-          const dy = Math.floor(j / 4) * (compact ? 14 : 18) - (compact ? 16 : 22) - ((j * 5) % 6);
-          g += `<text class="lbl" style="animation-delay:${(i * 70 + j * 40)}ms" x="${(ix + dx).toFixed(0)}" y="${(sy + dy).toFixed(0)}" text-anchor="middle" font-size="${compact ? 16 : 21}">${iconOf(m)}</text>`;
+          const dx = (j % 4) * (compact ? 17 : 22) - (compact ? 8 : 10);
+          const dy = Math.floor(j / 4) * (compact ? 18 : 23) - (compact ? 20 : 27) - ((j * 5) % 6);
+          g += `<text class="lbl" style="animation-delay:${(i * 70 + j * 40)}ms" x="${(ix + dx).toFixed(0)}" y="${(sy + dy).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(m)}</text>`;
         });
-        if (row.grp.members.length > 7) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 26 : 34)).toFixed(0)}" y="${(sy + 4).toFixed(0)}" font-size="${fs}" fill="#5A6070">+${row.grp.members.length - 7}</text>`;
+        if (row.grp.members.length > 7) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 34 : 44)).toFixed(0)}" y="${(sy + 4).toFixed(0)}" font-size="${fs}" fill="#5A6070">+${row.grp.members.length - 7}</text>`;
         const tag = row.grp.key === "\u2205" ? "\u2014" : (row.grp.key === "\u2026" ? "\u2026" : row.grp.key.split("").map((c) => String.fromCharCode(65 + +c)).join(""));
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + (compact ? 22 : 28)).toFixed(0)}" text-anchor="middle" font-size="${compact ? 11 : 14}" fill="#5A6070">${tag}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + (compact ? 28 : 35)).toFixed(0)}" text-anchor="middle" font-size="${compact ? 12 : 15}" fill="#5A6070">${tag}</text>`;
       }
     });
     const outDelay = nIn * 60 + 700;
@@ -122,7 +122,7 @@ export async function mount(root) {
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${(W - (compact ? 86 : 156) - obow).toFixed(0)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
-      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 70 : 120) - obow).toFixed(0)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 22 : 28}">${iconOf(e.t)}</text>`;
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 70 : 120) - obow).toFixed(0)}" y="${(ey2 + 6).toFixed(0)}" text-anchor="middle" font-size="${compact ? 30 : 38}">${iconOf(e.t)}</text>`;
       if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 54 : 98) - obow).toFixed(0)}" y="${(ey2 - (compact ? 12 : 16)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#B4400F">${fmt(e.v)}</text>`;
     });
     const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
