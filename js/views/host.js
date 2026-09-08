@@ -3,6 +3,7 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { RULES } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { settle, clampStake, fmt, board } from "../engine.js";
+import { sizingReport, requiredAccuracy } from "../finale.js";
 import { botRoster, botConf } from "../bots.js";
 
 const ROSTER = botRoster();
@@ -91,8 +92,10 @@ export async function mount(root) {
         if (!gain || r.deltas[t] > r.deltas[gain]) gain = t;
         if (!loss || r.deltas[t] < r.deltas[loss]) loss = t;
       }
+      const wealthAfter = {};
+      for (const t of Object.keys(entries)) wealthAfter[t] = ((wealth && wealth[t]) || 0) + r.deltas[t];
       updates["reveal/" + n] = {
-        correct: q.correct, W: r.W, L: r.L, pot: r.pot, mult: r.mult, rolled: r.rolled,
+        correct: q.correct, W: r.W, L: r.L, pot: r.pot, mult: r.mult, rolled: r.rolled, wealthAfter,
         nRight: Object.values(r.right).filter(Boolean).length,
         deltas, stakes, aiAnswers,
         top: gain ? { gainT: gain, gainD: r.deltas[gain], lossT: loss, lossD: r.deltas[loss] } : null,
@@ -129,9 +132,21 @@ export async function mount(root) {
     });
     const aiCalib = Object.values(calib).map((r) => ({ token: r.token, n: r.n, right: r.right, brier: r.sq / r.n }))
       .sort((a, b) => a.brier - b.brier);
+    const humanTokens = Object.entries(players || {}).filter(([, p]) => !p.bot).map(([t]) => t);
+    const sizing = sizingReport(reveals, humanTokens);
+    const P = bd.length;
+    const medianW = bd.length ? bd[Math.floor(P / 2)].w : 0;
+    const topIdx = Math.max(0, Math.ceil(P * 0.10) - 1);
+    const top10W = bd.length ? bd[topIdx].w : 0;
+    const thresholds = {
+      medianW, top10W,
+      pMedian: requiredAccuracy(reveals, medianW),
+      pTop10: requiredAccuracy(reveals, top10W),
+      Obar: sizing.Obar,
+    };
     await update(gref(), {
-      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss },
-      state: { phase: "finished", round: N_ROUNDS - 1, rollover: 0, closesAt: 0 },
+      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss, sizing: sizing.rows, thresholds },
+      state: { phase: "finished", round: N_ROUNDS - 1, rollover: 0, closesAt: 0, finaleStage: 0 },
     });
     log("Finale written. Full time.");
   }
@@ -169,6 +184,11 @@ export async function mount(root) {
     if (q("#next")) q("#next").onclick = () => startRound(n + 1);
     if (q("#close")) q("#close").onclick = closeAndSettle;
     if (q("#finish")) q("#finish").onclick = finish;
+    if (q("#stage")) q("#stage").onclick = () => {
+      const next = (((S.state && S.state.finaleStage) || 0) + 1) % 4;
+      update(gref(), { "state/finaleStage": next });
+      log("Finale screen " + (next + 1) + " of 4.");
+    };
     if (q("#reset")) q("#reset").onclick = resetGame;
   }
 }

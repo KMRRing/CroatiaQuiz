@@ -3,6 +3,7 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { CHARACTERS } from "../characters.js";
 import { fmt, board } from "../engine.js";
 import { botRoster } from "../bots.js";
+import { wealthSeries, svgWealthChart, AI_COLORS, KELLY_FORMULA_HTML } from "../finale.js";
 
 const BOTS = Object.fromEntries(botRoster().map((b) => [b.token, b]));
 
@@ -15,7 +16,7 @@ export async function mount(root) {
   onValue(gref("state"), async (s) => {
     S.state = s.val(); S.reveal = null;
     if (S.state && S.state.phase === "reveal") S.reveal = await read("reveal", S.state.round);
-    if (S.state && S.state.phase === "finished") S.finale = await read("finale");
+    if (S.state && S.state.phase === "finished") { S.finale = await read("finale"); S.reveals = await read("reveal"); }
     watchBets(); render();
   });
 
@@ -119,6 +120,56 @@ export async function mount(root) {
 
     if (ph === "finished" && S.finale) {
       const f = S.finale;
+      const stage = (S.state && S.state.finaleStage) || 0;
+      const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
+      if (stage === 1 && S.reveals) {
+        const revArr = []; for (let i = 0; i < N_ROUNDS; i++) revArr.push(S.reveals[i]);
+        const tokens = Object.keys(S.players);
+        const series = wealthSeries(revArr, tokens);
+        const style = {};
+        tokens.forEach((t) => { style[t] = { color: "#C9D0E2", width: 1.3 }; });
+        let k = 0;
+        for (const t of tokens) if (BOTS[t]) { style[t] = { color: AI_COLORS[k % AI_COLORS.length], width: 2, dash: "5 3", label: BOTS[t].name }; k++; }
+        if (f.board && f.board.length) {
+          const win = f.board[0].token;
+          style[win] = { color: "#0000FF", width: 3, label: nameOf(win).split(" ").slice(1).join(" ") };
+        }
+        root.innerHTML = `
+          <div class="screen">
+            <h1>The money, round by round</h1>
+            <p class="dim">Humans in grey, machines dashed, the winner in blue. Everyone sees their own line on their phone.</p>
+            ${svgWealthChart(series, style, 1040, 460)}
+          </div>`;
+        return;
+      }
+      if (stage === 2 && f.sizing) {
+        root.innerHTML = `
+          <div class="screen">
+            <h1>The right size, in one line</h1>
+            ${KELLY_FORMULA_HTML}
+            <p class="dim">This game's average pool multiple: O\u0304 = ${f.thresholds ? f.thresholds.Obar.toFixed(2) : "?"}\u00d7.
+            Below: your realised accuracy, your average stake, and what the formula said it should have been.</p>
+            <table class="sizing"><tr><th></th><th>accuracy</th><th>avg stake</th><th>Kelly says</th><th>verdict</th></tr>
+            ${f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
+              <td>${r.ratio == null ? "no positive-edge stake existed" : r.ratio.toFixed(1) + "\u00d7 Kelly " + (r.ratio > 1.2 ? "\u2014 overcommitted" : r.ratio < 0.8 ? "\u2014 timid" : "\u2014 on the money")}</td></tr>`).join("")}
+            </table>
+          </div>`;
+        return;
+      }
+      if (stage === 3 && f.thresholds) {
+        const t = f.thresholds;
+        root.innerHTML = `
+          <div class="screen center">
+            <h1>What would it have taken?</h1>
+            <p class="big-p">An outsider betting the formula perfectly at this game's realised odds needed\u2026</p>
+            <div class="cols">
+              <div class="thresh"><div class="mult">${t.pMedian == null ? ">99%" : pc(t.pMedian)}</div><p>accuracy to beat the median (${fmt(t.medianW)})</p></div>
+              <div class="thresh"><div class="mult">${t.pTop10 == null ? ">99%" : pc(t.pTop10)}</div><p>accuracy to crack the top 10% (${fmt(t.top10W)})</p></div>
+            </div>
+            <p class="dim">Perfect sizing buys surprisingly little without the accuracy to back it \u2014 and past the pool's own accuracy, every extra point compounds.</p>
+          </div>`;
+        return;
+      }
       root.innerHTML = `
         <div class="screen">
           <h1>Full time</h1>

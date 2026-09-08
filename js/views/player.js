@@ -3,6 +3,7 @@ import { QUESTIONS, N_ROUNDS } from "../questions.js";
 import { RULES, GAME_ID } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { clampStake, fmt } from "../engine.js";
+import { wealthSeries, svgWealthChart, KELLY_FORMULA_HTML } from "../finale.js";
 
 const TOKEN_KEY = "cq_token_" + GAME_ID;
 
@@ -35,7 +36,7 @@ export async function mount(root) {
   onValue(gref("wealth", token), (s) => { S.wealth = s.val() || 0; patchWealth(); });
 
   async function loadReveal(r) { S.reveal = await read("reveal", r); render(); }
-  async function loadFinale() { S.finale = await read("finale"); render(); }
+  async function loadFinale() { S.finale = await read("finale"); S.reveals = await read("reveal"); render(); }
 
   async function join() {
     const players = (await read("players")) || {};
@@ -147,6 +148,38 @@ export async function mount(root) {
 
     if (ph === "finished") {
       const f = S.finale;
+      const stage = (S.state && S.state.finaleStage) || 0;
+      const pc = (x) => x == null ? "\u2014" : (x * 100).toFixed(0) + "%";
+      if (stage === 1 && f && S.reveals) {
+        const revArr = []; for (let i = 0; i < N_ROUNDS; i++) revArr.push(S.reveals[i]);
+        const tokens = (f.board || []).map((r) => r.token);
+        const series = wealthSeries(revArr, tokens);
+        const style = {};
+        tokens.forEach((t) => { style[t] = { color: "#DDE1EC", width: 1 }; });
+        style[token] = { color: "#0000FF", width: 3, label: "you" };
+        root.innerHTML = `<div class="card"><h2>Your run, round by round</h2>${svgWealthChart(series, style, 620, 340)}</div>`;
+        return;
+      }
+      if (stage === 2 && f && f.sizing) {
+        const mine = f.sizing.find((r) => r.token === token);
+        root.innerHTML = `<div class="card"><h2>The right size</h2>${KELLY_FORMULA_HTML}
+          ${mine ? `<p>You were right <strong>${pc(mine.pHat)}</strong> of the time and staked
+          <strong>${pc(mine.fAvg)}</strong> of your stack on average. At this game's odds the formula said
+          <strong>${pc(mine.fStar)}</strong> \u2014 ${mine.ratio == null ? "no positive-edge stake existed at your accuracy." :
+          "you bet <strong>" + mine.ratio.toFixed(1) + "\u00d7 Kelly</strong>" + (mine.ratio > 1.2 ? " \u2014 overcommitted." : mine.ratio < 0.8 ? " \u2014 timid." : " \u2014 on the money.")}</p>` : ""}
+        </div>`;
+        return;
+      }
+      if (stage === 3 && f && f.thresholds) {
+        const t = f.thresholds;
+        const mine = f.sizing ? f.sizing.find((r) => r.token === token) : null;
+        root.innerHTML = `<div class="card center"><h2>What would it have taken?</h2>
+          <p>Median: <strong class="clock">${t.pMedian == null ? ">99%" : pc(t.pMedian)}</strong> \u00b7
+             Top 10%: <strong class="clock">${t.pTop10 == null ? ">99%" : pc(t.pTop10)}</strong> accuracy, perfectly sized.</p>
+          ${mine ? `<p class="dim">You ran at ${pc(mine.pHat)}.</p>` : ""}
+        </div>`;
+        return;
+      }
       let mine = "";
       if (f && f.board) {
         const idx = f.board.findIndex((r) => r.token === token);
@@ -156,11 +189,10 @@ export async function mount(root) {
         <div class="card center">
           <div class="avatar">${emoji}</div>
           ${mine || "<h2>Full time.</h2>"}
-          <p class="dim">Final boards are on the big screen. Thanks for playing.</p>
+          <p class="dim">Final boards are on the big screen \u2014 more coming.</p>
         </div>`;
       return;
     }
-  }
 
   function statusLine() {
     if (!S.answer.size) return "Pick an answer \u2014 no answer means the minimum stake is lost.";
