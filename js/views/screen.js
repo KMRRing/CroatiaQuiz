@@ -324,10 +324,6 @@ export async function mount(root) {
           .replace('style="width:100%;height:auto"', 'style="width:100%;height:100%"');
         root.innerHTML = `
           <div class="chartstage">
-            <div class="chead">
-              <h1>The money, round by round</h1>
-              <span class="dim">Humans in grey, machines dashed, the winner in blue</span>
-            </div>
             <div class="cwrap">${chart}</div>
           </div>`;
         return;
