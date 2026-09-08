@@ -123,15 +123,19 @@ export async function mount(root) {
         g += svgIcon(row.e.t, ix, sy, compact ? 32 : 42, i * 70);
         g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy - (compact ? 12 : 16)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.e.v)}</text>`;
       } else {
-        const shown = row.grp.members.slice(0, 7);
-        shown.forEach((m, j) => {
-          const dx = (j % 4) * (compact ? 17 : 22) - (compact ? 8 : 10);
-          const dy = Math.floor(j / 4) * (compact ? 18 : 23) - (compact ? 20 : 27) - ((j * 5) % 6);
-          g += svgIcon(m, ix + dx, sy + dy - (compact ? 5 : 7), compact ? 22 : 28, i * 70 + j * 40);
-        });
-        if (row.grp.members.length > 7) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix + (compact ? 34 : 44)).toFixed(0)}" y="${(sy + 4).toFixed(0)}" font-size="${fs}" fill="#5A6070">+${row.grp.members.length - 7}</text>`;
-        const tag = row.grp.key === "\u2205" ? "\u2014" : (row.grp.key === "\u2026" ? "\u2026" : row.grp.key.split("").map((c) => String.fromCharCode(65 + +c)).join(""));
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${ix.toFixed(0)}" y="${(sy + (compact ? 28 : 35)).toFixed(0)}" text-anchor="middle" font-size="${compact ? 12 : 15}" fill="#5A6070">${tag}</text>`;
+        const mem = row.grp.members;
+        if (mem.length === 1) {
+          g += svgIcon(mem[0], ix, sy, compact ? 32 : 42, i * 70);
+        } else {
+          const shown = mem.slice(0, 7);
+          const perRow = Math.min(4, shown.length);
+          const cxOff = ((perRow - 1) * (compact ? 17 : 22)) / 2;
+          shown.forEach((m, j) => {
+            const dx = (j % 4) * (compact ? 17 : 22) - cxOff;
+            const dy = Math.floor(j / 4) * (compact ? 18 : 23) - (compact ? 16 : 22) - ((j * 5) % 6);
+            g += svgIcon(m, ix + dx, sy + dy - (compact ? 5 : 7), compact ? 22 : 28, i * 70 + j * 40);
+          });
+        }
         g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy - (compact ? 12 : 16)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">${fmt(row.grp.v)}</text>`;
       }
     });
