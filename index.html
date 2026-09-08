@@ -63,6 +63,14 @@
   table.sizing th, table.sizing td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
   table.sizing th { color:var(--dim); font-weight:400; }
   .thresh { border:1px solid var(--line); border-radius:18px; padding:22px; }
+  .flow path.arrow { fill:none; stroke:url(#tgw); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; animation:drawin .7s ease-out forwards; opacity:.85; }
+  .flow text.lbl { opacity:0; animation:fadein .5s ease-out forwards; }
+  .flow .potring { animation:potpop 1s ease-out; }
+  @keyframes drawin { to { stroke-dashoffset:0; } }
+  @keyframes fadein { to { opacity:1; } }
+  @keyframes potpop { 0% { transform:scale(.9); } 65% { transform:scale(1.05); } 100% { transform:scale(1); } }
+  .strip { display:grid; grid-template-columns:2fr 1fr; gap:26px; align-items:start; }
+  @media (prefers-reduced-motion: reduce) { .flow path.arrow, .flow text.lbl { animation:none; stroke-dashoffset:0; opacity:1; } .flow .potring { animation:none; } }
   .log { background:var(--wash); border:1px solid var(--line); border-radius:12px; padding:10px; font-size:.8rem; white-space:pre-wrap; min-height:60px; }
 </style>
 </head>

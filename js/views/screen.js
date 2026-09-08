@@ -39,6 +39,59 @@ export async function mount(root) {
   const humanCount = () => Object.entries(S.players).filter(([t]) => !BOTS[t]).length;
   const lockLine = () => `${S.betCount} of ${humanCount()} locked in`;
 
+
+  function potScene(rv, q) {
+    const mkIn = [], mkOut = [];
+    for (const [t, st] of Object.entries(rv.stakes || {})) mkIn.push({ t, v: st, bot: false });
+    for (const [t, st] of Object.entries(rv.botStakes || {})) mkIn.push({ t, v: st, bot: true });
+    mkIn.sort((a, b) => b.v - a.v);
+    for (const e of mkIn) {
+      const right = e.bot ? (rv.aiAnswers && rv.aiAnswers[e.t] === rv.correct) : (rv.deltas && rv.deltas[e.t] > 0);
+      if (right && !rv.rolled && rv.mult > 0) mkOut.push({ t: e.t, v: e.v * rv.mult, bot: e.bot });
+    }
+    mkOut.sort((a, b) => b.v - a.v);
+    const totalIn = mkIn.reduce((a, e) => a + e.v, 0) + (rv.pot - rv.L);
+    const vmax = Math.max(1, mkIn[0] ? mkIn[0].v : 1, mkOut[0] ? mkOut[0].v : 1);
+    const wOf = (v) => (1.5 + 12 * Math.sqrt(v / vmax)).toFixed(1);
+    const spread = (n, i) => 90 + (n <= 1 ? 190 : (i / (n - 1)) * 380);
+    let g = "";
+    mkIn.forEach((e, i) => {
+      const sy = spread(mkIn.length, i);
+      const a = Math.PI * (150 + (mkIn.length <= 1 ? 30 : (i / (mkIn.length - 1)) * 60)) / 180;
+      const ex = 600 + 118 * Math.cos(a), ey = 300 + 118 * Math.sin(a);
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M 80 ${sy} C 300 ${sy}, ${ex - 150} ${ey}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(e.v)}" marker-end="url(#ain)"/>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="80" y="${sy - 10}" font-size="19" font-weight="700" fill="#0A0ABA">${nameOf(e.t)}${e.bot ? "" : " " + fmt(e.v)}</text>`;
+    });
+    const outDelay = mkIn.length * 70 + 700;
+    mkOut.forEach((e, i) => {
+      const ey2 = spread(mkOut.length, i);
+      const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
+      const sx = 600 + 118 * Math.cos(a), sy2 = 300 + 118 * Math.sin(a);
+      g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 90)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${sx + 150} ${sy2}, 900 ${ey2}, 1120 ${ey2}" stroke-width="${wOf(e.v)}" marker-end="url(#aout)"/>`;
+      if (i < 3) g += `<text class="lbl" style="animation-delay:${(outDelay + i * 90)}ms" x="1120" y="${ey2 - 10}" text-anchor="end" font-size="19" font-weight="700" fill="#B4400F">${nameOf(e.t)} ${fmt(e.v)}</text>`;
+    });
+    const potHead = rv.rolled
+      ? `<text x="600" y="120" text-anchor="middle" font-size="30" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">NOBODY RIGHT \u2014 ${fmt(rv.pot)} ROLLS OVER</text>`
+      : `<text x="600" y="120" text-anchor="middle" font-size="40" font-weight="700" fill="#0000FF" font-family="Century Gothic,Questrial,Poppins,Arial">${fmt(totalIn)} in the pot</text>`;
+    return `
+    <svg class="flow" viewBox="0 0 1200 560" style="width:100%;height:auto">
+      <defs>
+        <linearGradient id="tgw" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#0000FF"/><stop offset="0.5" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
+        </linearGradient>
+        <marker id="ain" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8200DE"/></marker>
+        <marker id="aout" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#FF6432"/></marker>
+      </defs>
+      ${potHead}
+      <g class="potring" style="transform-origin:600px 300px">
+        <circle cx="600" cy="300" r="118" fill="#fff" stroke="url(#tgw)" stroke-width="5"/>
+        <text x="600" y="292" text-anchor="middle" font-size="46" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.rolled ? "\u21bb" : "\u00d7" + rv.mult.toFixed(2)}</text>
+        <text x="600" y="330" text-anchor="middle" font-size="17" fill="#5A6070">${rv.rolled ? "carried to next round" : "paid to the right side"}</text>
+      </g>
+      ${g}
+    </svg>`;
+  }
+
   function joinUrl() {
     return location.origin + location.pathname + location.search + "#join";
   }
@@ -88,31 +141,19 @@ export async function mount(root) {
       const q = QUESTIONS[S.state.round];
       const rv = S.reveal;
       const correctTxt = q.correct.split("").map((i) => String.fromCharCode(65 + +i) + ". " + q.options[+i]).join("  \u00b7  ");
-      const bd = board(S.wealth, S.players).slice(0, 10);
-      const total = rv.W + rv.L || 1;
+      const bd = board(S.wealth, S.players).slice(0, 5);
       root.innerHTML = `
         <div class="screen">
           <div class="dim">Question ${S.state.round + 1} \u2014 the answer</div>
           <h1 class="qtext">${correctTxt}</h1>
-          <div class="poolbar"><div class="poolW" style="width:${(rv.W / total) * 100}%"></div></div>
-          <div class="row spread">
-            <span>${fmt(rv.W)} right</span>
-            <strong class="mult">${rv.rolled ? "ROLLOVER \u2192 " + fmt(rv.pot) : rv.mult.toFixed(2) + "\u00d7"}</strong>
-            <span>${fmt(rv.L)} wrong</span>
-          </div>
-          ${rv.top ? `<p>${nameOf(rv.top.gainT)} +${fmt(rv.top.gainD)} \u00b7 ${nameOf(rv.top.lossT)} \u2212${fmt(Math.abs(rv.top.lossD))}</p>` : ""}
-          <div class="cols">
-            <div>
-              <h2>Board</h2>
-              <ol class="board">${bd.map((r) => `<li>${nameOf(r.token)} <span>${fmt(r.w)}</span></li>`).join("")}</ol>
-            </div>
-            <div>
-              <h2>The machines said</h2>
-              <ul class="board">${Object.entries(rv.aiAnswers || {}).map(([t, a]) =>
-                `<li>${nameOf(t)} <span>${a == null || a === "" ? "\u2014" : a.split("").map((i) => String.fromCharCode(65 + +i)).join("")}</span></li>`).join("")}
-              </ul>
-              <p class="dim">Their stakes stay sealed until the end.</p>
-            </div>
+          ${potScene(rv, q)}
+          <div class="strip">
+            <div><h2>The machines said</h2>
+              <div class="grid" style="justify-content:flex-start">${Object.entries(rv.aiAnswers || {}).map(([t, a]) =>
+                `<span class="chip">${nameOf(t)} \u00b7 ${a == null || a === "" ? "\u2014" : a.split("").map((i) => String.fromCharCode(65 + +i)).join("")}</span>`).join("")}
+              </div></div>
+            <div><h2>Top 5</h2>
+              <ol class="board">${bd.map((r) => `<li>${nameOf(r.token)} <span>${fmt(r.w)}</span></li>`).join("")}</ol></div>
           </div>
         </div>`;
       return;
