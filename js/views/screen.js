@@ -314,13 +314,12 @@ export async function mount(root) {
         const tokens = Object.keys(S.players);
         const series = wealthSeries(revArr, tokens);
         const style = {};
-        tokens.forEach((t) => { style[t] = { color: "#C9D0E2", width: 2 }; });
-        let k = 0;
-        for (const t of tokens) if (BOTS[t]) { style[t] = { color: AI_COLORS[k % AI_COLORS.length], width: 3.2, dash: "7 4" }; k++; }
-        if (f.board && f.board.length) style[f.board[0].token] = { color: "#0000FF", width: 4.5 };
+        tokens.forEach((t) => { style[t] = { color: "rgba(255,255,255,.45)", width: 2 }; });
+        for (const t of tokens) if (BOTS[t]) style[t] = { color: "#FFFFFF", width: 3.2, dash: "7 4" };
+        if (f.board && f.board.length) style[f.board[0].token] = { color: "#FFD359", width: 5 };
         const icons = {};
         for (const t of tokens) icons[t] = BOTS[t] && BOTS[t].img ? { img: BOTS[t].img } : { emoji: iconOf(t) };
-        const chart = svgWealthChart(series, style, 1760, 760, 1.9, icons)
+        const chart = svgWealthChart(series, style, 1760, 760, 1.9, icons, true)
           .replace('style="width:100%;height:auto"', 'style="width:100%;height:100%"');
         root.innerHTML = `
           <div class="chartstage">

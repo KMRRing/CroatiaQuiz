@@ -65,22 +65,25 @@ export function requiredKnowledge(reveals, target) {
 }
 
 // Minimal SVG line chart. series: {token: [w0..wN]}, style: {token:{color,width,dash,label}}
-export function svgWealthChart(series, style, width, height, fscale = 1, icons = null) {
+export function svgWealthChart(series, style, width, height, fscale = 1, icons = null, dark = false) {
+  const gMajor = dark ? "rgba(255,255,255,.30)" : "#E3E6EF";
+  const gMinor = dark ? "rgba(255,255,255,.16)" : "#F0F2F8";
+  const txt = dark ? "rgba(255,255,255,.92)" : "#5A6070";
   const tokens = Object.keys(series);
   if (!tokens.length) return "<svg></svg>";
   const N = series[tokens[0]].length - 1;
   let maxW = 10;
   tokens.forEach((t) => series[t].forEach((w) => { if (w > maxW) maxW = w; }));
-  const padL = 46, padB = 26, padT = 12, padR = icons ? 122 : 8;
+  const padL = Math.round(46 * (fscale > 1 ? fscale * 0.95 : 1)), padB = 26, padT = 12, padR = icons ? 122 : 8;
   const X = (i) => padL + (i / N) * (width - padL - padR);
   const Y = (w) => padT + (1 - w / maxW) * (height - padT - padB);
-  let g = `<line x1="${padL}" y1="${Y(0)}" x2="${width - padR}" y2="${Y(0)}" stroke="#E3E6EF"/>`;
+  let g = `<line x1="${padL}" y1="${Y(0)}" x2="${width - padR}" y2="${Y(0)}" stroke="${gMajor}"/>`;
   for (const gv of [0.25, 0.5, 0.75, 1]) {
     const v = Math.round(maxW * gv);
-    g += `<line x1="${padL}" y1="${Y(v)}" x2="${width - padR}" y2="${Y(v)}" stroke="#F0F2F8"/>` +
-         `<text x="${padL - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="#5A6070">$${v}</text>`;
+    g += `<line x1="${padL}" y1="${Y(v)}" x2="${width - padR}" y2="${Y(v)}" stroke="${gMinor}"/>` +
+         `<text x="${padL - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="${txt}">$${v}</text>`;
   }
-  g += `<text x="${width - padR}" y="${height - 6}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="#5A6070">round ${N}</text>`;
+  g += `<text x="${width - padR}" y="${height - 6}" text-anchor="end" font-size="${Math.round(11 * fscale)}" fill="${txt}">round ${N}</text>`;
   const sorted = tokens.slice().sort((a, b) => ((style[a] && style[a].width) || 1) - ((style[b] && style[b].width) || 1));
   for (const t of sorted) {
     const st = style[t] || {};
@@ -114,7 +117,7 @@ export function svgWealthChart(series, style, width, height, fscale = 1, icons =
           : `<text x="${x.toFixed(0)}" y="${(cy + s * 0.32).toFixed(0)}" text-anchor="middle" font-size="${Math.round(s * 0.9)}">${ic.emoji}</text>`;
       });
       if (c.items.length > 6)
-        g += `<text x="${(x0 + 6 * s * 0.42 + s * 0.6).toFixed(0)}" y="${(cy + 5).toFixed(0)}" font-size="${Math.round(11 * fscale)}" fill="#5A6070">+${c.items.length - 6}</text>`;
+        g += `<text x="${(x0 + 6 * s * 0.42 + s * 0.6).toFixed(0)}" y="${(cy + 5).toFixed(0)}" font-size="${Math.round(11 * fscale)}" fill="${txt}">+${c.items.length - 6}</text>`;
     }
   }
   return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto">${g}</svg>`;
