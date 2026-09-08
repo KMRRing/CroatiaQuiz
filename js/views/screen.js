@@ -422,7 +422,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u00b7" : (x * 100).toFixed(0) + "%";
-      if (stage >= 1 && stage <= 4 && S.reveals) {
+      if (stage >= 1 && stage <= 6 && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = Object.keys(S.players);
         const series = wealthSeries(revArr, tokens);
@@ -442,22 +442,19 @@ export async function mount(root) {
                 f.bestRound ? `<div class="hlcard"><div class="hlt">Biggest pot</div><div class="hlv">Q${f.bestRound.n + 1} \u00b7 ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7</div></div>` : null,
                 f.biggestWin ? `<div class="hlcard"><div class="hlt">Best single round</div><div class="hlv">${iconHtml(f.biggestWin.t)} ${plainName(f.biggestWin.t)} \u00b7 +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})</div></div>` : null,
                 f.biggestLoss ? `<div class="hlcard"><div class="hlt">Worst beat</div><div class="hlv">${iconHtml(f.biggestLoss.t)} ${plainName(f.biggestLoss.t)} \u00b7 \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</div></div>` : null,
+                f.streak ? `<div class="hlcard"><div class="hlt">Longest streak</div><div class="hlv">${iconHtml(f.streak.t)} ${plainName(f.streak.t)} \u00b7 ${f.streak.len} in a row (Q${f.streak.from + 1} to Q${f.streak.to + 1})</div></div>` : null,
+                f.bestOdds ? `<div class="hlcard"><div class="hlt">Best odds</div><div class="hlv">${iconHtml(f.bestOdds.t)} ${plainName(f.bestOdds.t)} \u00b7 won at ${f.bestOdds.mult.toFixed(2)}\u00d7 (Q${f.bestOdds.n + 1})</div></div>` : null,
               ].filter(Boolean).slice(0, Math.max(0, stage - 1)).join("")}
             </div>
           </div>`;
         return;
       }
-      if (stage === 5 && f.sizing) {
+      if (stage === 7 && f.sizing) {
         const t = f.thresholds || {};
         const kM = t.kMedian != null ? t.kMedian : t.pMedian;
         const kA = t.kMean;
         const kT = t.kTop10 != null ? t.kTop10 : t.pTop10;
         const cell = (k, label, w) => `<div class="thresh"><div class="mult">${k == null ? ">100%" : pc(k)}</div><p>needs to know ${k == null ? "more than all" : pc(k)} of the answers to beat the ${label} (${fmt(w)})</p></div>`;
-        const rows = f.sizing.map((r) => `<tr><td>${nameOf(r.token)}</td><td>${pc(r.pHat)}</td><td>${pc(r.fAvg)}</td><td>${pc(r.fStar)}</td>
-              <td>${r.ratio == null ? "no edge" : r.ratio.toFixed(1) + "\u00d7 Kelly"}</td></tr>`);
-        const half = Math.ceil(rows.length / 2);
-        const thead = `<tr><th></th><th>accuracy</th><th>avg stake</th><th>Kelly says</th><th>verdict</th></tr>`;
-        const tbl = (rs) => `<table class="sizing">${thead}${rs.join("")}</table>`;
         root.innerHTML = `
           <div class="kstage">
             <div class="kcard">

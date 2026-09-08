@@ -29,7 +29,11 @@ export function sizingReport(reveals, humanTokens) {
       n++; if (d > 0) right++;
       if (s != null) {
         const wAtBet = (rv.wealthAfter && rv.wealthAfter[t] != null ? rv.wealthAfter[t] : 0) - d;
-        if (wAtBet > 0) { fSum += s / wAtBet; fN++; }
+        if (wAtBet > 0) {
+          if (s <= RULES.minStake + 1e-9) {
+            if (wAtBet > RULES.minStake + 1e-9) fN++;
+          } else { fSum += s / wAtBet; fN++; }
+        }
       }
     });
     if (!n) continue;

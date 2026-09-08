@@ -250,7 +250,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u00b7" : (x * 100).toFixed(0) + "%";
-      if (stage >= 1 && stage <= 4 && f && S.reveals) {
+      if (stage >= 1 && stage <= 6 && f && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = (f.board || []).map((r) => r.token);
         const series = wealthSeries(revArr, tokens);
@@ -270,7 +270,7 @@ export async function mount(root) {
           <div class="card"><div class="qsummary">${qrows}</div></div>`;
         return;
       }
-      if (stage === 5 && f && f.sizing) {
+      if (stage === 7 && f && f.sizing) {
         const mine = f.sizing.find((r) => r.token === token);
         root.innerHTML = `${barHtml([emoji, name], false)}<div class="card"><h2>Your sizing</h2>
           ${mine ? `

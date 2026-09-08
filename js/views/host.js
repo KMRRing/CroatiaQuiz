@@ -181,6 +181,28 @@ export async function mount(root) {
     });
     const aiCalib = Object.values(calib).map((r) => ({ token: r.token, n: r.n, right: r.right, brier: r.sq / r.n }))
       .sort((a, b) => a.brier - b.brier);
+    const allTokens = bd.map((r) => r.token);
+    const rightAt = (rv, t) => (rv.answers && rv.answers[t] === rv.correct) || (rv.aiAnswers && rv.aiAnswers[t] === rv.correct);
+    const cur = {}; let bestStreak = null;
+    reveals.forEach((rv, n) => {
+      if (!rv) return;
+      for (const t of allTokens) {
+        cur[t] = rightAt(rv, t) ? (cur[t] || 0) + 1 : 0;
+        if (cur[t] >= 2 && (!bestStreak || cur[t] > bestStreak.len)) bestStreak = { t, len: cur[t], to: n, from: n - cur[t] + 1 };
+      }
+    });
+    let bestOdds = null;
+    reveals.forEach((rv, n) => {
+      if (!rv || rv.rolled || !(rv.mult > 1.001)) return;
+      if (bestOdds && rv.mult <= bestOdds.mult) return;
+      let pick = null, ps = -1;
+      for (const [t, d] of Object.entries(rv.deltas || {})) {
+        if (d <= 0) continue;
+        const st = (rv.stakes && rv.stakes[t]) || (rv.botStakes && rv.botStakes[t]) || 0;
+        if (st > ps) { ps = st; pick = t; }
+      }
+      if (pick) bestOdds = { t: pick, mult: rv.mult, n };
+    });
     const humanTokens = Object.entries(players || {}).filter(([, p]) => !p.bot).map(([t]) => t);
     const sizing = sizingReport(reveals, humanTokens);
     const P = bd.length;
@@ -196,7 +218,7 @@ export async function mount(root) {
       Obar: sizing.Obar,
     };
     await update(gref(), {
-      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss, sizing: sizing.rows, thresholds, nPlayed: reveals.length },
+      finale: { board: bd, aiCalib, bestRound, biggestWin, biggestLoss, streak: bestStreak, bestOdds, sizing: sizing.rows, thresholds, nPlayed: reveals.length },
       state: { phase: "finished", round: N_ROUNDS - 1, rollover: 0, closesAt: 0, finaleStage: 0 },
     });
     log("Finale written. Full time.");
@@ -248,7 +270,7 @@ export async function mount(root) {
           </div>
           <div class="btnrow">
             <button id="lobby">Open lobby</button>
-            <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/6)</button>
+            <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/8)</button>
             <button id="finish" class="${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "danger"}">Finish \u2192 finale${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : " (early)"}</button>
           </div>
           <div class="btnrow">
@@ -283,9 +305,9 @@ export async function mount(root) {
       finish();
     };
     if (q("#stage")) q("#stage").onclick = () => {
-      const next = (((S.state && S.state.finaleStage) || 0) + 1) % 6;
+      const next = (((S.state && S.state.finaleStage) || 0) + 1) % 8;
       update(gref(), { "state/finaleStage": next });
-      log("Finale screen " + (next + 1) + " of 6.");
+      log("Finale screen " + (next + 1) + " of 8.");
     };
     if (q("#release")) q("#release").onclick = giveUpHost;
     if (q("#reset")) q("#reset").onclick = resetGame;
