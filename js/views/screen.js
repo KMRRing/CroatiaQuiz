@@ -281,17 +281,15 @@ export async function mount(root) {
     }
     clearInterval(S.timer);
     if (!S.state || ph === "lobby") {
-      const humans = Object.entries(S.players).filter(([t]) => !BOTS[t]);
+      const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
       root.innerHTML = `
-        <div class="screen center">
-          <h1>Croatia Quiz</h1>
-          <p class="dim big-p">Scan to join \u2014 the house deals you a character.</p>
+        <div class="lobbystage">
           <div id="qr" class="qr"></div>
-          <p class="dim">${joinUrl()}</p>
-          <div class="grid">${humans.map(([t]) => `<span class="chip">${nameOf(t)}</span>`).join("")}</div>
-          <p class="dim">${humans.length} in the room \u00b7 ${Object.keys(BOTS).length} machines waiting</p>
+          <div class="grid lobbyicons">${humans.map(([t], i) =>
+            `<span class="joinicon" style="animation-delay:${i * 50}ms">${nameOf(t).split(" ")[0]}</span>`).join("")}
+          </div>
         </div>`;
-      drawQr(root.querySelector("#qr"), joinUrl());
+      drawQr(root.querySelector("#qr"), joinUrl(), Math.round(window.innerHeight * 0.5));
       return;
     }
 
@@ -388,9 +386,9 @@ export async function mount(root) {
     root.innerHTML = `<div class="screen center"><h1>\u2026</h1></div>`;
   }
 
-  function drawQr(el, text) {
+  function drawQr(el, text, size = 240) {
     if (!el) return;
-    const go = () => { el.innerHTML = ""; new window.QRCode(el, { text, width: 240, height: 240 }); };
+    const go = () => { el.innerHTML = ""; new window.QRCode(el, { text, width: size, height: size }); };
     if (window.QRCode) return go();
     const s = document.createElement("script");
     s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
