@@ -90,7 +90,7 @@ export async function mount(root) {
     const nIn = inRows.length;
     inRows.forEach((r) => { vm = Math.max(vm, r.kind === "one" ? r.e.v : r.grp.v); });
     inRows.forEach((row, i) => {
-      const sy = spread(nIn, i);
+      const sy = nIn === 1 ? cy : spread(nIn, i);  // lone loser: dead-straight into the pot equator
       const ix = (compact ? 96 : 150) + bowOff(nIn, i);
       const ax = ix + (compact ? 16 : 36);
       const t2 = nIn <= 1 ? 0.5 : i / (nIn - 1);
@@ -130,7 +130,7 @@ export async function mount(root) {
     });
     const outDelay = nIn * 60 + 700;
     mkOut.forEach((e, i) => {
-      const ey2 = spread(mkOut.length, i);
+      const ey2 = mkOut.length === 1 ? cy : spread(mkOut.length, i);  // lone winner: dead-straight out
       const obow = bowOff(mkOut.length, i);
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);

@@ -151,7 +151,7 @@
   .zone-c { position:relative; width:100%; min-height:44vh; }
   .zone-c #clockwrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:transform .7s ease, opacity .7s ease; }
   .zone-c #clockwrap.morph { transform:scale(1.5); opacity:0; }
-  .zone-c #potwrap { position:absolute; inset:0; }
+  .zone-c #potwrap { position:absolute; inset:0 -4%; }  /* pot renders ~8% wider than the column */
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
   .zone-r { position:absolute; right:8vw; top:50%; transform:translateY(-50%); width:clamp(200px, 21vw, 420px); }
   @media (max-aspect-ratio: 8/5) {
@@ -269,7 +269,7 @@
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
 <div id="app"><div class="dealwrap"><div class="bigdisc dealpulse"><p class="dim">Loading&#8230;</p></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b138-article", "./js/questions.js": "./js/questions.js?v=b138-article", "./js/characters.js": "./js/characters.js?v=b138-article", "./js/engine.js": "./js/engine.js?v=b138-article", "./js/fb.js": "./js/fb.js?v=b138-article", "./js/bots.js": "./js/bots.js?v=b138-article", "./js/finale.js": "./js/finale.js?v=b138-article", "./js/views/player.js": "./js/views/player.js?v=b138-article", "./js/views/screen.js": "./js/views/screen.js?v=b138-article", "./js/views/host.js": "./js/views/host.js?v=b138-article", "./js/views/swarm.js": "./js/views/swarm.js?v=b138-article", "./js/views/data.js": "./js/views/data.js?v=b138-article" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b139-potgeom", "./js/questions.js": "./js/questions.js?v=b139-potgeom", "./js/characters.js": "./js/characters.js?v=b139-potgeom", "./js/engine.js": "./js/engine.js?v=b139-potgeom", "./js/fb.js": "./js/fb.js?v=b139-potgeom", "./js/bots.js": "./js/bots.js?v=b139-potgeom", "./js/finale.js": "./js/finale.js?v=b139-potgeom", "./js/views/player.js": "./js/views/player.js?v=b139-potgeom", "./js/views/screen.js": "./js/views/screen.js?v=b139-potgeom", "./js/views/host.js": "./js/views/host.js?v=b139-potgeom", "./js/views/swarm.js": "./js/views/swarm.js?v=b139-potgeom", "./js/views/data.js": "./js/views/data.js?v=b139-potgeom" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
