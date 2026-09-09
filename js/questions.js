@@ -31,7 +31,7 @@ export const QUESTIONS = [
     options: ["Credits", "A compliance obligation (deficit)", "Neither"], correct: "0" },
   { id: 10, tag: "RFNBO electricity", type: "multi", roomP: 0.85,
     text: "Renewable status of the electricity used for RFNBO production can be demonstrated via:",
-    options: ["Direct connection to a renewable installation", "A renewable power purchase agreement", "Grid electricity in a bidding zone with >90% renewable share in the previous calendar year", "Grid electricity in a bidding zone with <90% renewable share in the previous calendar year", "Grid electricity in a bidding zone with emission intensity below 18 gCO\u2082eq/MJ, combined with a PPA", "Grid electricity consumed during periods of avoided curtailment / redispatch"], correct: "01245" },
+    options: ["Direct connection to a renewable installation", "A renewable power purchase agreement", "Grid electricity in a bidding zone with >90% renewable share in the previous calendar year", "Grid electricity in a bidding zone with emission intensity below 18 gCO\u2082eq/MJ, combined with a PPA", "Grid electricity consumed during periods of avoided curtailment / redispatch"], correct: "01234" },
   { id: 11, tag: "RCF", type: "single", roomP: 0.90,
     text: "A fossil waste that is generally recycled into new materials is a good candidate for upgrading into a Recycled Carbon Fuel.",
     options: ["True", "False"], correct: "1" },
