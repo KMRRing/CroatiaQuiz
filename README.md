@@ -32,7 +32,7 @@ on GitHub Pages, with Firebase Realtime Database carrying the live state. No ser
 5. **Anonymous auth.** Build -> Authentication -> Get started -> Sign-in method ->
    Anonymous -> Enable -> Save.
 6. **GitHub Pages.** Repo -> Settings -> Pages -> Source: Deploy from a branch ->
-   `main` / root -> Save. Site: `https://kmrringqa.github.io/CroatiaQuiz/`.
+   `main` / root -> Save. Site: `https://kmrring.github.io/CroatiaQuiz/`.
 
 ## Running the night
 1. Open `#host` on your laptop, "Claim host on this device", then "Open lobby". Keep the tab open
