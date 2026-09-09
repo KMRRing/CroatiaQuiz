@@ -146,12 +146,12 @@
   .qcard .qmeta { color:rgba(255,255,255,.88); font-size:.95rem; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
-  .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
-  .colmid .zone-q { position:static; left:auto; transform:none; width:100%; min-width:0; max-height:48vh; }
-  .zone-c { position:relative; width:100%; min-height:44vh; }
+  .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; bottom:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
+  .colmid .zone-q { position:static; left:auto; transform:none; width:100%; min-width:0; flex:0 0 auto; max-height:46vh; overflow:hidden; }
+  .zone-c { position:relative; width:100%; flex:1 1 auto; min-height:0; }
   .zone-c #clockwrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:transform .7s ease, opacity .7s ease; }
   .zone-c #clockwrap.morph { transform:scale(1.5); opacity:0; }
-  .zone-c #potwrap { position:absolute; inset:0 -4%; }  /* pot renders ~8% wider than the column */
+  .zone-c #potwrap { position:absolute; inset:0 -6%; }  /* pot may render ~12% wider than the column */
   .zone-l { position:absolute; left:2.5vw; top:42vh; width:42vw; }
   .zone-r { position:absolute; right:8vw; top:50%; transform:translateY(-50%); width:clamp(200px, 21vw, 420px); }
   @media (max-aspect-ratio: 8/5) {
@@ -276,7 +276,7 @@
         <path id="f8" d="M 100 109.44 L 76.29 86.37 A 34.0 34.0 0 1 1 123.71 86.37 L 63.73 144.73 A 52.0 52.0 0 1 0 136.27 144.73 Z" fill="none" stroke="none"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="2.7s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b141-loaderdisc", "./js/questions.js": "./js/questions.js?v=b141-loaderdisc", "./js/characters.js": "./js/characters.js?v=b141-loaderdisc", "./js/engine.js": "./js/engine.js?v=b141-loaderdisc", "./js/fb.js": "./js/fb.js?v=b141-loaderdisc", "./js/bots.js": "./js/bots.js?v=b141-loaderdisc", "./js/finale.js": "./js/finale.js?v=b141-loaderdisc", "./js/views/player.js": "./js/views/player.js?v=b141-loaderdisc", "./js/views/screen.js": "./js/views/screen.js?v=b141-loaderdisc", "./js/views/host.js": "./js/views/host.js?v=b141-loaderdisc", "./js/views/swarm.js": "./js/views/swarm.js?v=b141-loaderdisc", "./js/views/data.js": "./js/views/data.js?v=b141-loaderdisc" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b142-fitstage", "./js/questions.js": "./js/questions.js?v=b142-fitstage", "./js/characters.js": "./js/characters.js?v=b142-fitstage", "./js/engine.js": "./js/engine.js?v=b142-fitstage", "./js/fb.js": "./js/fb.js?v=b142-fitstage", "./js/bots.js": "./js/bots.js?v=b142-fitstage", "./js/finale.js": "./js/finale.js?v=b142-fitstage", "./js/views/player.js": "./js/views/player.js?v=b142-fitstage", "./js/views/screen.js": "./js/views/screen.js?v=b142-fitstage", "./js/views/host.js": "./js/views/host.js?v=b142-fitstage", "./js/views/swarm.js": "./js/views/swarm.js?v=b142-fitstage", "./js/views/data.js": "./js/views/data.js?v=b142-fitstage" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

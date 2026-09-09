@@ -141,7 +141,7 @@ export async function mount(root) {
     const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
     const f2 = Math.round(f1 * 0.52);
     return `
-    <svg class="flow" viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    <svg class="flow" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%">
       <defs>
         <linearGradient id="tgw" x1="0" y1="0" x2="${W}" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#0000FF"/><stop offset="0.5" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/>
@@ -271,16 +271,36 @@ export async function mount(root) {
     num.setAttribute("fill", low ? "#D93636" : "#0A0A14");
   }
 
+  function fitQ() {
+    // scale the question card contents so the card never exceeds ~the top half,
+    // leaving the rest of the column to the pot/clock zone
+    const zq = root.querySelector(".zone-q"), inner = root.querySelector("#qinner");
+    if (!zq || !inner) return;
+    zq.style.height = ""; inner.style.transform = "";
+    const pad = zq.offsetHeight - inner.offsetHeight;
+    const nat = inner.offsetHeight;
+    const avail = Math.round(window.innerHeight * 0.46) - pad;
+    const sc = Math.min(1, avail / Math.max(1, nat));
+    if (sc < 1) {
+      inner.style.transformOrigin = "top center";
+      inner.style.transform = `scale(${sc})`;
+      zq.style.height = Math.round(nat * sc + pad) + "px";
+    }
+  }
+  window.addEventListener("resize", () => fitQ());
+
   function buildStage(q, phase, rv) {
     root.innerHTML = `
       <div class="stage">
         <div class="colmid">
         <div class="zone-q qcard">
+          <div id="qinner">
           <div class="row spread">
             <span class="qmeta">Question ${S.state.round + 1} / ${N_ROUNDS}</span>
           </div>
           <h1 class="qtext" id="qtext">${q.text}</h1>
           <div id="optbox">${optionRows(q, null)}</div>
+          </div>
         </div>
         <div class="zone-c">
           <div id="clockwrap" class="fade show center">
@@ -301,6 +321,7 @@ export async function mount(root) {
         <div class="zone-r" id="zoneR"><ol class="board lb biglb" id="lbList"></ol></div>
       </div>`;
     S.stageRound = S.state.round; S.revealApplied = false; S.stagePhase = phase;
+    fitQ();
     renderBoard(phase === "reveal" && rv && rv.wealthAfter ? rv.wealthAfter : S.wealth);
     if (phase === "question") { S.timer = setInterval(tick, 250); tick(); }
     else if (phase === "preview") {
@@ -344,6 +365,7 @@ export async function mount(root) {
       if (share != null) row.insertAdjacentHTML("beforeend",
         `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span><span class="optpct">${share}%</span></div></div>`);
     });
+    fitQ();
     const cw = root.querySelector("#clockwrap"), pw = root.querySelector("#potwrap");
     const num = root.querySelector("#clocknum2"), fg = root.querySelector("#ringfg2");
     if (num) { num.textContent = "0"; num.setAttribute("fill", "#D93636"); }
