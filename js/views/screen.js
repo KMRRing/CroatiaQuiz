@@ -1,6 +1,6 @@
 import { gref, onValue, ensureAuth, serverNow, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
-import { RULES } from "../config.js";
+import { RULES, GAME_ID } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { fmt, board } from "../engine.js";
 import { botRoster } from "../bots.js";
@@ -401,6 +401,7 @@ export async function mount(root) {
       root.innerHTML = `
         <div class="lobbystage">
           <div id="qr" class="qr"></div>
+          <p class="dim" style="font-size:.8rem;opacity:.5;margin:6px 0 0">game ${GAME_ID}</p>
           <div class="grid lobbyicons">${humans.map(([t], i) =>
             `<span class="joinicon" style="animation-delay:${i * 50}ms">${nameOf(t).split(" ")[0]}</span>`).join("")}
           </div>

@@ -1,6 +1,6 @@
 import { ensureAuth, gref, onValue, get, update, set, serverNow, serverTimestamp, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
-import { RULES, BUILD, TEST_MODE } from "../config.js";
+import { RULES, BUILD, TEST_MODE, GAME_ID } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 
 function randomWrong(q) {
@@ -286,7 +286,7 @@ export async function mount(root) {
     }
     root.innerHTML = `
       <div class="card">
-        <h1>Host console</h1>
+        <h1>Host console</h1><p class="dim" style="font-size:.78rem;margin:-6px 0 10px">game ${GAME_ID} \u00b7 ${BUILD}</p>
         <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)} \u00b7 build ${BUILD}</p>
         ${!isHost() ? `<button class="big" id="claim">Claim host on this device</button>` : `
           <div class="btnrow">
