@@ -1,6 +1,6 @@
 import { ensureAuth, gref, onValue, set, serverNow, serverTimestamp, read } from "../fb.js";
 import { QUESTIONS, N_ROUNDS } from "../questions.js";
-import { RULES, GAME_ID } from "../config.js";
+import { RULES, GAME_ID, BUILD } from "../config.js";
 import { CHARACTERS } from "../characters.js";
 import { clampStake, fmt } from "../engine.js";
 import { wealthSeries, svgWealthChart } from "../finale.js";
@@ -23,7 +23,7 @@ export async function mount(root) {
 
   onValue(gref("players", token), (s) => {
     S.me = s.val();
-    if (!S.me && !S.joining) { S.joining = true; join().catch(() => { S.joining = false; }); }
+    if (!S.me && !S.joining) { S.joining = true; join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); }
     render();
   });
   onValue(gref("state"), (s) => {
@@ -153,7 +153,12 @@ export async function mount(root) {
     document.body.classList.remove("urgent");
     clearInterval(S.timer);
     if (!S.me) {
-      root.innerHTML = `<div class="card center"><div class="avatar">\u2026</div><p class="dim">Dealing you a character\u2026</p></div>`;
+      const foot = `<p class="dim" style="font-size:.72rem;opacity:.6;margin-top:14px">game ${GAME_ID} \u00b7 ${BUILD}</p>`;
+      root.innerHTML = S.joinErr
+        ? `<div class="card center"><div class="avatar">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p><button id="rejoin">Try again</button>${foot}</div>`
+        : `<div class="card center"><div class="avatar">\u2026</div><p class="dim">Dealing you a character\u2026</p>${foot}</div>`;
+      const rj = root.querySelector("#rejoin");
+      if (rj) rj.onclick = () => { S.joinErr = null; S.joining = true; render(); join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); };
       return;
     }
     const [emoji, name] = charOf(S.me);
