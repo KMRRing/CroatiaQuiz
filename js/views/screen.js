@@ -311,6 +311,20 @@ export async function mount(root) {
     else if (rv) applyReveal(rv);
   }
 
+  function deriveFlow(rv) {
+    // Rebuild the pot scene for rounds settled before the flow schema existed
+    // (no stakes/botStakes in the reveal record). Deltas are enough: a loser
+    // paid in -delta; a winner drew +delta, which is stake*(mult-1) exactly.
+    const d = rv.deltas || {};
+    const toks = Object.keys(d).filter((t) => d[t]);
+    if (!toks.length) return null;
+    const mult = rv.mult > 1 ? rv.mult : 2;
+    const stakes = {};
+    for (const t of toks) stakes[t] = d[t] < 0 ? -d[t] : d[t] / (mult - 1);
+    const pot = rv.pot != null ? rv.pot : Object.values(d).reduce((s, x) => s + (x < 0 ? -x : 0), 0);
+    return Object.assign({}, rv, { stakes, botStakes: rv.botStakes || {}, mult, pot });
+  }
+
   function applyReveal(rv) {
     S.revealApplied = true;
     clearInterval(S.timer);
@@ -338,9 +352,11 @@ export async function mount(root) {
     S.potTimer = setTimeout(() => {
       if (cw) cw.classList.add("morph");
       if (pw) {
-        pw.innerHTML = (rv.stakes && Object.keys(rv.stakes).length)
-          ? potScene(rv, q, 780, 470, true, S.state.round)
-          : `<p class="dim">Settled on an older build. No flow data for this round.</p>`;
+        const rv2 = ((rv.stakes && Object.keys(rv.stakes).length) || (rv.botStakes && Object.keys(rv.botStakes).length))
+          ? rv : deriveFlow(rv);
+        pw.innerHTML = rv2
+          ? potScene(rv2, q, 780, 470, true, S.state.round)
+          : `<p class="dim">No money moved this round.</p>`;
         requestAnimationFrame(() => pw.classList.add("show"));
       }
     }, 3000);
