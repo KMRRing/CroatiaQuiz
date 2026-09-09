@@ -155,8 +155,8 @@ export async function mount(root) {
     if (!S.me) {
       const foot = `<p class="dim" style="font-size:.72rem;opacity:.6;margin-top:14px">game ${GAME_ID} \u00b7 ${BUILD}</p>`;
       root.innerHTML = S.joinErr
-        ? `<div class="card center"><div class="avatar">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p><button id="rejoin">Try again</button>${foot}</div>`
-        : `<div class="card center"><div class="avatar">\u2026</div><p class="dim">Dealing you a character\u2026</p>${foot}</div>`;
+        ? `<div class="dealwrap"><div class="avatar">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p><button id="rejoin">Try again</button>${foot}</div>`
+        : `<div class="dealwrap"><div class="avatar dealpulse">\u2026</div><p class="dim">Dealing you a character\u2026</p>${foot}</div>`;
       const rj = root.querySelector("#rejoin");
       if (rj) rj.onclick = () => { S.joinErr = null; S.joining = true; render(); join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); };
       return;
