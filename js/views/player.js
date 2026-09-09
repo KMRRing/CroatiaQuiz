@@ -170,7 +170,7 @@ export async function mount(root) {
         <div class="dealwrap" style="min-height:calc(100svh - 150px)">
           <div class="bigdisc">
             <div class="demoji">${emoji}</div>
-            <h1>You are ${"AEIOU".includes(name[0]) ? "an" : "a"} ${name}</h1>
+            <h1>You are ${"AEIO".includes(name[0]) /* not U: "a Unicorn" */ ? "an" : "a"} ${name}</h1>
             <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>
           </div>
         </div>`;
