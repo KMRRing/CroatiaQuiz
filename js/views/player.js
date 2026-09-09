@@ -286,7 +286,7 @@ export async function mount(root) {
       let mine = "", won = false;
       if (f && f.board) {
         const idx = f.board.findIndex((r) => r.token === token);
-        const topHuman = f.board.find((r) => { const pl = S.players && S.players[r.token]; return !(pl && pl.bot); });
+        const topHuman = f.board.find((r) => !["grok","chatgpt","deepseek","claude","mistral","gemini"].includes(r.token) && !r.token.startsWith("tb_"));
         won = !!(topHuman && topHuman.token === token);
         if (idx >= 0) mine = won
           ? `<h2>\u{1F3C6} You won the night: ${fmt(f.board[idx].w)}</h2>`
