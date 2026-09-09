@@ -268,8 +268,16 @@
   </linearGradient></defs>
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
-<div id="app"><div class="dealwrap"><div class="bigdisc dealpulse"><p class="dim">Loading&#8230;</p></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b139-potgeom", "./js/questions.js": "./js/questions.js?v=b139-potgeom", "./js/characters.js": "./js/characters.js?v=b139-potgeom", "./js/engine.js": "./js/engine.js?v=b139-potgeom", "./js/fb.js": "./js/fb.js?v=b139-potgeom", "./js/bots.js": "./js/bots.js?v=b139-potgeom", "./js/finale.js": "./js/finale.js?v=b139-potgeom", "./js/views/player.js": "./js/views/player.js?v=b139-potgeom", "./js/views/screen.js": "./js/views/screen.js?v=b139-potgeom", "./js/views/host.js": "./js/views/host.js?v=b139-potgeom", "./js/views/swarm.js": "./js/views/swarm.js?v=b139-potgeom", "./js/views/data.js": "./js/views/data.js?v=b139-potgeom" } }</script>
+<div id="app"><div class="dealwrap"><svg viewBox="0 0 200 246" style="width:min(42vw,190px);height:auto" aria-label="Loading">
+        <defs><linearGradient id="ldg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0000FF"/><stop offset=".55" stop-color="#8200DE"/><stop offset="1" stop-color="#FF6432"/></linearGradient></defs>
+        <circle cx="100" cy="62" r="34" fill="none" stroke="url(#ldg)" stroke-width="2" opacity=".32"/>
+        <circle cx="100" cy="182" r="52" fill="none" stroke="url(#ldg)" stroke-width="2" opacity=".32"/>
+        <line x1="76.29" y1="86.37" x2="136.27" y2="144.73" stroke="url(#ldg)" stroke-width="2" opacity=".32"/>
+        <line x1="123.71" y1="86.37" x2="63.73" y2="144.73" stroke="url(#ldg)" stroke-width="2" opacity=".32"/>
+        <path id="f8" d="M 100 109.44 L 76.29 86.37 A 34.0 34.0 0 1 1 123.71 86.37 L 63.73 144.73 A 52.0 52.0 0 1 0 136.27 144.73 Z" fill="none" stroke="none"/>
+        <g><circle r="8" fill="#FF6432" opacity=".35"/><circle r="4.5" fill="#8200DE"/><animateMotion dur="2.7s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
+      </svg></div></div>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b140-loader", "./js/questions.js": "./js/questions.js?v=b140-loader", "./js/characters.js": "./js/characters.js?v=b140-loader", "./js/engine.js": "./js/engine.js?v=b140-loader", "./js/fb.js": "./js/fb.js?v=b140-loader", "./js/bots.js": "./js/bots.js?v=b140-loader", "./js/finale.js": "./js/finale.js?v=b140-loader", "./js/views/player.js": "./js/views/player.js?v=b140-loader", "./js/views/screen.js": "./js/views/screen.js?v=b140-loader", "./js/views/host.js": "./js/views/host.js?v=b140-loader", "./js/views/swarm.js": "./js/views/swarm.js?v=b140-loader", "./js/views/data.js": "./js/views/data.js?v=b140-loader" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
