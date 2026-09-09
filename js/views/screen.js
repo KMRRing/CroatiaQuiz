@@ -414,7 +414,10 @@ export async function mount(root) {
         const style = {};
         tokens.forEach((t) => { style[t] = { color: "rgba(255,255,255,.45)", width: 2 }; });
         for (const t of tokens) if (BOTS[t]) style[t] = { color: "#FFFFFF", width: 3.2, dash: "7 4" };
-        if (f.board && f.board.length) style[f.board[0].token] = { color: "#FFD359", width: 5 };
+        if (f.board && f.board.length) {
+          const topHuman = f.board.find((r) => { const pl = S.players[r.token]; return !(pl && pl.bot); }) || f.board[0];
+          style[topHuman.token] = { color: "#FFD359", width: 5 };
+        }
         const icons = {};
         for (const t of tokens) icons[t] = BOTS[t] && BOTS[t].img ? { img: BOTS[t].img } : { emoji: iconOf(t) };
         const chart = svgWealthChart(series, style, 1760, 760, 1.9, icons, true)
@@ -425,10 +428,10 @@ export async function mount(root) {
             <div class="hlstack onchart">
               ${[
                 f.bestRound ? `<div class="hlcard"><div class="hlt">Biggest pot</div><div class="hlv">Q${f.bestRound.n + 1} \u00b7 ${fmt(f.bestRound.pot)} at ${f.bestRound.mult.toFixed(2)}\u00d7</div></div>` : null,
-                f.biggestWin ? `<div class="hlcard"><div class="hlt">Best single round</div><div class="hlv">${iconHtml(f.biggestWin.t)} ${plainName(f.biggestWin.t)} \u00b7 +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})</div></div>` : null,
-                f.biggestLoss ? `<div class="hlcard"><div class="hlt">Worst beat</div><div class="hlv">${iconHtml(f.biggestLoss.t)} ${plainName(f.biggestLoss.t)} \u00b7 \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</div></div>` : null,
-                f.streak ? `<div class="hlcard"><div class="hlt">Longest streak</div><div class="hlv">${iconHtml(f.streak.t)} ${plainName(f.streak.t)} \u00b7 ${f.streak.len} in a row (Q${f.streak.from + 1} to Q${f.streak.to + 1})</div></div>` : null,
-                f.bestOdds ? `<div class="hlcard"><div class="hlt">Best odds</div><div class="hlv">${iconHtml(f.bestOdds.t)} ${plainName(f.bestOdds.t)} \u00b7 won at ${f.bestOdds.mult.toFixed(2)}\u00d7 (Q${f.bestOdds.n + 1})</div></div>` : null,
+                f.biggestWin ? `<div class="hlcard"><div class="hlt">Best single round</div><div class="hlv">${iconHtml(f.biggestWin.t)} ${plainName(f.biggestWin.t)} \u00b7 +${fmt(f.biggestWin.d)} (Q${f.biggestWin.n + 1})</div>${f.biggestWin.b ? `<div class="hlsub">(${plainName(f.biggestWin.b.t)}: +${fmt(f.biggestWin.b.d)}, Q${f.biggestWin.b.n + 1})</div>` : ""}</div>` : null,
+                f.biggestLoss ? `<div class="hlcard"><div class="hlt">Worst beat</div><div class="hlv">${iconHtml(f.biggestLoss.t)} ${plainName(f.biggestLoss.t)} \u00b7 \u2212${fmt(Math.abs(f.biggestLoss.d))} (Q${f.biggestLoss.n + 1})</div>${f.biggestLoss.b ? `<div class="hlsub">(${plainName(f.biggestLoss.b.t)}: \u2212${fmt(Math.abs(f.biggestLoss.b.d))}, Q${f.biggestLoss.b.n + 1})</div>` : ""}</div>` : null,
+                f.streak ? `<div class="hlcard"><div class="hlt">Longest streak</div><div class="hlv">${iconHtml(f.streak.t)} ${plainName(f.streak.t)} \u00b7 ${f.streak.len} in a row (Q${f.streak.from + 1} to Q${f.streak.to + 1})</div>${f.streak.b ? `<div class="hlsub">(${plainName(f.streak.b.t)}: ${f.streak.b.len} in a row)</div>` : ""}</div>` : null,
+                f.bestOdds ? `<div class="hlcard"><div class="hlt">Best odds</div><div class="hlv">${iconHtml(f.bestOdds.t)} ${plainName(f.bestOdds.t)} \u00b7 won at ${f.bestOdds.mult.toFixed(2)}\u00d7 (Q${f.bestOdds.n + 1})</div>${f.bestOdds.b ? `<div class="hlsub">(${plainName(f.bestOdds.b.t)}: ${f.bestOdds.b.mult.toFixed(2)}\u00d7)</div>` : ""}</div>` : null,
               ].filter(Boolean).slice(0, Math.max(0, stage - 1)).join("")}
             </div>
           </div>`;

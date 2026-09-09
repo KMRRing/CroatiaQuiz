@@ -179,13 +179,16 @@ export async function mount(root) {
     for (let n = 0; n < N_ROUNDS; n++) { if (all[n] == null) break; reveals.push(all[n]); }
     const bd = board(wealth || {}, players || {}).map((r) => ({ token: r.token, w: r.w }));
     const calib = {};
-    let bestRound = null, biggestWin = null, biggestLoss = null;
+    const isBot = (t) => !!((players || {})[t] && players[t].bot);
+    let bestRound = null;
+    const win = { h: null, b: null }, loss = { h: null, b: null };
     reveals.forEach((rv, n) => {
       if (!rv) return;
       if (!bestRound || rv.pot > bestRound.pot) bestRound = { n, pot: rv.pot, mult: rv.mult };
       for (const [t, d] of Object.entries(rv.deltas || {})) {
-        if (!biggestWin || d > biggestWin.d) biggestWin = { t, d, n };
-        if (!biggestLoss || d < biggestLoss.d) biggestLoss = { t, d, n };
+        const k = isBot(t) ? "b" : "h";
+        if (!win[k] || d > win[k].d) win[k] = { t, d, n };
+        if (!loss[k] || d < loss[k].d) loss[k] = { t, d, n };
       }
       for (const [t, a] of Object.entries(rv.aiAnswers || {})) {
         const c = botConf(t, n);
@@ -199,26 +202,39 @@ export async function mount(root) {
       .sort((a, b) => a.brier - b.brier);
     const allTokens = bd.map((r) => r.token);
     const rightAt = (rv, t) => (rv.answers && rv.answers[t] === rv.correct) || (rv.aiAnswers && rv.aiAnswers[t] === rv.correct);
-    const cur = {}; let bestStreak = null;
+    const cur = {}; const stk = { h: null, b: null };
     reveals.forEach((rv, n) => {
       if (!rv) return;
       for (const t of allTokens) {
         cur[t] = rightAt(rv, t) ? (cur[t] || 0) + 1 : 0;
-        if (cur[t] >= 2 && (!bestStreak || cur[t] > bestStreak.len)) bestStreak = { t, len: cur[t], to: n, from: n - cur[t] + 1 };
+        const k = isBot(t) ? "b" : "h";
+        if (cur[t] >= 2 && (!stk[k] || cur[t] > stk[k].len)) stk[k] = { t, len: cur[t], to: n, from: n - cur[t] + 1 };
       }
     });
-    let bestOdds = null;
+    const odds = { h: null, b: null };
     reveals.forEach((rv, n) => {
       if (!rv || rv.rolled || !(rv.mult > 1.001)) return;
-      if (bestOdds && rv.mult <= bestOdds.mult) return;
-      let pick = null, ps = -1;
+      const cand = { h: null, b: null }, ps = { h: -1, b: -1 };
       for (const [t, d] of Object.entries(rv.deltas || {})) {
         if (d <= 0) continue;
+        const k = isBot(t) ? "b" : "h";
         const st = (rv.stakes && rv.stakes[t]) || (rv.botStakes && rv.botStakes[t]) || 0;
-        if (st > ps) { ps = st; pick = t; }
+        if (st > ps[k]) { ps[k] = st; cand[k] = t; }
       }
-      if (pick) bestOdds = { t: pick, mult: rv.mult, n };
+      for (const k of ["h", "b"]) {
+        if (cand[k] && (!odds[k] || rv.mult > odds[k].mult)) odds[k] = { t: cand[k], mult: rv.mult, n };
+      }
     });
+    const headline = (H, B, better) => {
+      if (!H) return B;
+      const out = { ...H };
+      if (B && better(B, H)) out.b = B;
+      return out;
+    };
+    const biggestWin = headline(win.h, win.b, (b2, h2) => b2.d > h2.d);
+    const biggestLoss = headline(loss.h, loss.b, (b2, h2) => b2.d < h2.d);
+    const bestStreak = headline(stk.h, stk.b, (b2, h2) => b2.len > h2.len);
+    const bestOdds = headline(odds.h, odds.b, (b2, h2) => b2.mult > h2.mult);
     const humanTokens = Object.entries(players || {}).filter(([, p]) => !p.bot).map(([t]) => t);
     const sizing = sizingReport(reveals, humanTokens);
     const P = bd.length;
