@@ -155,8 +155,8 @@ export async function mount(root) {
     if (!S.me) {
       const foot = `<p class="dim" style="font-size:.72rem;opacity:.6;margin-top:14px">game ${GAME_ID} \u00b7 ${BUILD}</p>`;
       root.innerHTML = S.joinErr
-        ? `<div class="dealwrap"><div class="avatar">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p><button id="rejoin">Try again</button>${foot}</div>`
-        : `<div class="dealwrap"><div class="avatar dealpulse">\u2026</div><p class="dim">Dealing you a character\u2026</p>${foot}</div>`;
+        ? `<div class="dealwrap"><div class="bigdisc"><div class="demoji">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p></div><button id="rejoin" style="margin-top:16px">Try again</button>${foot}</div>`
+        : `<div class="dealwrap"><div class="bigdisc dealpulse"><div class="demoji">\u2026</div><p class="dim">Dealing you a character\u2026</p></div>${foot}</div>`;
       const rj = root.querySelector("#rejoin");
       if (rj) rj.onclick = () => { S.joinErr = null; S.joining = true; render(); join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); };
       return;
@@ -167,10 +167,12 @@ export async function mount(root) {
     if (!S.state || ph === "lobby") {
       root.innerHTML = `
         ${barHtml([emoji, name], false)}
-        <div class="card center">
-          <div class="avatar">${emoji}</div>
-          <h1>You are ${"AEIO".includes(name[0]) ? "an" : "a"} ${name}</h1>
-          <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>
+        <div class="dealwrap" style="min-height:calc(100svh - 150px)">
+          <div class="bigdisc">
+            <div class="demoji">${emoji}</div>
+            <h1>You are ${"AEIOU".includes(name[0]) ? "an" : "a"} ${name}</h1>
+            <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>
+          </div>
         </div>`;
       return;
     }
