@@ -166,12 +166,12 @@ export async function mount(root) {
       const isC = q.correct.includes(String(i));
       const letter = String.fromCharCode(65 + i);
       const label = `${letter}. ${o}`;
-      if (!rv) return `<div class="optrow plain"><span class="optlabel"><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span>${label}</span></div>`;
+      if (!rv) return `<div class="optrow plain"><span class="optlabel">${label}</span></div>`;
       const share = shares ? Math.round(shares[i] * 100) : null;
       return `<div class="optrow ${isC ? "right" : "wrong"}">
-        <span class="optlabel"><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span>${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}
+        <span class="optlabel">${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}
         <div class="optfillwrap" style="--w:${share == null ? 0 : share}%">
-          <div class="optfill"><span class="optlabel"><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span>${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}</div>
+          <div class="optfill"><span class="optlabel">${label}</span>${share == null ? "" : `<span class="optpct">${share}%</span>`}</div>
         </div>
       </div>`;
     }).join("") + `</div>`;
@@ -328,7 +328,7 @@ export async function mount(root) {
       const share = rv.optShare ? Math.round(rv.optShare[i] * 100) : null;
       const label = row.querySelector(".optlabel") ? row.querySelector(".optlabel").textContent : "";
       if (share != null) row.insertAdjacentHTML("beforeend",
-        `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel"><span class="tick ${q.type === "multi" ? "sq" : "rd"}"></span>${label}</span><span class="optpct">${share}%</span></div></div>`);
+        `<span class="optpct">${share}%</span><div class="optfillwrap" style="--w:${share}%"><div class="optfill"><span class="optlabel">${label}</span><span class="optpct">${share}%</span></div></div>`);
     });
     const cw = root.querySelector("#clockwrap"), pw = root.querySelector("#potwrap");
     const num = root.querySelector("#clocknum2"), fg = root.querySelector("#ringfg2");

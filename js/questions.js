@@ -16,7 +16,7 @@ export const QUESTIONS = [
     options: ["True", "False"], correct: "1" },
   { id: 5, tag: "ISCC EU", type: "multi", roomP: 0.75,
     text: "Which of the following are critical non-conformities?",
-    options: ["Issuing a Sustainability Declaration without holding a valid certificate", "Issuing a false or fraudulent Sustainability Declaration", "A negative balance in the mass balance", "Sourcing feedstock from land converted from high-carbon-stock/high-biodiversity status after January 2008", "Denying the auditor access to sites, data, or documentation", "Minor record-keeping/documentation gaps", "Late submission of the annual audit within the permitted cure period"], correct: "01234" },
+    options: ["Issuing a Sustainability Declaration without holding a valid certificate", "A negative balance in the mass balance", "Sourcing feedstock from land converted from high-carbon-stock/high-biodiversity status after January 2008", "Denying the auditor access to sites, data, or documentation", "Minor record-keeping/documentation gaps", "Late submission of the annual audit within the permitted cure period"], correct: "0123" },
   { id: 6, tag: "ISCC EU", type: "single", roomP: 0.50,
     text: "In the current draft of IR 2022/996, the mass balance period will be one month, starting 2027.",
     options: ["True", "False"], correct: "0" },
