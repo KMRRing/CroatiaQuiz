@@ -81,9 +81,15 @@ export async function mount(root) {
     let vm = Math.max(RULES.minStake + 1, mkOut[0] ? mkOut[0].v : 1);
     const MINW = compact ? 1.6 : 2, SPAN = compact ? 9 : 13;
     const wOf = (v) => (MINW + SPAN * Math.sqrt(Math.max(0, v - RULES.minStake) / Math.max(1, vm - RULES.minStake))).toFixed(1);
-    const yTop = compact ? 66 : 90, yBot = H - (compact ? 16 : 50);
+    const yTop = rv.yTop != null ? rv.yTop : (compact ? 66 : 90);
+    const yBot = H - (rv.yBot != null ? rv.yBot : (compact ? 16 : 50));
     const spread = (n, i) => yTop + (n <= 1 ? (yBot - yTop) / 2 : (i / (n - 1)) * (yBot - yTop));
-    const fs = compact ? 13 : 19, hf = compact ? 21 : 40;
+    const fs = rv.fs != null ? rv.fs : (compact ? 13 : 19), hf = compact ? 21 : 40;
+    const IS = rv.icon != null ? rv.icon : (IS);
+    const LOFF = rv.icon != null ? Math.round(IS * 0.75) : (compact ? 23 : 30);
+    const ROFF = rv.icon != null ? Math.round(IS * 0.62) : (compact ? 16 : 22);
+    const inLabel = (t, v) => (rv.labels && rv.labels[t]) || ("-" + fmt(v));
+    const inFill = (t) => (rv.green && rv.green.indexOf(t) >= 0) ? "#0E8A43" : "#0A0ABA";
     let g = "";
     const bow = compact ? 16 : 24;
     const bowOff = (n, i) => bow * (1 - (n <= 1 ? 0 : Math.sin(Math.PI * (i / (n - 1)))));
@@ -107,12 +113,12 @@ export async function mount(root) {
       const c2x = ex - (dxr / dl) * L2, c2y = ey - (dyr / dl) * L2;
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${c2x.toFixed(0)} ${c2y.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}"/>`;
       if (row.kind === "one") {
-        g += svgIcon(row.e.t, ix, sy, compact ? 32 : 42, i * 70);
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 23 : 30)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.e.v)}</text>`;
+        g += svgIcon(row.e.t, ix, sy, IS, i * 70);
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - LOFF).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="${inFill(row.e.t)}">${inLabel(row.e.t, row.e.v)}</text>`;
       } else {
         const mem = row.grp.members;
         if (mem.length === 1) {
-          g += svgIcon(mem[0], ix, sy, compact ? 32 : 42, i * 70);
+          g += svgIcon(mem[0], ix, sy, IS, i * 70);
         } else {
           const shown = mem.slice(0, 7);
           const step = compact ? 18 : 23, rowStep = compact ? 19 : 24;
@@ -127,7 +133,7 @@ export async function mount(root) {
             g += svgIcon(m, ix + dx, sy + dy, compact ? 22 : 28, i * 70 + j * 40);
           });
         }
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (mem.length === 1 ? (compact ? 23 : 30) : (compact ? 53 : 66))).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.grp.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (mem.length === 1 ? LOFF : LOFF + 30)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.grp.v)}</text>`;
       }
     });
     const outDelay = nIn * 60 + 700;
@@ -137,10 +143,10 @@ export async function mount(root) {
       const a = Math.PI * (-30 + (mkOut.length <= 1 ? 30 : (i / (mkOut.length - 1)) * 60)) / 180;
       const sx = cx + R * Math.cos(a), sy2 = cy + R * Math.sin(a);
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(outDelay + i * 80)}ms" d="M ${sx.toFixed(0)} ${sy2.toFixed(0)} C ${(sx + (compact ? 60 : 150)).toFixed(0)} ${sy2.toFixed(0)}, ${(W * 0.75).toFixed(0)} ${ey2.toFixed(0)}, ${(W - (compact ? 112 : 186) - obow).toFixed(0)} ${ey2.toFixed(0)}" stroke-width="${wOf(e.v)}"/>`;
-      g += svgIcon(e.t, W - (compact ? 96 : 150) - obow, ey2, compact ? 32 : 42, outDelay + i * 80);
-      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 80 : 128) - obow).toFixed(0)}" y="${(ey2 + (compact ? 5 : 7)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#0E8A43">+${fmt(e.v)}</text>`;
+      g += svgIcon(e.t, W - (compact ? 96 : 150) - obow, ey2, IS, outDelay + i * 80);
+      g += `<text class="lbl" style="animation-delay:${(outDelay + i * 80)}ms" x="${(W - (compact ? 96 : 150) - obow + ROFF).toFixed(0)}" y="${(ey2 + (compact ? 5 : 7)).toFixed(0)}" text-anchor="start" font-size="${fs}" font-weight="700" fill="#0E8A43">+${fmt(e.v)}</text>`;
     });
-    const f1 = Math.round(compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36));
+    const f1 = Math.round((compact ? Math.max(19, R * 0.42) : Math.max(30, R * 0.36)) * (rv.potFs || 1));
     const f2 = Math.round(f1 * 0.52);
     return `
     <svg class="flow" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%">
@@ -275,31 +281,44 @@ export async function mount(root) {
 
   const TUT_CI = { t_fox: 2, t_oct: 1, t_par: 0, t_bat: 6 };
 
+  const TUT_STAKES = { t_fox: 40, t_oct: 10, t_par: 30, t_bat: 20 };
+  const TUT_LABELS = { t_fox: "$40 on B", t_oct: "$10 on B", t_par: "$30 on A", t_bat: "$20 on C" };
+  const TUT_SKIN = { yTop: 26, yBot: 26, fs: 23, icon: 42, potFs: 1.25 };
+
   function tutPotRv(rolled) {
-    const stakes = { t_fox: 40, t_oct: 10, t_par: 30, t_bat: 20 };
-    if (rolled) return { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 }, pot: 120, mult: 1, rolled: true, correct: "0" };
-    return { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: 56, t_oct: 14, t_par: -30, t_bat: -20 }, pot: 120, mult: 2.4, rolled: false, correct: "0" };
+    const base = Object.assign({ stakes: TUT_STAKES, botStakes: {}, aiAnswers: {}, pot: 200, correct: "0" }, TUT_SKIN);
+    if (rolled) return Object.assign(base, { deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 }, mult: 1, rolled: true });
+    return Object.assign(base, { deltas: { t_fox: 120, t_oct: 30, t_par: -30, t_bat: -20 }, mult: 4, rolled: false });
   }
 
   function clearTut() { (S.tutT || []).forEach(clearTimeout); S.tutT = []; }
 
   const POT_CAPS = {
-    1: "The four stakes total $100. The house adds $20, so the pot for this question is $120.",
+    1: "The four stakes total $100. The house adds $100, so the pot for this question is $200.",
     2: "Betting has already closed, so nothing about the pot changes at this point.",
-    3: "The share of the pot a correct player receives is the share of the winning stakes they put up. The net gain is that payout less the stake they had already paid in.",
+    3: "The share of the pot a correct player receives is the share of the winning stakes they put up. The net gain is that payout less the stake already paid in.",
     4: "This is the picture that appears on this screen after every question.",
   };
 
+  const POT_ROWS = [
+    [1, "<strong>Every player pays in.</strong> Each stake goes into a single pot, correct or not, together with $100 from the house. Betting then closes."],
+    [2, "<strong>The answer is revealed.</strong> Here Fox and Octopus are correct; Parrot and Bat are not."],
+    [3, "<strong>The pot is divided.</strong> Each correct player takes the share of the pot that matches their share of the winning stakes, and keeps that payout less the stake paid in."],
+    [4, "<strong>On screen during the game.</strong> Players who were wrong appear on the left with what they paid in; players who were right appear on the right with their net gain."],
+  ];
+
+  const potBox = () => `<div class="tutpot small"><div id="tutchip" class="tutchip"></div><div id="tutpotbox" class="tutpotbox"></div></div><p class="tutcap" id="tutcap2"></p>`;
+
   function divisionHtml() {
     const rows = [
-      { t: "t_fox", stake: 40, pct: 80, gross: 96, net: 56 },
-      { t: "t_oct", stake: 10, pct: 20, gross: 24, net: 14 },
+      { t: "t_fox", stake: 40, pct: 80, gross: 160, net: 120 },
+      { t: "t_oct", stake: 10, pct: 20, gross: 40, net: 30 },
     ];
     return `<div class="potdiv">
-      <div class="potdivtop">${fmt(120)} pot, divided by share of the ${fmt(50)} staked by correct players</div>
+      <div class="potdivtop">${fmt(200)} pot, divided by share of the ${fmt(50)} staked by correct players</div>
       <div class="potbar">
-        <div class="potseg segA" style="flex:80">${iconOf("t_fox")} 80% = ${fmt(96)}</div>
-        <div class="potseg segB" style="flex:20">${iconOf("t_oct")} 20% = ${fmt(24)}</div>
+        <div class="potseg segA" style="flex:80">${iconOf("t_fox")} 80% = ${fmt(160)}</div>
+        <div class="potseg segB" style="flex:20">${iconOf("t_oct")} 20% = ${fmt(40)}</div>
       </div>
       <div class="potmath">${rows.map((r) => `<div class="potmathrow">
         <span class="pmi">${iconOf(r.t)}</span>
@@ -312,24 +331,20 @@ export async function mount(root) {
     </div>`;
   }
 
-  function tutPayIn() {
-    return { stakes: { t_fox: 40, t_oct: 10, t_par: 30, t_bat: 20 }, botStakes: {}, aiAnswers: {},
-             deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 },
-             pot: 120, mult: 1, rolled: false, correct: "0", subLabel: "" };
+  function tutPayIn(green) {
+    return Object.assign({ stakes: TUT_STAKES, botStakes: {}, aiAnswers: {},
+      deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 },
+      pot: 200, mult: 1, rolled: false, correct: "0", subLabel: "",
+      labels: TUT_LABELS, green: green || [] }, TUT_SKIN);
   }
 
   function paintPot(k) {
     const box = root.querySelector("#tutpotbox");
     if (!box) return;
     const chip = (txt) => { const c = root.querySelector("#tutchip"); if (c) { c.textContent = txt || ""; c.style.opacity = txt ? "1" : "0"; } };
-    const draw = (rv) => { box.innerHTML = potScene(rv, { options: [], correct: "0" }, 780, 470, true, 9); };
-    [...root.querySelectorAll(".tutphase")].forEach((el) => {
-      const p = Number(el.dataset.ph);
-      el.classList.toggle("on", p <= k);
-      el.classList.toggle("now", p === k);
-    });
+    const draw = (rv) => { box.innerHTML = potScene(rv, { options: [], correct: "0" }, 760, 300, true, 9); };
     if (k === 1) { draw(tutPayIn()); chip(""); }
-    else if (k === 2) { draw(tutPayIn()); chip("Correct answer: B \u00b7 Fox and Octopus"); }
+    else if (k === 2) { draw(tutPayIn(["t_fox", "t_oct"])); chip("Correct answer: B \u00b7 Fox and Octopus"); }
     else if (k === 3) { box.innerHTML = divisionHtml(); chip(""); }
     else { draw(tutPotRv(false)); chip(""); }
     const cap = root.querySelector("#tutcap2");
@@ -339,48 +354,38 @@ export async function mount(root) {
   function paintRoll() {
     const box = root.querySelector("#tutpotbox");
     if (!box) return;
-    [...root.querySelectorAll(".tutphase")].forEach((el) => el.classList.add("on"));
-    box.innerHTML = potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9);
+    box.innerHTML = potScene(tutPotRv(true), { options: [], correct: "0" }, 760, 300, true, 9);
   }
 
-  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 3, 7: 4 };
+  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 3 };
 
   function renderTut(step) {
     clearTut();
     if (S.tutShown === step && root.querySelector(".tutstage")) return;
     S.tutShown = step;
     const n = TUT_SLIDE[step] || 1;
+    const k = step - 1;
     const slides = {
       1: `<h1 class="tuttitle">How it works</h1>
         <div class="optrows">
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.15s">A question appears on this screen and is read aloud by the host.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.55s">Select your answer on your phone. Questions with several correct answers are marked accordingly.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.95s">Choose your stake before the timer expires. The minimum is $10; staking your full balance is allowed.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.1s">Each player starts with $10 and receives a further $10 at the start of every round.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.4s">Questions appear on this screen and on your phone. Once the question has been read out, the timer starts.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.7s">Select your answer and your stake on your phone.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The minimum stake is $10. If no answer is selected, that minimum is entered automatically.</div>
         </div>
-        <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $10 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
-      2: `<h1 class="tuttitle">How the pot is split</h1>
-        <div class="optrow plain tutstep tutphase" data-ph="1"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> Each stake goes into a single pot, correct or not, together with $20 from the house. Betting then closes.</span></div>
-        <div class="optrow plain tutstep tutphase" data-ph="2"><span class="tutnum">2</span><span><strong>The answer is revealed.</strong> Here Fox and Octopus are correct; Parrot and Bat are not.</span></div>
-        <div class="optrow plain tutstep tutphase" data-ph="3"><span class="tutnum">3</span><span><strong>The pot is divided.</strong> Each correct player takes the share of the pot that matches their share of the winning stakes, and keeps that payout less the stake they paid in.</span></div>
-        <div class="optrow plain tutstep tutphase" data-ph="4"><span class="tutnum">4</span><span><strong>On screen during the game.</strong> Players who were wrong appear on the left with what they paid in; players who were right appear on the right with their net gain.</span></div>
-        <div class="tutpot small"><div id="tutchip" class="tutchip"></div><div id="tutpotbox" class="tutpotbox"></div></div>
-        <p class="tutcap" id="tutcap2"></p>`,
+        <div class="tutbots tutpop" style="animation-delay:1.3s">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}</div>
+        <p class="tutcap tutpop" style="animation-delay:1.3s">Six AI models are competing alongside you. Each was given all of the questions in advance and worked out its own method for sizing bets, using the same information available to you.</p>`,
+      2: `<h1 class="tuttitle">How the pot is split</h1>` + POT_ROWS.map(([p, html]) =>
+          `<div class="optrow plain tutstep tutphase${p <= k ? " on" : ""}${p === k ? " now" : ""}" data-ph="${p}"><span class="tutnum">${p}</span><span>${html}</span></div>`
+          + (p === k ? potBox() : "")).join(""),
       3: `<h1 class="tuttitle">If nobody is right</h1>
-        <div class="optrow plain tutstep tutphase" data-ph="1"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> The stakes are collected exactly as before and betting closes.</span></div>
-        <div class="optrow plain tutstep tutphase" data-ph="2"><span class="tutnum">2</span><span><strong>Nobody selected the correct answer.</strong> There is no one to divide the pot between, so nothing is paid out.</span></div>
-        <div class="optrow plain tutstep tutphase" data-ph="3"><span class="tutnum">3</span><span><strong>The pot carries over.</strong> It is added to the next question, on top of that round\u2019s stakes.</span></div>
-        <div class="tutpot small"><div id="tutchip" class="tutchip"></div><div id="tutpotbox" class="tutpotbox"></div></div>
+        <div class="optrow plain tutstep tutphase on" data-ph="1"><span class="tutnum">1</span><span><strong>Nobody selected the correct answer.</strong> There is no one to divide the pot between, so nothing is paid out.</span></div>
+        <div class="optrow plain tutstep tutphase on" data-ph="2"><span class="tutnum">2</span><span><strong>The pot carries over.</strong> It is added to the next question, on top of that round\u2019s stakes.</span></div>
+        ${potBox()}
         <p class="tutcap">The next pot is therefore larger for everyone, and a question that rolls over more than once can become very large indeed.</p>`,
-      4: `<h1 class="tuttitle">Strategy</h1>
-        <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AI models are competing alongside you.</span></div>
-        <div class="optrows">
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.2s">Your stake should reflect your confidence: raise it when you are certain, keep to the minimum when guessing.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.6s">No one is eliminated: the $10 allowance before each question keeps every player in the game.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The finale ranks final balances and shows who sized their bets most effectively.</div>
-        </div>`,
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;
-    if (n === 2) paintPot(step - 1);
+    if (n === 2) paintPot(k);
     if (n === 3) paintRoll();
   }
 

@@ -287,7 +287,7 @@ export async function mount(root) {
     root.innerHTML = `
       <div class="card">
         <h1>Host console</h1><p class="dim" style="font-size:.78rem;margin:-6px 0 10px">game ${GAME_ID} \u00b7 ${BUILD}</p>
-        <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans${(S.state && S.state.tut) ? " \u00b7 tutorial step " + S.state.tut + "/7 on screen" : ""} \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)} \u00b7 build ${BUILD}</p>
+        <p class="dim">Phase: <strong>${ph}</strong> \u00b7 round ${n + 1}/${N_ROUNDS} \u00b7 ${humans.length} humans${(S.state && S.state.tut) ? " \u00b7 tutorial step " + S.state.tut + "/6 on screen" : ""} \u00b7 rollover ${fmt((S.state && S.state.rollover) || 0)} \u00b7 build ${BUILD}</p>
         ${!isHost() ? `<button class="big" id="claim">Claim host on this device</button>` : `
           <div class="btnrow">
             <button id="show" ${canStartNext ? "" : "disabled"}>Show question ${n + 2}</button>
@@ -302,7 +302,7 @@ export async function mount(root) {
           </div>
           <div class="btnrow">
             <button id="lobby">Open lobby</button>
-            <button id="tut" ${ph === "lobby" ? "" : "disabled"}>Tutorial: ${((S.state && S.state.tut) || 0) >= 7 ? "end, back to QR" : "show step " + (((S.state && S.state.tut) || 0) + 1) + "/7"}</button>
+            <button id="tut" ${ph === "lobby" ? "" : "disabled"}>Tutorial: ${((S.state && S.state.tut) || 0) >= 6 ? "end, back to QR" : "show step " + (((S.state && S.state.tut) || 0) + 1) + "/6"}</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/8)</button>
             <button id="finish" class="${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "danger"}">Finish \u2192 finale${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : " (early)"}</button>
           </div>
@@ -332,9 +332,9 @@ export async function mount(root) {
     if (q("#lobby")) q("#lobby").onclick = openLobby;
     if (q("#tut")) q("#tut").onclick = async () => {
       const cur = (S.state && S.state.tut) || 0;
-      const nx = cur >= 7 ? 0 : cur + 1;
+      const nx = cur >= 6 ? 0 : cur + 1;
       await update(gref(), { "state/tut": nx });
-      log(nx ? `Tutorial step ${nx}/7 on the big screen.` : "Tutorial ended. QR is back on screen.");
+      log(nx ? `Tutorial step ${nx}/6 on the big screen.` : "Tutorial ended. QR is back on screen.");
     };
     if (q("#show")) q("#show").onclick = () => showQuestion(n + 1);
     if (q("#nextbig")) q("#nextbig").onclick = nextAction;

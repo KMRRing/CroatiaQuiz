@@ -151,7 +151,7 @@
   .tutstep { font-size:clamp(.7rem,2.5vh,1.5rem); padding:clamp(5px,1.7vh,17px) 20px; }
   .tutpop { opacity:0; animation:popin .5s cubic-bezier(.2,.8,.3,1.2) forwards; }
   .tutpot { height:50vh; position:relative; background:#fff; border-radius:18px; padding:1.2vh 1vw; box-sizing:border-box; }
-  .tutpot.small { height:32vh; }
+  .tutpot.small { height:27vh; margin:1.2vh 0 0; }
   .tutpotbox { width:100%; height:100%; }
   .tutchip { position:absolute; top:.9vh; left:50%; transform:translateX(-50%); z-index:2;
     background:var(--blue); color:#fff; padding:.5vh 1.1vw; border-radius:999px; white-space:nowrap;
@@ -160,12 +160,12 @@
   .tutphase.on { opacity:1; }
   .tutphase.now .tutnum { box-shadow:0 0 0 .5vh rgba(0,0,255,.16); }
   .potdiv { height:100%; display:flex; flex-direction:column; justify-content:center; gap:1.5vh; color:var(--ink); padding:0 1vw; }
-  .potdivtop { font-size:clamp(.65rem,1.9vh,1.05rem); font-weight:700; color:var(--blue); text-align:center; }
+  .potdivtop { font-size:clamp(.8rem,2.4vh,1.35rem); font-weight:700; color:var(--blue); text-align:center; }
   .potbar { display:flex; gap:6px; height:clamp(24px,6vh,52px); }
-  .potseg { border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:clamp(.6rem,2vh,1.1rem); white-space:nowrap; overflow:hidden; }
+  .potseg { border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:clamp(.75rem,2.5vh,1.4rem); white-space:nowrap; overflow:hidden; }
   .potseg.segA { background:linear-gradient(90deg,#0000FF,#8200DE); }
   .potseg.segB { background:#FF6432; }
-  .potmath { display:flex; flex-direction:column; gap:.9vh; font-size:clamp(.6rem,1.85vh,1.02rem); }
+  .potmath { display:flex; flex-direction:column; gap:.9vh; font-size:clamp(.75rem,2.3vh,1.3rem); }
   .potmathrow { display:flex; flex-wrap:wrap; align-items:center; gap:.45vw; }
   .potmathrow strong { color:var(--blue); }
   .pmarrow { color:var(--blue); opacity:.55; }
@@ -307,7 +307,7 @@
         <path d="M 39.38 134.24 A 72 72 0 0 1 117.36 95.25" fill="none" stroke="#fff" stroke-width="2"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b158-tutsteps", "./js/questions.js": "./js/questions.js?v=b158-tutsteps", "./js/characters.js": "./js/characters.js?v=b158-tutsteps", "./js/engine.js": "./js/engine.js?v=b158-tutsteps", "./js/fb.js": "./js/fb.js?v=b158-tutsteps", "./js/bots.js": "./js/bots.js?v=b158-tutsteps", "./js/finale.js": "./js/finale.js?v=b158-tutsteps", "./js/views/player.js": "./js/views/player.js?v=b158-tutsteps", "./js/views/screen.js": "./js/views/screen.js?v=b158-tutsteps", "./js/views/host.js": "./js/views/host.js?v=b158-tutsteps", "./js/views/swarm.js": "./js/views/swarm.js?v=b158-tutsteps", "./js/views/data.js": "./js/views/data.js?v=b158-tutsteps" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b159-tutrework", "./js/questions.js": "./js/questions.js?v=b159-tutrework", "./js/characters.js": "./js/characters.js?v=b159-tutrework", "./js/engine.js": "./js/engine.js?v=b159-tutrework", "./js/fb.js": "./js/fb.js?v=b159-tutrework", "./js/bots.js": "./js/bots.js?v=b159-tutrework", "./js/finale.js": "./js/finale.js?v=b159-tutrework", "./js/views/player.js": "./js/views/player.js?v=b159-tutrework", "./js/views/screen.js": "./js/views/screen.js?v=b159-tutrework", "./js/views/host.js": "./js/views/host.js?v=b159-tutrework", "./js/views/swarm.js": "./js/views/swarm.js?v=b159-tutrework", "./js/views/data.js": "./js/views/data.js?v=b159-tutrework" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
