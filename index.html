@@ -158,6 +158,18 @@
     font-weight:700; font-size:clamp(.6rem,1.7vh,.95rem); opacity:0; transition:opacity .35s ease; }
   .tutphase { display:flex; gap:clamp(8px,1.4vw,16px); align-items:flex-start; opacity:.45; transition:opacity .4s ease; }
   .tutphase.on { opacity:1; }
+  .tutphase.now .tutnum { box-shadow:0 0 0 .5vh rgba(0,0,255,.16); }
+  .potdiv { height:100%; display:flex; flex-direction:column; justify-content:center; gap:1.5vh; color:var(--ink); padding:0 1vw; }
+  .potdivtop { font-size:clamp(.65rem,1.9vh,1.05rem); font-weight:700; color:var(--blue); text-align:center; }
+  .potbar { display:flex; gap:6px; height:clamp(24px,6vh,52px); }
+  .potseg { border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:clamp(.6rem,2vh,1.1rem); white-space:nowrap; overflow:hidden; }
+  .potseg.segA { background:linear-gradient(90deg,#0000FF,#8200DE); }
+  .potseg.segB { background:#FF6432; }
+  .potmath { display:flex; flex-direction:column; gap:.9vh; font-size:clamp(.6rem,1.85vh,1.02rem); }
+  .potmathrow { display:flex; flex-wrap:wrap; align-items:center; gap:.45vw; }
+  .potmathrow strong { color:var(--blue); }
+  .pmarrow { color:var(--blue); opacity:.55; }
+  .pmnet { color:#0E8A43; font-weight:700; }
   .tutphase strong { color:var(--blue); }
   .tutnum { flex:0 0 auto; width:clamp(20px,3.4vh,30px); height:clamp(20px,3.4vh,30px); border-radius:50%;
     background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center;
@@ -295,7 +307,7 @@
         <path d="M 39.38 134.24 A 72 72 0 0 1 117.36 95.25" fill="none" stroke="#fff" stroke-width="2"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b157-tutsteps", "./js/questions.js": "./js/questions.js?v=b157-tutsteps", "./js/characters.js": "./js/characters.js?v=b157-tutsteps", "./js/engine.js": "./js/engine.js?v=b157-tutsteps", "./js/fb.js": "./js/fb.js?v=b157-tutsteps", "./js/bots.js": "./js/bots.js?v=b157-tutsteps", "./js/finale.js": "./js/finale.js?v=b157-tutsteps", "./js/views/player.js": "./js/views/player.js?v=b157-tutsteps", "./js/views/screen.js": "./js/views/screen.js?v=b157-tutsteps", "./js/views/host.js": "./js/views/host.js?v=b157-tutsteps", "./js/views/swarm.js": "./js/views/swarm.js?v=b157-tutsteps", "./js/views/data.js": "./js/views/data.js?v=b157-tutsteps" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b158-tutsteps", "./js/questions.js": "./js/questions.js?v=b158-tutsteps", "./js/characters.js": "./js/characters.js?v=b158-tutsteps", "./js/engine.js": "./js/engine.js?v=b158-tutsteps", "./js/fb.js": "./js/fb.js?v=b158-tutsteps", "./js/bots.js": "./js/bots.js?v=b158-tutsteps", "./js/finale.js": "./js/finale.js?v=b158-tutsteps", "./js/views/player.js": "./js/views/player.js?v=b158-tutsteps", "./js/views/screen.js": "./js/views/screen.js?v=b158-tutsteps", "./js/views/host.js": "./js/views/host.js?v=b158-tutsteps", "./js/views/swarm.js": "./js/views/swarm.js?v=b158-tutsteps", "./js/views/data.js": "./js/views/data.js?v=b158-tutsteps" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
