@@ -71,7 +71,7 @@ const AI_META = [
   ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png", "Fable 5.1 Max"],
   ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png", "Medium 3.5"],
   ["bot_gemini", "Gemini", "\u{264A}", "assets/bots/gemini.png", "3.6 Flash Extended"],
-  ["bot_qwen", "Qwen", "\u{1F537}", "assets/bots/qwen.png", "Qwen3.7 Deep-Research-Mini"],
+  ["bot_qwen", "Qwen", "\u{1F537}", "assets/bots/qwen.png", "Qwen 3.7"],
 ];
 
 // stake helpers -----------------------------------------------------
