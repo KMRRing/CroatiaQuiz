@@ -101,10 +101,18 @@ export function mistralStake(input) {
   return clamp(B * c * (0.8 + 0.02 * (round - 1)), B);
 }
 
+// ChatGPT: confidence times stack plus the stipend, with no history term and no
+// cap of its own. At its stated confidences this is all-in almost every round.
+export function chatgptStake(input) {
+  const { c, balance: B } = input;
+  return clamp(Math.floor(c * (B + RULES.stipend)), B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
   bot_deepseek: deepseekStake,
   bot_grok: grokStake,
   bot_gemini: geminiStake,
   bot_mistral: mistralStake,
+  bot_chatgpt: chatgptStake,
 };

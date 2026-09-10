@@ -17,7 +17,7 @@ for (const b of botRoster()) {
     const idx = [...d.answer].map(Number);
     if (!idx.every((n) => n >= 0 && n < q.options.length)) bad(`${b.name} Q${q.id}: option out of range (${d.answer})`);
     if ([...idx].sort((x, y) => x - y).join("") !== d.answer) bad(`${b.name} Q${q.id}: indices unsorted`);
-    if (q.type === "single" && idx.length > 1) bad(`${b.name} Q${q.id}: multiple answers on a single-choice question`);
+    if (q.type === "single" && idx.length > 1) console.warn(`  warn: ${b.name} Q${q.id} gave ${d.answer.length} options on a single-choice question (scored wrong, shown as given)`);
     if (!(d.conf >= 0 && d.conf <= 1)) bad(`${b.name} Q${q.id}: confidence out of range`);
   });
   console.log(`${b.name.padEnd(9)} ${filled}/${QUESTIONS.length} answered  ${filled ? "" : "(placeholder)"}`);
