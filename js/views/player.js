@@ -148,6 +148,11 @@ export async function mount(root) {
     S.partyTimer = setInterval(conf, 650); S.partyTimer2 = setInterval(boom, 2200);
   }
 
+  const loaderMark = () => {
+    const t = document.getElementById("loadermark");
+    return t ? t.innerHTML : "";
+  };
+
   function render() {
     stopParty();
     document.body.classList.remove("urgent");
@@ -156,7 +161,7 @@ export async function mount(root) {
       const foot = `<p class="dim" style="font-size:.72rem;opacity:.6;margin-top:14px">game ${GAME_ID} \u00b7 ${BUILD}</p>`;
       root.innerHTML = S.joinErr
         ? `<div class="dealwrap"><div class="bigdisc"><div class="demoji">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p></div><button id="rejoin" style="margin-top:16px">Try again</button>${foot}</div>`
-        : `<div class="dealwrap"><div class="bigdisc dealpulse"><div class="demoji">\u2026</div><p class="dim">Dealing you a character\u2026</p></div>${foot}</div>`;
+        : `<div class="dealwrap"><div class="bigdisc">${loaderMark()}</div>${foot}</div>`;
       const rj = root.querySelector("#rejoin");
       if (rj) rj.onclick = () => { S.joinErr = null; S.joining = true; render(); join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); };
       return;
