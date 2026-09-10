@@ -55,7 +55,7 @@ export const QUESTIONS = [
     options: ["Makes the whole FAME bio, at the e-methanol\u2019s CI", "Makes the methyl share count as RFNBO instead of biofuel", "Has its energy content credited as RFNBO, while the FAME\u2019s CI is calculated as if fossil methanol had been used", "Is credited as RFNBO, and the FAME\u2019s CI also uses the e-methanol\u2019s emissions"], correct: "2" },
   { id: 18, tag: "UK SAF", type: "single", roomP: 0.30,
     text: "An RCF SAF has a UK-methodology CI of -35.6 gCO\u2082e/MJ, a 140% saving. Under the UK SAF Mandate, each litre earns approximately:",
-    options: ["Nothing", "1 HEFA certificate", "1 Main certificate", "2 Main (non-HEFA) SAF certificates", "2 PtL certificates"], correct: "3" },
+    options: ["Nothing", "1 HEFA certificate", "2 HEFA certificates", "1 Main (non-HEFA) certificate", "2 Main (non-HEFA) SAF certificates", "2 PtL certificates"], correct: "4" },
   { id: 19, tag: "IR 2022/996", type: "multi", roomP: 0.30,
     text: "The draft revision of Implementing Regulation 2022/996 proposes:",
     options: ["A one-month mass-balance period for traders", "Retroactive cancellation of PoS through the entire supply chain", "An expanded list of critical non-conformities", "Automatic PoS cancellation on a critical non-conformity"], correct: "0123" },
