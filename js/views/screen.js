@@ -285,10 +285,9 @@ export async function mount(root) {
   const TUT_LABELS = { t_fox: "$40 on B", t_oct: "$10 on B", t_par: "$30 on A", t_bat: "$20 on C" };
   const TUT_SKIN = { yTop: 26, yBot: 26, fs: 23, icon: 42, potFs: 1.25 };
 
-  function tutPotRv(rolled) {
-    const base = Object.assign({ stakes: TUT_STAKES, botStakes: {}, aiAnswers: {}, pot: 200, correct: "0" }, TUT_SKIN);
-    if (rolled) return Object.assign(base, { deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 }, mult: 1, rolled: true });
-    return Object.assign(base, { deltas: { t_fox: 120, t_oct: 30, t_par: -30, t_bat: -20 }, mult: 4, rolled: false });
+  function tutPayout() {
+    return Object.assign({ stakes: TUT_STAKES, botStakes: {}, aiAnswers: {}, pot: 200, correct: "0",
+      deltas: { t_fox: 120, t_oct: 30, t_par: -30, t_bat: -20 }, mult: 4, rolled: false }, TUT_SKIN);
   }
 
   function clearTut() { (S.tutT || []).forEach(clearTimeout); S.tutT = []; }
@@ -346,18 +345,12 @@ export async function mount(root) {
     if (k === 1) { draw(tutPayIn()); chip(""); }
     else if (k === 2) { draw(tutPayIn(["t_fox", "t_oct"])); chip("Correct answer: B \u00b7 Fox and Octopus"); }
     else if (k === 3) { box.innerHTML = divisionHtml(); chip(""); }
-    else { draw(tutPotRv(false)); chip(""); }
+    else { draw(tutPayout()); chip(""); }
     const cap = root.querySelector("#tutcap2");
     if (cap) cap.textContent = POT_CAPS[k] || "";
   }
 
-  function paintRoll() {
-    const box = root.querySelector("#tutpotbox");
-    if (!box) return;
-    box.innerHTML = potScene(tutPotRv(true), { options: [], correct: "0" }, 760, 300, true, 9);
-  }
-
-  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 3 };
+  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2 };
 
   function renderTut(step) {
     clearTut();
@@ -378,15 +371,9 @@ export async function mount(root) {
       2: `<h1 class="tuttitle">How the pot is split</h1>` + POT_ROWS.map(([p, html]) =>
           `<div class="optrow plain tutstep tutphase${p <= k ? " on" : ""}${p === k ? " now" : ""}" data-ph="${p}"><span class="tutnum">${p}</span><span>${html}</span></div>`
           + (p === k ? potBox() : "")).join(""),
-      3: `<h1 class="tuttitle">If nobody is right</h1>
-        <div class="optrow plain tutstep tutphase on" data-ph="1"><span class="tutnum">1</span><span><strong>Nobody selected the correct answer.</strong> There is no one to divide the pot between, so nothing is paid out.</span></div>
-        <div class="optrow plain tutstep tutphase on" data-ph="2"><span class="tutnum">2</span><span><strong>The pot carries over.</strong> It is added to the next question, on top of that round\u2019s stakes.</span></div>
-        ${potBox()}
-        <p class="tutcap">The next pot is therefore larger for everyone, and a question that rolls over more than once can become very large indeed.</p>`,
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;
     if (n === 2) paintPot(k);
-    if (n === 3) paintRoll();
   }
 
   function fitQ() {
