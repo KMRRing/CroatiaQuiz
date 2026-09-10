@@ -37,7 +37,7 @@ export const QUESTIONS = [
     options: ["True", "False"], correct: "1" },
   { id: 12, tag: "UK / RTFO", type: "single", roomP: 0.30,
     text: "e-Ethanol, an RFNBO, is supplied into UK domestic bunkering. Per litre it earns, and under the UK ETS it is:",
-    options: ["1 RTFC / zero-rated", "2 dRTFCs / zero-rated", "2 RTFCs / fossil emission factor", "2 RTFCs / zero-rated", "Nothing / out of scope"], correct: "3" },
+    options: ["1 RTFC / zero-rated", "2 RTFCs / fossil emission factor", "2 dRTFCs / zero-rated", "Nothing / zero-rated", "Nothing / fossil emission factor"], correct: "3" },
   { id: 13, tag: "UK / RTFO", type: "single", roomP: 0.40,
     text: "Most UK development-fuel RTFCs in 2025 went to biomethane-derived road fuels: diesel and petrol made by co-processing biomethane at refineries.",
     options: ["True", "False"], correct: "0" },
