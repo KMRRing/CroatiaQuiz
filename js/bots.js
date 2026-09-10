@@ -15,7 +15,13 @@ import { SIZING, defaultStake } from "./sizing.js";
 const AI_ANSWERS = {
   bot_grok:    Array(QUESTIONS.length).fill(null),
   bot_chatgpt: Array(QUESTIONS.length).fill(null),
-  bot_deepseek:Array(QUESTIONS.length).fill(null),
+  bot_deepseek: [
+    { a: "C", c: 0.99 }, { a: "C", c: 0.99 }, { a: "A", c: 0.94 }, { a: "A", c: 0.99 },
+    { a: "AD", c: 0.99 }, { a: "B", c: 0.99 }, { a: "C", c: 0.90 }, { a: "A", c: 0.98 },
+    { a: "ACD", c: 0.84 }, { a: "B", c: 0.92 }, { a: "A", c: 0.88 }, { a: "C", c: 0.90 },
+    { a: "A", c: 0.68 }, { a: "AD", c: 0.86 }, { a: "B", c: 0.84 }, { a: "ABCD", c: 0.90 },
+    { a: "C", c: 0.90 }, { a: "E", c: 0.98 }, { a: "ABCD", c: 0.76 }, { a: "E", c: 0.92 },
+  ],
   bot_claude: [
     { a: "C", c: 0.96 }, { a: "C", c: 0.95 }, { a: "A", c: 0.8 },  { a: "B", c: 0.9 },
     { a: "AE", c: 0.9 }, { a: "B", c: 0.85 }, { a: "D", c: 0.7 },  { a: "A", c: 0.85 },

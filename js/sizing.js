@@ -63,6 +63,20 @@ export function claudeStake(input) {
   return clamp(MIN, B);
 }
 
+// DeepSeek: confidence measured against the crowd's observed accuracy, ramped by
+// round index. Note it reads the ROOM's accuracy, not its own, so a room doing
+// badly widens its perceived edge rather than narrowing it.
+export function deepseekStake(input) {
+  const { c, balance: B, players: N, round = 1, history = [] } = input;
+  const p = history.length
+    ? history.reduce((a, h) => a + (h.correct || 0) / Math.max(1, N), 0) / history.length
+    : 0.5;
+  let f = Math.max(0.10, Math.min(1.00, 0.20 + 1.50 * (c - p) + 0.02 * round));
+  if (c < 0.55) f = 0.10;
+  return clamp(RULES.minStake + f * (B - RULES.minStake), B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
+  bot_deepseek: deepseekStake,
 };
