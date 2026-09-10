@@ -48,7 +48,7 @@ export const QUESTIONS = [
     text: "A barge loads 600 mt fossil naphtha, 200 mt ISCC PLUS circular naphtha and 200 mt ISCC EU bio-naphtha into one tank. The trader discharges 200 mt as circular naphtha at the first port, brings the remaining 800 mt into the Netherlands and applies to book 200 mt of bio-naphtha for EREs. Can he book the 200 mt?",
     options: ["Yes", "No"], correct: "1" },
   { id: 16, tag: "Maritime", type: "multi", roomP: 0.30,
-    text: "RED-certified rapeseed methyl ester bunkered into a ship earns zero-rating or renewable credit under:",
+    text: "Rapeseed methyl ester bunkered into a ship can earn zero-rating or renewable credit under:",
     options: ["FuelEU Maritime", "EU ETS on intra-EU voyages", "UK ETS on domestic voyages", "The Dutch brandstoftransitieverplichting zeevaart (ZREs)", "The IMO Net-Zero Framework, as approved at MEPC 83"], correct: "124" },
   { id: 17, tag: "Germany / 37. BImSchV", type: "single", roomP: 0.30,
     text: "Under the BImSchG / 37. BImSchV intermediate pathway, e-methanol used to transesterify FAME:",
