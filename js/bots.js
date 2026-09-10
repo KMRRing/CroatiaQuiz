@@ -1,20 +1,28 @@
 import { QUESTIONS } from "./questions.js";
+import { SIZING, defaultStake } from "./sizing.js";
 
 // ------------------------------------------------------------------
 // AI COMPETITORS.
-// Fill each AI's `answers` from your pre-computed run: one entry per
-// question, { a: "<sorted option indices>", c: <confidence 0..1> }.
-// Example: { a: "1", c: 0.9 }  or for select-all  { a: "01234", c: 0.55 }.
+// Paste each model's run straight in: one entry per question, as the model
+// gave it, { a: "<option letters>", c: <confidence 0..1> }.
+// Example: { a: "C", c: 0.9 }  or for select-all  { a: "AE", c: 0.55 }.
+// Letters are converted to option indices at load; order does not matter.
 // null = the AI abstains that round (minimum stake, no answer).
 // Stakes are computed at settlement and never written to the database,
 // so players see WHAT the AIs answered but never how much they bet.
-// Sizing rule for AIs: stake fraction = max(0, 2c - 1) of stack.
+// Bet sizing is per model, in sizing.js; models without a rule use defaultStake.
 // ------------------------------------------------------------------
 const AI_ANSWERS = {
   bot_grok:    Array(QUESTIONS.length).fill(null),
   bot_chatgpt: Array(QUESTIONS.length).fill(null),
   bot_deepseek:Array(QUESTIONS.length).fill(null),
-  bot_claude:  Array(QUESTIONS.length).fill(null),
+  bot_claude: [
+    { a: "C", c: 0.96 }, { a: "C", c: 0.95 }, { a: "A", c: 0.8 },  { a: "B", c: 0.9 },
+    { a: "AE", c: 0.9 }, { a: "B", c: 0.85 }, { a: "D", c: 0.7 },  { a: "A", c: 0.85 },
+    { a: "CD", c: 0.75 }, { a: "A", c: 0.85 }, { a: "B", c: 0.75 }, { a: "B", c: 0.45 },
+    { a: "A", c: 0.6 },  { a: "A", c: 0.55 }, { a: "B", c: 0.65 }, { a: "BCE", c: 0.35 },
+    { a: "C", c: 0.8 },  { a: "E", c: 0.85 }, { a: "BCD", c: 0.3 }, { a: "E", c: 0.6 },
+  ],
   bot_mistral: Array(QUESTIONS.length).fill(null),
   bot_gemini:  Array(QUESTIONS.length).fill(null),
   bot_qwen:    Array(QUESTIONS.length).fill(null),
@@ -33,20 +41,25 @@ const AI_META = [
 // stake helpers -----------------------------------------------------
 const kellyEvens = (c) => Math.max(0, 2 * c - 1);
 
+// "BCE" -> "124": option letters to sorted option indices.
+const toIdx = (a) => [...String(a).toUpperCase()].map((ch) => ch.charCodeAt(0) - 65).sort((x, y) => x - y).join("");
+const ANSWERS = Object.fromEntries(Object.entries(AI_ANSWERS)
+  .map(([t, arr]) => [t, arr.map((e) => (e ? { a: toIdx(e.a), c: e.c } : null))]));
+
 export function botRoster() {
-  const bots = AI_META.map(([token, name, emoji, img]) => ({
+  return AI_META.map(([token, name, emoji, img]) => ({
     token, name, emoji, img, kind: "ai",
-    decide(q, qi, wealth) {
-      const e = AI_ANSWERS[token][qi];
-      if (!e) return { answer: null, frac: 0, conf: null };
-      return { answer: e.a, frac: kellyEvens(e.c), conf: e.c };
+    decide(q, qi, wealth, ctx) {
+      const e = ANSWERS[token][qi];
+      if (!e) return { answer: null, stake: null, conf: null };
+      const rule = SIZING[token] || defaultStake;
+      return { answer: e.a, stake: rule(Object.assign({}, ctx, { c: e.c, balance: wealth })), conf: e.c };
     },
   }));
-  return bots;
 }
 
 // Confidence lookup for the finale calibration board only (never shown mid-game).
 export function botConf(token, qi) {
-  const e = AI_ANSWERS[token] && AI_ANSWERS[token][qi];
+  const e = ANSWERS[token] && ANSWERS[token][qi];
   return e ? e.c : null;
 }

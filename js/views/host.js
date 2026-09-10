@@ -109,7 +109,17 @@ export async function mount(root) {
     try {
       const n = S.state.round;
       const q = QUESTIONS[n];
-      const [bets, wealth, players] = await Promise.all([read("bets", n), read("wealth"), read("players")]);
+      const [bets, wealth, players, pastReveals] = await Promise.all([read("bets", n), read("wealth"), read("players"), read("reveal")]);
+      // history the AI sizing rules may draw on: pot, carry-in, how many were right, and their own record
+      const past = [];
+      for (let i = 0; i < n; i++) { const rv = (pastReveals || {})[i]; if (!rv) break; past.push(rv); }
+      const nPlayers = Object.keys(players || {}).length;
+      const histFor = (t) => past.map((rv, i) => ({
+        pot: rv.pot, carry: i > 0 && past[i - 1].rolled ? past[i - 1].pot : 0,
+        correct: rv.nRight || 0, myConf: botConf(t, i) || 0,
+        myCorrect: ((rv.aiAnswers || {})[t] || "") === rv.correct,
+      }));
+      const leaderFor = (t) => Object.entries(wealth || {}).reduce((m, [k, v]) => (k === t ? m : Math.max(m, v || 0)), 0);
       const entries = {};
       for (const [t, p] of Object.entries(players || {})) {
         const w = (wealth && wealth[t]) || 0;
@@ -117,8 +127,9 @@ export async function mount(root) {
           const bot = BOTS[t];
           let d, stake;
           if (bot) {
-            d = bot.decide(q, n, w);
-            stake = Math.min(w, Math.max(Math.min(RULES.minStake, w), d.frac * w));
+            d = bot.decide(q, n, w, { players: nPlayers, round: n + 1, carry: S.state.rollover || 0,
+                                      leader: leaderFor(t), history: histFor(t) });
+            stake = Math.min(w, Math.max(Math.min(RULES.minStake, w), Math.round(d.stake || 0)));
           } else if (p.test) {
             if (TEST_MODE && n === 0) d = { answer: t === "tb_0" ? randomWrong(q) : q.correct };
             else if (TEST_MODE && n === 1) d = { answer: t === "tb_0" ? q.correct : randomWrong(q) };
