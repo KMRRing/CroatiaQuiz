@@ -293,11 +293,15 @@ export async function mount(root) {
         </div>
         <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $10 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
       2: `<h1 class="tuttitle">How the pot is split</h1>
-        <div class="tutpot">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">All stakes, together with a $20 contribution from the house, form a single pot. Players who answer correctly divide the entire pot in proportion to their stakes. In this example the multiple is \u00d72.40: Fox staked $40 and receives +$56; Octopus staked $10 and receives +$14. Incorrect answers forfeit their stakes.</p>`,
+        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.1s"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> Each stake is taken from the player who placed it, correct or not, and goes into a single pot along with $20 from the house. Betting then closes.</span></div>
+        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.5s"><span class="tutnum">2</span><span><strong>The answer is revealed.</strong> Everyone who answered correctly shares the whole pot, divided in proportion to the amount each of them staked.</span></div>
+        <div class="tutpot small">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
+        <p class="tutcap">Above: the four stakes total $100 and the house adds $20, making a $120 pot. Fox and Octopus answered correctly and staked $50 between them, so the pot pays \u00d72.40. Fox turns $40 into $96, a net gain of $56; Octopus turns $10 into $24, a net gain of $14. Parrot and Bat do not recover their stakes.</p>`,
       3: `<h1 class="tuttitle">If nobody is right</h1>
-        <div class="tutpot">${potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">If no one answers correctly, no payouts are made. The entire pot carries over and is added to the next question\u2019s pot.</p>`,
+        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.1s"><span class="tutnum">1</span><span><strong>Every player still pays in.</strong> The stakes are collected exactly as before and betting closes.</span></div>
+        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.5s"><span class="tutnum">2</span><span><strong>No one answered correctly.</strong> There is nobody to share the pot, so no payouts are made.</span></div>
+        <div class="tutpot small">${potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
+        <p class="tutcap">The full pot carries over and is added to the next question, on top of that round\u2019s stakes. The following pot is therefore larger for everyone.</p>`,
       4: `<h1 class="tuttitle">Strategy</h1>
         <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AI models are competing alongside you.</span></div>
         <div class="optrows">
