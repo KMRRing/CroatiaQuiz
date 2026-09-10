@@ -440,7 +440,7 @@ export async function mount(root) {
 
   function render() {
     const ph = S.state ? S.state.phase : "lobby";
-    if ((!S.state || ph === "lobby") && root.querySelector(".lobbystage")) {
+    if ((!S.state || ph === "lobby") && !(S.state && S.state.tut > 0) && root.querySelector(".lobbystage")) {
       const el = root.querySelector(".lobbyicons");
       if (el) {
         const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
