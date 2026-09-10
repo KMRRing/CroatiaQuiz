@@ -291,7 +291,7 @@ export async function mount(root) {
           <div class="optrow plain tutstep tutpop" style="animation-delay:.55s">Select your answer on your phone. Questions with several correct answers are marked accordingly.</div>
           <div class="optrow plain tutstep tutpop" style="animation-delay:.95s">Choose your stake before the timer expires. The minimum is $10; staking your full balance is allowed.</div>
         </div>
-        <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $5 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
+        <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $10 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
       2: `<h1 class="tuttitle">How the pot is split</h1>
         <div class="tutpot">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
         <p class="tutcap">All stakes, together with a $20 contribution from the house, form a single pot. Players who answer correctly divide the entire pot in proportion to their stakes. In this example the multiple is \u00d72.40: Fox staked $40 and receives +$56; Octopus staked $10 and receives +$14. Incorrect answers forfeit their stakes.</p>`,
