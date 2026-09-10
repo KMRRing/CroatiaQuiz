@@ -17,6 +17,7 @@ const AI_ANSWERS = {
   bot_claude:  Array(QUESTIONS.length).fill(null),
   bot_mistral: Array(QUESTIONS.length).fill(null),
   bot_gemini:  Array(QUESTIONS.length).fill(null),
+  bot_qwen:    Array(QUESTIONS.length).fill(null),
 };
 
 const AI_META = [
@@ -26,6 +27,7 @@ const AI_META = [
   ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png"],
   ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png"],
   ["bot_gemini", "Gemini", "\u{264A}", "assets/bots/gemini.png"],
+  ["bot_qwen", "Qwen", "\u{1F537}", "assets/bots/qwen.png"],
 ];
 
 // stake helpers -----------------------------------------------------
