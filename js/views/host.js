@@ -302,6 +302,7 @@ export async function mount(root) {
           </div>
           <div class="btnrow">
             <button id="lobby">Open lobby</button>
+            <button id="tut" ${ph === "lobby" ? "" : "disabled"}>Tutorial: ${((S.state && S.state.tut) || 0) >= 4 ? "end" : "slide " + (((S.state && S.state.tut) || 0) + 1) + "/4"}</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/8)</button>
             <button id="finish" class="${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "danger"}">Finish \u2192 finale${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : " (early)"}</button>
           </div>
@@ -329,6 +330,12 @@ export async function mount(root) {
     const q = (id) => root.querySelector(id);
     if (q("#claim")) q("#claim").onclick = claim;
     if (q("#lobby")) q("#lobby").onclick = openLobby;
+    if (q("#tut")) q("#tut").onclick = async () => {
+      const cur = (S.state && S.state.tut) || 0;
+      const nx = cur >= 4 ? 0 : cur + 1;
+      await update(gref(), { "state/tut": nx });
+      log(nx ? `Tutorial slide ${nx}/4 on the big screen.` : "Tutorial ended. QR is back on screen.");
+    };
     if (q("#show")) q("#show").onclick = () => showQuestion(n + 1);
     if (q("#nextbig")) q("#nextbig").onclick = nextAction;
     if (q("#start")) q("#start").onclick = startQuestion;

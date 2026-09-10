@@ -35,11 +35,13 @@ export async function mount(root) {
   }
 
   const iconOf = (t) => {
+    if (TUT_CI[t] != null) return CHARACTERS[TUT_CI[t]][0];
     if (BOTS[t]) return BOTS[t].emoji;
     const p = S.players[t];
     return (p && CHARACTERS[p.ci] ? CHARACTERS[p.ci][0] : "\u{1F3AD}");
   };
   const plainName = (t) => {
+    if (TUT_CI[t] != null) return CHARACTERS[TUT_CI[t]][1];
     if (BOTS[t]) return BOTS[t].name;
     const p = S.players[t];
     return (p && CHARACTERS[p.ci] ? CHARACTERS[p.ci][1] : "?");
@@ -271,6 +273,42 @@ export async function mount(root) {
     num.setAttribute("fill", low ? "#D93636" : "#0A0A14");
   }
 
+  const TUT_CI = { t_fox: 2, t_oct: 1, t_par: 0, t_bat: 6 };
+
+  function tutPotRv(rolled) {
+    const stakes = { t_fox: 40, t_oct: 10, t_par: 30, t_bat: 20 };
+    if (rolled) return { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 }, pot: 120, mult: 1, rolled: true, correct: "0" };
+    return { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: 56, t_oct: 14, t_par: -30, t_bat: -20 }, pot: 120, mult: 2.4, rolled: false, correct: "0" };
+  }
+
+  function renderTut(n) {
+    if (S.tutShown === n && root.querySelector(".tutstage")) return;
+    S.tutShown = n;
+    const slides = {
+      1: `<h1 class="tuttitle">How it works</h1>
+        <div class="optrows">
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.15s">\u{1F4FA} A question appears up here. The host reads it out.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.55s">\u{1F4F1} Pick your answer on your phone. Multi-select rounds say so.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.95s">\u{1F4B0} Set your stake before the clock runs out. $10 minimum, all-in allowed.</div>
+        </div>
+        <p class="tutcap tutpop" style="animation-delay:1.4s">Everyone is dealt +$10 before every question. Not betting doesn\u2019t save you: the table takes the $10 floor anyway.</p>`,
+      2: `<h1 class="tuttitle">One pot. Winners split it.</h1>
+        <div class="tutpot">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
+        <p class="tutcap">All stakes plus $20 from the house go into one pot. Right answers split the whole pot in proportion to their stake. Here \u00d72.40: Fox staked $40 and nets +$56, Octopus staked $10 and nets +$14. Wrong answers pay in.</p>`,
+      3: `<h1 class="tuttitle">Nobody right? It rolls.</h1>
+        <div class="tutpot">${potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
+        <p class="tutcap">No winners means nobody is paid. The whole pot carries into the next question and stacks on top of that round\u2019s stakes.</p>`,
+      4: `<h1 class="tuttitle">Bet like you mean it</h1>
+        <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AIs are at the table. Beat them.</span></div>
+        <div class="optrows">
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.2s">Your stake is your confidence. Sure \u2192 go big. Guessing \u2192 $10.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.6s">You can\u2019t bust out: the $10 stipend keeps everyone in to the end.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The finale crowns the richest \u2014 and exposes who bet well and who just got lucky.</div>
+        </div>`,
+    };
+    root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;
+  }
+
   function fitQ() {
     // scale the question card contents so the card never exceeds ~the top half,
     // leaving the rest of the column to the pot/clock zone
@@ -421,6 +459,8 @@ export async function mount(root) {
     }
     clearInterval(S.timer);
     if (!S.state || ph === "lobby") {
+      if (S.state && S.state.tut > 0) { renderTut(S.state.tut); return; }
+      S.tutShown = 0;
       const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
       root.innerHTML = `
         <div class="lobbystage">
