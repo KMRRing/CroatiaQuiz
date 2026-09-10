@@ -108,6 +108,13 @@ export function chatgptStake(input) {
   return clamp(Math.floor(c * (B + RULES.stipend)), B);
 }
 
+// Qwen: one-tenth Kelly at evens. Its confidences are already discounted for
+// expected competition, so this is the most cautious rule in the field.
+export function qwenStake(input) {
+  const { c, balance: B } = input;
+  return clamp(0.1 * (2 * c - 1) * B, B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
   bot_deepseek: deepseekStake,
@@ -115,4 +122,5 @@ export const SIZING = {
   bot_gemini: geminiStake,
   bot_mistral: mistralStake,
   bot_chatgpt: chatgptStake,
+  bot_qwen: qwenStake,
 };

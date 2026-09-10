@@ -55,7 +55,13 @@ const AI_ANSWERS = {
     { a: "B", c: 0.85 }, { a: "ABD", c: 0.7 }, { a: "A", c: 0.85 }, { a: "ABCD", c: 0.75 },
     { a: "C", c: 0.8 }, { a: "E", c: 0.8 }, { a: "ACD", c: 0.75 }, { a: "C", c: 0.8 },
   ],
-  bot_qwen:    Array(QUESTIONS.length).fill(null),
+  bot_qwen: [
+    { a: "C", c: 0.95 }, { a: "D", c: 0.93 }, { a: "A", c: 0.63 }, { a: "D", c: 0.59 },
+    { a: "BD", c: 0.69 }, { a: "A", c: 0.79 }, { a: "D", c: 0.86 }, { a: "A", c: 0.74 },
+    { a: "ABCD", c: 0.64 }, { a: "B", c: 0.82 }, { a: "B", c: 0.71 }, { a: "D", c: 0.59 },
+    { a: "A", c: 0.77 }, { a: "BC", c: 0.62 }, { a: "B", c: 0.56 }, { a: "ABCD", c: 0.64 },
+    { a: "C", c: 0.79 }, { a: "E", c: 0.64 }, { a: "BCD", c: 0.70 }, { a: "C", c: 0.81 },
+  ],
 };
 
 const AI_META = [
