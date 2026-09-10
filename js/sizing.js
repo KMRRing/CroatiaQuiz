@@ -76,7 +76,27 @@ export function deepseekStake(input) {
   return clamp(RULES.minStake + f * (B - RULES.minStake), B);
 }
 
+// Grok: quadratic in confidence, ramped down as rounds run out, and cut hard when
+// the previous round showed the room doing well.
+export function grokStake(input) {
+  const { c, balance: B, players: N, round = 1, history = [] } = input;
+  const last = history.length ? history[history.length - 1] : null;
+  const share = last ? (last.correct || 0) / Math.max(1, N) : 0.5;
+  const crowd = share < 0.35 ? 1 : share < 0.55 ? 0.7 : 0.45;
+  return clamp(B * 0.12 * c * c * (1 + 0.03 * (20 - round)) * crowd, B);
+}
+
+// Gemini: a flat fraction of stack equal to confidence, eased only slightly as the
+// game runs down. At typical confidences this stakes most of the stack every round.
+export function geminiStake(input) {
+  const { c, balance: B, round = 1 } = input;
+  const remaining = Math.max(0, 20 - round);
+  return clamp(Math.floor(B * c * (0.8 + 0.2 * (remaining / 20))), B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
   bot_deepseek: deepseekStake,
+  bot_grok: grokStake,
+  bot_gemini: geminiStake,
 };

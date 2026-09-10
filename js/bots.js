@@ -13,7 +13,13 @@ import { SIZING, defaultStake } from "./sizing.js";
 // Bet sizing is per model, in sizing.js; models without a rule use defaultStake.
 // ------------------------------------------------------------------
 const AI_ANSWERS = {
-  bot_grok:    Array(QUESTIONS.length).fill(null),
+  bot_grok: [
+    { a: "C", c: 0.95 }, { a: "C", c: 0.88 }, { a: "A", c: 0.82 }, { a: "B", c: 0.97 },
+    { a: "AE", c: 0.92 }, { a: "B", c: 0.85 }, { a: "D", c: 0.75 }, { a: "A", c: 0.90 },
+    { a: "CD", c: 0.70 }, { a: "A", c: 0.80 }, { a: "B", c: 0.78 }, { a: "C", c: 0.72 },
+    { a: "B", c: 0.65 }, { a: "BD", c: 0.68 }, { a: "B", c: 0.80 }, { a: "ABC", c: 0.70 },
+    { a: "C", c: 0.75 }, { a: "E", c: 0.78 }, { a: "ACD", c: 0.65 }, { a: "E", c: 0.70 },
+  ],
   bot_chatgpt: Array(QUESTIONS.length).fill(null),
   bot_deepseek: [
     { a: "C", c: 0.99 }, { a: "C", c: 0.99 }, { a: "A", c: 0.94 }, { a: "A", c: 0.99 },
@@ -30,7 +36,13 @@ const AI_ANSWERS = {
     { a: "C", c: 0.8 },  { a: "E", c: 0.85 }, { a: "BCD", c: 0.3 }, { a: "E", c: 0.6 },
   ],
   bot_mistral: Array(QUESTIONS.length).fill(null),
-  bot_gemini:  Array(QUESTIONS.length).fill(null),
+  bot_gemini: [
+    { a: "C", c: 0.95 }, { a: "C", c: 0.95 }, { a: "B", c: 0.85 }, { a: "C", c: 0.9 },
+    { a: "ACF", c: 0.7 }, { a: "A", c: 0.8 }, { a: "C", c: 0.75 }, { a: "B", c: 0.8 },
+    { a: "ABC", c: 0.75 }, { a: "C", c: 0.8 }, { a: "B", c: 0.85 }, { a: "C", c: 0.8 },
+    { a: "B", c: 0.85 }, { a: "ABD", c: 0.7 }, { a: "A", c: 0.85 }, { a: "ABCD", c: 0.75 },
+    { a: "C", c: 0.8 }, { a: "E", c: 0.8 }, { a: "ACD", c: 0.75 }, { a: "C", c: 0.8 },
+  ],
   bot_qwen:    Array(QUESTIONS.length).fill(null),
 };
 
