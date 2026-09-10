@@ -43,8 +43,6 @@
   .bigdisc .demoji { font-size:3.8rem; line-height:1.1; }
   .bigdisc h1 { font-size:1.35rem; margin:0; color:#fff; }
   .bigdisc .dim { color:rgba(255,255,255,.78); font-size:.86rem; line-height:1.35; }
-  .dealpulse { animation:dealpulse 1.5s ease-in-out infinite; }
-  @keyframes dealpulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
   .bar { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; font-weight:700; position:sticky; top:0; z-index:4;
     margin:-14px -14px 12px; padding:calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
     background:linear-gradient(135deg, rgba(0,0,255,.07) 0%, rgba(130,0,222,.07) 55%, rgba(255,100,50,.09) 100%), #fff;
@@ -314,7 +312,7 @@
       </svg></template>
 <div id="app"><div class="dealwrap"><div class="bigdisc" id="bootmark"></div></div></div>
 <script>document.getElementById("bootmark").innerHTML = document.getElementById("loadermark").innerHTML;</script>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b180-dealmark", "./js/questions.js": "./js/questions.js?v=b180-dealmark", "./js/characters.js": "./js/characters.js?v=b180-dealmark", "./js/engine.js": "./js/engine.js?v=b180-dealmark", "./js/fb.js": "./js/fb.js?v=b180-dealmark", "./js/bots.js": "./js/bots.js?v=b180-dealmark", "./js/finale.js": "./js/finale.js?v=b180-dealmark", "./js/views/player.js": "./js/views/player.js?v=b180-dealmark", "./js/views/screen.js": "./js/views/screen.js?v=b180-dealmark", "./js/views/host.js": "./js/views/host.js?v=b180-dealmark", "./js/views/swarm.js": "./js/views/swarm.js?v=b180-dealmark", "./js/views/data.js": "./js/views/data.js?v=b180-dealmark" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b181-deadcss", "./js/questions.js": "./js/questions.js?v=b181-deadcss", "./js/characters.js": "./js/characters.js?v=b181-deadcss", "./js/engine.js": "./js/engine.js?v=b181-deadcss", "./js/fb.js": "./js/fb.js?v=b181-deadcss", "./js/bots.js": "./js/bots.js?v=b181-deadcss", "./js/finale.js": "./js/finale.js?v=b181-deadcss", "./js/views/player.js": "./js/views/player.js?v=b181-deadcss", "./js/views/screen.js": "./js/views/screen.js?v=b181-deadcss", "./js/views/host.js": "./js/views/host.js?v=b181-deadcss", "./js/views/swarm.js": "./js/views/swarm.js?v=b181-deadcss", "./js/views/data.js": "./js/views/data.js?v=b181-deadcss" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
