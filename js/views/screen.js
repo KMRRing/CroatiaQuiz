@@ -371,7 +371,7 @@ export async function mount(root) {
       4: (() => {
         const ts = Object.keys(BOTS), c = ts.length;
         return `<h1 class="tuttitle">The AI competitors</h1>
-        <div class="tutai">${ts.map((t, i) => `<div class="tutaitile tutpop" style="animation-delay:${i * 120 + 100}ms">${iconHtml(t)}<span>${BOTS[t].name}</span></div>`).join("")}</div>
+        <div class="tutai">${ts.map((t, i) => `<div class="tutaitile tutpop" style="animation-delay:${i * 120 + 100}ms">${iconHtml(t)}<span>${BOTS[t].name}</span>${BOTS[t].version ? `<span class="tutaiver">${BOTS[t].version}</span>` : ""}</div>`).join("")}</div>
         <p class="tutcap tutpop" style="animation-delay:${c * 120 + 200}ms">${(NUMW[c] || c).replace(/^./, (m) => m.toUpperCase())} AI models are playing alongside you, on the same balance and the same $10 minimum. Each was given all of the questions in advance and worked out its own method for sizing its bets, using only the information available to you.</p>`;
       })(),
     };

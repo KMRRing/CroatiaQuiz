@@ -65,13 +65,13 @@ const AI_ANSWERS = {
 };
 
 const AI_META = [
-  ["bot_grok", "Grok", "\u{1F916}", "assets/bots/grok.png"],
+  ["bot_grok", "Grok", "\u{1F916}", "assets/bots/grok.png", "Grok 4.5"],
   ["bot_chatgpt", "ChatGPT", "\u{1F7E2}", "assets/bots/chatgpt.png"],
-  ["bot_deepseek", "DeepSeek", "\u{1F433}", "assets/bots/deepseek.png"],
-  ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png"],
-  ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png"],
-  ["bot_gemini", "Gemini", "\u{264A}", "assets/bots/gemini.png"],
-  ["bot_qwen", "Qwen", "\u{1F537}", "assets/bots/qwen.png"],
+  ["bot_deepseek", "DeepSeek", "\u{1F433}", "assets/bots/deepseek.png", "DeepSeek-V3"],
+  ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png", "Fable 5.1 Max"],
+  ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png", "Medium 3.5"],
+  ["bot_gemini", "Gemini", "\u{264A}", "assets/bots/gemini.png", "3.6 Flash Extended"],
+  ["bot_qwen", "Qwen", "\u{1F537}", "assets/bots/qwen.png", "Qwen3.7 Deep-Research-Mini"],
 ];
 
 // stake helpers -----------------------------------------------------
@@ -83,8 +83,8 @@ const ANSWERS = Object.fromEntries(Object.entries(AI_ANSWERS)
   .map(([t, arr]) => [t, arr.map((e) => (e ? { a: toIdx(e.a), c: e.c } : null))]));
 
 export function botRoster() {
-  return AI_META.map(([token, name, emoji, img]) => ({
-    token, name, emoji, img, kind: "ai",
+  return AI_META.map(([token, name, emoji, img, version]) => ({
+    token, name, emoji, img, version, kind: "ai",
     decide(q, qi, wealth, ctx) {
       const e = ANSWERS[token][qi];
       if (!e) return { answer: null, stake: null, conf: null };
