@@ -302,7 +302,7 @@ export async function mount(root) {
   const POT_ROWS = [
     [1, "<strong>Every player pays in.</strong> Each stake goes into a single pot, correct or not, together with $100 from the house. Betting then closes."],
     [2, "<strong>The answer is revealed.</strong> Here Fox and Octopus are correct; Parrot and Bat are not."],
-    [3, "<strong>The pot is divided.</strong> Each correct player takes the share of the pot that matches their share of the winning stakes, and keeps that payout less the stake paid in."],
+    [3, "<strong>The pot is divided.</strong> Each correct player takes the share of the pot that matches their share of the winning stakes."],
     [4, "<strong>On screen during the game.</strong> Players who were wrong appear on the left with what they paid in; players who were right appear on the right with their net gain."],
   ];
 
