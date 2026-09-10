@@ -22,7 +22,7 @@ export const QUESTIONS = [
     options: ["True", "False"], correct: "1" },
   { id: 7, tag: "Ireland / RTFO", type: "single", roomP: 0.30,
     text: "POME-based HVO supplied into Ireland after 1 July 2025 earns:",
-    options: ["1 Green Certificate per MJ", "2 Green Certificates per MJ plus an additional Orange Certificate", "2 Orange Certificates per MJ", "2 Green Certificates per MJ, and no additional certificate"], correct: "3" },
+    options: ["3 Green Certificates per MJ", "3 Orange Certificates per MJ", "2 Orange Certificates per MJ", "2 Green Certificates per MJ"], correct: "3" },
   { id: 8, tag: "EU ETS2 / BEHG", type: "single", roomP: 0.50,
     text: "The start of EU ETS2 was pushed from 2027 to 2028, and Germany extended the BEHG price corridor of \u20ac55-65/t to cover 2027.",
     options: ["True", "False"], correct: "0" },
