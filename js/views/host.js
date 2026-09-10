@@ -57,14 +57,14 @@ export async function mount(root) {
     const updates = { state: { phase: "lobby", round: -1, rollover: 0, closesAt: 0 } };
     for (const b of ROSTER) {
       updates["players/" + b.token] = { uid: user.uid, bot: true, name: b.name, emoji: b.emoji, joinedAt: serverTimestamp() };
-      updates["wealth/" + b.token] = 0;
+      updates["wealth/" + b.token] = RULES.start;
     }
     if (TEST_MODE) {
       const idx = [...Array(CHARACTERS.length).keys()];
       for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
       for (let i = 0; i < 20; i++) {
         updates["players/tb_" + i] = { uid: user.uid, bot: true, test: true, ci: idx[i % idx.length], joinedAt: serverTimestamp() };
-        updates["wealth/tb_" + i] = 0;
+        updates["wealth/tb_" + i] = RULES.start;
       }
     }
     await update(gref(), updates);

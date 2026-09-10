@@ -287,23 +287,23 @@ export async function mount(root) {
     const slides = {
       1: `<h1 class="tuttitle">How it works</h1>
         <div class="optrows">
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.15s">\u{1F4FA} A question appears up here. The host reads it out.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.55s">\u{1F4F1} Pick your answer on your phone. Multi-select rounds say so.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.95s">\u{1F4B0} Set your stake before the clock runs out. $10 minimum, all-in allowed.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.15s">A question appears on this screen and is read aloud by the host.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.55s">Select your answer on your phone. Questions with several correct answers are marked accordingly.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.95s">Choose your stake before the timer expires. The minimum is $10; staking your full balance is allowed.</div>
         </div>
-        <p class="tutcap tutpop" style="animation-delay:1.4s">Everyone is dealt +$10 before every question. Not betting doesn\u2019t save you: the table takes the $10 floor anyway.</p>`,
-      2: `<h1 class="tuttitle">One pot. Winners split it.</h1>
+        <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $5 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
+      2: `<h1 class="tuttitle">How the pot is split</h1>
         <div class="tutpot">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">All stakes plus $20 from the house go into one pot. Right answers split the whole pot in proportion to their stake. Here \u00d72.40: Fox staked $40 and nets +$56, Octopus staked $10 and nets +$14. Wrong answers pay in.</p>`,
-      3: `<h1 class="tuttitle">Nobody right? It rolls.</h1>
+        <p class="tutcap">All stakes, together with a $20 contribution from the house, form a single pot. Players who answer correctly divide the entire pot in proportion to their stakes. In this example the multiple is \u00d72.40: Fox staked $40 and receives +$56; Octopus staked $10 and receives +$14. Incorrect answers forfeit their stakes.</p>`,
+      3: `<h1 class="tuttitle">If nobody is right</h1>
         <div class="tutpot">${potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">No winners means nobody is paid. The whole pot carries into the next question and stacks on top of that round\u2019s stakes.</p>`,
-      4: `<h1 class="tuttitle">Bet like you mean it</h1>
-        <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AIs are at the table. Beat them.</span></div>
+        <p class="tutcap">If no one answers correctly, no payouts are made. The entire pot carries over and is added to the next question\u2019s pot.</p>`,
+      4: `<h1 class="tuttitle">Strategy</h1>
+        <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AI models are competing alongside you.</span></div>
         <div class="optrows">
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.2s">Your stake is your confidence. Sure \u2192 go big. Guessing \u2192 $10.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.6s">You can\u2019t bust out: the $10 stipend keeps everyone in to the end.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The finale crowns the richest \u2014 and exposes who bet well and who just got lucky.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.2s">Your stake should reflect your confidence: raise it when you are certain, keep to the minimum when guessing.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.6s">No one is eliminated: the $10 allowance before each question keeps every player in the game.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The finale ranks final balances and shows who sized their bets most effectively.</div>
         </div>`,
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;

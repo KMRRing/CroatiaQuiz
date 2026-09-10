@@ -40,7 +40,7 @@ export async function mount(root) {
     render();
   });
   onValue(gref("wealth", token), (s) => {
-    const w = s.val() || 0;
+    const w = s.val() != null ? s.val() : RULES.start;
     const wasLocked = S.wealth <= RULES.minStake, isLocked = w <= RULES.minStake;
     S.wealth = w;
     if (S.state && S.state.phase === "question" && wasLocked !== isLocked) render();
