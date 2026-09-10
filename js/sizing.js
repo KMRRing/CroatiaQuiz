@@ -94,9 +94,17 @@ export function geminiStake(input) {
   return clamp(Math.floor(B * c * (0.8 + 0.2 * (remaining / 20))), B);
 }
 
+// Mistral: confidence times stack, ramping UP as the game runs on, so the last
+// rounds are effectively all-in at any decent confidence.
+export function mistralStake(input) {
+  const { c, balance: B, round = 1 } = input;
+  return clamp(B * c * (0.8 + 0.02 * (round - 1)), B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
   bot_deepseek: deepseekStake,
   bot_grok: grokStake,
   bot_gemini: geminiStake,
+  bot_mistral: mistralStake,
 };
