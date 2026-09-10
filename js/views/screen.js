@@ -295,7 +295,6 @@ export async function mount(root) {
   const POT_CAPS = {
     1: "The four stakes total $100. The house adds $100, so the pot for this question is $200.",
     2: "Betting has already closed, so nothing about the pot changes at this point.",
-    4: "This is the picture that appears on this screen after every question.",
   };
 
   const POT_ROWS = [
