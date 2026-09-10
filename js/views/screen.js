@@ -108,7 +108,7 @@ export async function mount(root) {
       g += `<path class="arrow" pathLength="100" style="animation-delay:${(i * 70)}ms" d="M ${ax.toFixed(0)} ${sy.toFixed(0)} C ${cx * 0.5} ${sy.toFixed(0)}, ${c2x.toFixed(0)} ${c2y.toFixed(0)}, ${ex.toFixed(0)} ${ey.toFixed(0)}" stroke-width="${wOf(v)}"/>`;
       if (row.kind === "one") {
         g += svgIcon(row.e.t, ix, sy, compact ? 32 : 42, i * 70);
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 16 : 22)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.e.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (compact ? 23 : 30)).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.e.v)}</text>`;
       } else {
         const mem = row.grp.members;
         if (mem.length === 1) {
@@ -127,7 +127,7 @@ export async function mount(root) {
             g += svgIcon(m, ix + dx, sy + dy, compact ? 22 : 28, i * 70 + j * 40);
           });
         }
-        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (mem.length === 1 ? (compact ? 16 : 22) : (compact ? 46 : 58))).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.grp.v)}</text>`;
+        g += `<text class="lbl" style="animation-delay:${(i * 70)}ms" x="${(ix - (mem.length === 1 ? (compact ? 23 : 30) : (compact ? 53 : 66))).toFixed(0)}" y="${(sy + (compact ? 5 : 7)).toFixed(0)}" text-anchor="end" font-size="${fs}" font-weight="700" fill="#0A0ABA">-${fmt(row.grp.v)}</text>`;
       }
     });
     const outDelay = nIn * 60 + 700;
