@@ -177,6 +177,10 @@
   .tutbots { display:flex; gap:1vw; margin:.6vh 0 1.6vh; align-items:center; }
   .tutbots .boticon { width:clamp(30px,5vh,46px); height:clamp(30px,5vh,46px); }
   .tutbots .lbicon { font-size:clamp(24px,4.2vh,38px); }
+  .tutai { display:flex; flex-wrap:wrap; justify-content:center; gap:clamp(10px,2.4vw,34px); margin:3vh 0 1vh; }
+  .tutai .tutaitile { display:flex; flex-direction:column; align-items:center; gap:.9vh; color:#fff; font-weight:700; font-size:clamp(.7rem,2vh,1.15rem); }
+  .tutai .boticon { width:clamp(40px,9vh,84px); height:clamp(40px,9vh,84px); border-radius:16px; background:#fff; padding:6px; box-sizing:border-box; }
+  .tutai .lbicon { font-size:clamp(34px,8vh,74px); line-height:1; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
   .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; bottom:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
@@ -307,7 +311,7 @@
         <path d="M 39.38 134.24 A 72 72 0 0 1 117.36 95.25" fill="none" stroke="#fff" stroke-width="2"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b160-tut5", "./js/questions.js": "./js/questions.js?v=b160-tut5", "./js/characters.js": "./js/characters.js?v=b160-tut5", "./js/engine.js": "./js/engine.js?v=b160-tut5", "./js/fb.js": "./js/fb.js?v=b160-tut5", "./js/bots.js": "./js/bots.js?v=b160-tut5", "./js/finale.js": "./js/finale.js?v=b160-tut5", "./js/views/player.js": "./js/views/player.js?v=b160-tut5", "./js/views/screen.js": "./js/views/screen.js?v=b160-tut5", "./js/views/host.js": "./js/views/host.js?v=b160-tut5", "./js/views/swarm.js": "./js/views/swarm.js?v=b160-tut5", "./js/views/data.js": "./js/views/data.js?v=b160-tut5" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b161-aipage", "./js/questions.js": "./js/questions.js?v=b161-aipage", "./js/characters.js": "./js/characters.js?v=b161-aipage", "./js/engine.js": "./js/engine.js?v=b161-aipage", "./js/fb.js": "./js/fb.js?v=b161-aipage", "./js/bots.js": "./js/bots.js?v=b161-aipage", "./js/finale.js": "./js/finale.js?v=b161-aipage", "./js/views/player.js": "./js/views/player.js?v=b161-aipage", "./js/views/screen.js": "./js/views/screen.js?v=b161-aipage", "./js/views/host.js": "./js/views/host.js?v=b161-aipage", "./js/views/swarm.js": "./js/views/swarm.js?v=b161-aipage", "./js/views/data.js": "./js/views/data.js?v=b161-aipage" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";

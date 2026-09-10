@@ -350,7 +350,8 @@ export async function mount(root) {
     if (cap) cap.textContent = POT_CAPS[k] || "";
   }
 
-  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2 };
+  const NUMW = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+  const TUT_SLIDE = { 1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 4 };
 
   function renderTut(step) {
     clearTut();
@@ -365,12 +366,16 @@ export async function mount(root) {
           <div class="optrow plain tutstep tutpop" style="animation-delay:.4s">Questions appear on this screen and on your phone. Once the question has been read out, the timer starts.</div>
           <div class="optrow plain tutstep tutpop" style="animation-delay:.7s">Select your answer and your stake on your phone.</div>
           <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The minimum stake is $10. If no answer is selected, that minimum is entered automatically.</div>
-        </div>
-        <div class="tutbots tutpop" style="animation-delay:1.3s">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}</div>
-        <p class="tutcap tutpop" style="animation-delay:1.3s">Six AI models are competing alongside you. Each was given all of the questions in advance and worked out its own method for sizing bets, using the same information available to you.</p>`,
+        </div>`,
       2: `<h1 class="tuttitle">How the pot is split</h1>` + POT_ROWS.map(([p, html]) =>
           `<div class="optrow plain tutstep tutphase${p <= k ? " on" : ""}${p === k ? " now" : ""}" data-ph="${p}"><span class="tutnum">${p}</span><span>${html}</span></div>`
           + (p === k ? potBox() : "")).join(""),
+      4: (() => {
+        const ts = Object.keys(BOTS), c = ts.length;
+        return `<h1 class="tuttitle">The AI competitors</h1>
+        <div class="tutai">${ts.map((t, i) => `<div class="tutaitile tutpop" style="animation-delay:${i * 120 + 100}ms">${iconHtml(t)}<span>${BOTS[t].name}</span></div>`).join("")}</div>
+        <p class="tutcap tutpop" style="animation-delay:${c * 120 + 200}ms">${(NUMW[c] || c).replace(/^./, (m) => m.toUpperCase())} AI models are playing alongside you, on the same balance and the same $10 minimum. Each was given all of the questions in advance and worked out its own method for sizing its bets, using only the information available to you.</p>`;
+      })(),
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;
     if (n === 2) paintPot(k);
