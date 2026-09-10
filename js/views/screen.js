@@ -295,7 +295,6 @@ export async function mount(root) {
   const POT_CAPS = {
     1: "The four stakes total $100. The house adds $100, so the pot for this question is $200.",
     2: "Betting has already closed, so nothing about the pot changes at this point.",
-    3: "The share of the pot a correct player receives is the share of the winning stakes they put up. The net gain is that payout less the stake already paid in.",
     4: "This is the picture that appears on this screen after every question.",
   };
 
@@ -347,7 +346,7 @@ export async function mount(root) {
     else if (k === 3) { box.innerHTML = divisionHtml(); chip(""); }
     else { draw(tutPayout()); chip(""); }
     const cap = root.querySelector("#tutcap2");
-    if (cap) cap.textContent = POT_CAPS[k] || "";
+    if (cap) { const txt = POT_CAPS[k] || ""; cap.textContent = txt; cap.style.display = txt ? "" : "none"; }
   }
 
   const NUMW = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
