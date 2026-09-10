@@ -153,7 +153,7 @@ export async function mount(root) {
       <g class="potring" style="transform-origin:${cx}px ${cy}px">
         <circle cx="${cx}" cy="${cy}" r="${R}" fill="#fff" stroke="url(#tgw)" stroke-width="${compact ? 3.5 : 5}"/>
         <text x="${cx}" y="${cy - f2 * 0.35}" text-anchor="middle" font-size="${f1}" font-weight="700" fill="#0000FF" font-family="Century Gothic,Questrial,Poppins,Arial">${fmt(rv.pot != null ? rv.pot : totalIn)}</text>
-        <text x="${cx}" y="${cy + f2 * 1.15}" text-anchor="middle" font-size="${f2}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.rolled ? "\u21bb rolls over" : "\u00d7" + rv.mult.toFixed(2)}</text>
+        <text x="${cx}" y="${cy + f2 * 1.15}" text-anchor="middle" font-size="${f2}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.subLabel != null ? rv.subLabel : (rv.rolled ? "\u21bb rolls over" : "\u00d7" + rv.mult.toFixed(2))}</text>
       </g>
     </svg>`;
   }
@@ -281,7 +281,30 @@ export async function mount(root) {
     return { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: 56, t_oct: 14, t_par: -30, t_bat: -20 }, pot: 120, mult: 2.4, rolled: false, correct: "0" };
   }
 
+  function clearTut() { (S.tutT || []).forEach(clearTimeout); S.tutT = []; }
+
+  function startPotSeq(n) {
+    const box = root.querySelector("#tutpotbox");
+    if (!box) return;
+    const stakes = { t_fox: 40, t_oct: 10, t_par: 30, t_bat: 20 };
+    const payIn = { stakes, botStakes: {}, aiAnswers: {}, deltas: { t_fox: -40, t_oct: -10, t_par: -30, t_bat: -20 },
+                    pot: 120, mult: 1, rolled: false, correct: "0", subLabel: "" };
+    const done = tutPotRv(n === 3);
+    const draw = (rv) => { box.innerHTML = potScene(rv, { options: [], correct: "0" }, 780, 470, true, 9); };
+    const chip = (txt) => { const c = root.querySelector("#tutchip"); if (c) { c.textContent = txt || ""; c.style.opacity = txt ? "1" : "0"; } };
+    const lit = (k) => [...root.querySelectorAll(".tutphase")].forEach((el) => el.classList.toggle("on", Number(el.dataset.ph) === k));
+    const cycle = () => {
+      S.tutT = [];
+      draw(payIn); lit(1); chip("");
+      S.tutT.push(setTimeout(() => { lit(2); chip(n === 3 ? "Correct answer: B \u00b7 nobody selected it" : "Correct answer: B \u00b7 Fox and Octopus"); }, 3600));
+      S.tutT.push(setTimeout(() => { lit(3); chip(""); draw(done); }, 6400));
+      S.tutT.push(setTimeout(cycle, 13500));
+    };
+    cycle();
+  }
+
   function renderTut(n) {
+    clearTut();
     if (S.tutShown === n && root.querySelector(".tutstage")) return;
     S.tutShown = n;
     const slides = {
@@ -293,15 +316,17 @@ export async function mount(root) {
         </div>
         <p class="tutcap tutpop" style="animation-delay:1.4s">Every player starts with $10 and receives a further $10 before each question. If no bet is placed, the $10 minimum stake is entered automatically.</p>`,
       2: `<h1 class="tuttitle">How the pot is split</h1>
-        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.1s"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> Each stake is taken from the player who placed it, correct or not, and goes into a single pot along with $20 from the house. Betting then closes.</span></div>
-        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.5s"><span class="tutnum">2</span><span><strong>The answer is revealed.</strong> Everyone who answered correctly shares the whole pot, divided in proportion to the amount each of them staked.</span></div>
-        <div class="tutpot small">${potScene(tutPotRv(false), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">Above: the four stakes total $100 and the house adds $20, making a $120 pot. Fox and Octopus answered correctly and staked $50 between them, so the pot pays \u00d72.40. Fox turns $40 into $96, a net gain of $56; Octopus turns $10 into $24, a net gain of $14. Parrot and Bat do not recover their stakes.</p>`,
+        <div class="optrow plain tutstep tutphase" data-ph="1"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> Each stake goes into a single pot, correct or not, together with $20 from the house. Betting then closes.</span></div>
+        <div class="optrow plain tutstep tutphase" data-ph="2"><span class="tutnum">2</span><span><strong>The answer is revealed.</strong> Here Fox and Octopus are correct; Parrot and Bat are not.</span></div>
+        <div class="optrow plain tutstep tutphase" data-ph="3"><span class="tutnum">3</span><span><strong>The pot is paid out.</strong> The correct players share the entire pot, in proportion to what each of them staked.</span></div>
+        <div class="tutpot small"><div id="tutchip" class="tutchip"></div><div id="tutpotbox" class="tutpotbox"></div></div>
+        <p class="tutcap">Stakes of $100 plus $20 from the house make a $120 pot. Fox and Octopus staked $50 between them, so the pot pays \u00d72.40: Fox turns $40 into $96 and Octopus $10 into $24, net gains of $56 and $14.</p>`,
       3: `<h1 class="tuttitle">If nobody is right</h1>
-        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.1s"><span class="tutnum">1</span><span><strong>Every player still pays in.</strong> The stakes are collected exactly as before and betting closes.</span></div>
-        <div class="optrow plain tutstep tutphase tutpop" style="animation-delay:.5s"><span class="tutnum">2</span><span><strong>No one answered correctly.</strong> There is nobody to share the pot, so no payouts are made.</span></div>
-        <div class="tutpot small">${potScene(tutPotRv(true), { options: [], correct: "0" }, 780, 470, true, 9)}</div>
-        <p class="tutcap">The full pot carries over and is added to the next question, on top of that round\u2019s stakes. The following pot is therefore larger for everyone.</p>`,
+        <div class="optrow plain tutstep tutphase" data-ph="1"><span class="tutnum">1</span><span><strong>Every player pays in.</strong> The stakes are collected exactly as before and betting closes.</span></div>
+        <div class="optrow plain tutstep tutphase" data-ph="2"><span class="tutnum">2</span><span><strong>The answer is revealed.</strong> On this question nobody selected it.</span></div>
+        <div class="optrow plain tutstep tutphase" data-ph="3"><span class="tutnum">3</span><span><strong>Nothing is paid out.</strong> The full pot carries into the next question, on top of that round\u2019s stakes.</span></div>
+        <div class="tutpot small"><div id="tutchip" class="tutchip"></div><div id="tutpotbox" class="tutpotbox"></div></div>
+        <p class="tutcap">The next pot is therefore larger for everyone, and a question that rolls over more than once can become very large indeed.</p>`,
       4: `<h1 class="tuttitle">Strategy</h1>
         <div class="tutbots">${Object.keys(BOTS).map((t) => iconHtml(t)).join("")}<span class="tutcap" style="margin:0 0 0 .8vw">Six AI models are competing alongside you.</span></div>
         <div class="optrows">
@@ -311,6 +336,7 @@ export async function mount(root) {
         </div>`,
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;
+    if (n === 2 || n === 3) startPotSeq(n);
   }
 
   function fitQ() {
@@ -464,6 +490,7 @@ export async function mount(root) {
     clearInterval(S.timer);
     if (!S.state || ph === "lobby") {
       if (S.state && S.state.tut > 0) { renderTut(S.state.tut); return; }
+      clearTut();
       S.tutShown = 0;
       const humans = Object.entries(S.players).filter(([, p]) => !p.bot);
       root.innerHTML = `

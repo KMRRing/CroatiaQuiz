@@ -150,9 +150,14 @@
   .tutcard .tutcap { color:rgba(255,255,255,.92); font-size:clamp(.7rem,2.3vh,1.4rem); line-height:1.45; margin:1.6vh 0 0; }
   .tutstep { font-size:clamp(.7rem,2.5vh,1.5rem); padding:clamp(5px,1.7vh,17px) 20px; }
   .tutpop { opacity:0; animation:popin .5s cubic-bezier(.2,.8,.3,1.2) forwards; }
-  .tutpot { height:50vh; position:relative; }
-  .tutpot.small { height:34vh; }
-  .tutphase { display:flex; gap:clamp(8px,1.4vw,16px); align-items:flex-start; }
+  .tutpot { height:50vh; position:relative; background:#fff; border-radius:18px; padding:1.2vh 1vw; box-sizing:border-box; }
+  .tutpot.small { height:32vh; }
+  .tutpotbox { width:100%; height:100%; }
+  .tutchip { position:absolute; top:.9vh; left:50%; transform:translateX(-50%); z-index:2;
+    background:var(--blue); color:#fff; padding:.5vh 1.1vw; border-radius:999px; white-space:nowrap;
+    font-weight:700; font-size:clamp(.6rem,1.7vh,.95rem); opacity:0; transition:opacity .35s ease; }
+  .tutphase { display:flex; gap:clamp(8px,1.4vw,16px); align-items:flex-start; opacity:.45; transition:opacity .4s ease; }
+  .tutphase.on { opacity:1; }
   .tutphase strong { color:var(--blue); }
   .tutnum { flex:0 0 auto; width:clamp(20px,3.4vh,30px); height:clamp(20px,3.4vh,30px); border-radius:50%;
     background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center;
@@ -290,7 +295,7 @@
         <path d="M 39.38 134.24 A 72 72 0 0 1 117.36 95.25" fill="none" stroke="#fff" stroke-width="2"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b155-twophase", "./js/questions.js": "./js/questions.js?v=b155-twophase", "./js/characters.js": "./js/characters.js?v=b155-twophase", "./js/engine.js": "./js/engine.js?v=b155-twophase", "./js/fb.js": "./js/fb.js?v=b155-twophase", "./js/bots.js": "./js/bots.js?v=b155-twophase", "./js/finale.js": "./js/finale.js?v=b155-twophase", "./js/views/player.js": "./js/views/player.js?v=b155-twophase", "./js/views/screen.js": "./js/views/screen.js?v=b155-twophase", "./js/views/host.js": "./js/views/host.js?v=b155-twophase", "./js/views/swarm.js": "./js/views/swarm.js?v=b155-twophase", "./js/views/data.js": "./js/views/data.js?v=b155-twophase" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b156-potphases", "./js/questions.js": "./js/questions.js?v=b156-potphases", "./js/characters.js": "./js/characters.js?v=b156-potphases", "./js/engine.js": "./js/engine.js?v=b156-potphases", "./js/fb.js": "./js/fb.js?v=b156-potphases", "./js/bots.js": "./js/bots.js?v=b156-potphases", "./js/finale.js": "./js/finale.js?v=b156-potphases", "./js/views/player.js": "./js/views/player.js?v=b156-potphases", "./js/views/screen.js": "./js/views/screen.js?v=b156-potphases", "./js/views/host.js": "./js/views/host.js?v=b156-potphases", "./js/views/swarm.js": "./js/views/swarm.js?v=b156-potphases", "./js/views/data.js": "./js/views/data.js?v=b156-potphases" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
