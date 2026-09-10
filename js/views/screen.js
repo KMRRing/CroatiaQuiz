@@ -85,7 +85,7 @@ export async function mount(root) {
     const yBot = H - (rv.yBot != null ? rv.yBot : (compact ? 16 : 50));
     const spread = (n, i) => yTop + (n <= 1 ? (yBot - yTop) / 2 : (i / (n - 1)) * (yBot - yTop));
     const fs = rv.fs != null ? rv.fs : (compact ? 13 : 19), hf = compact ? 21 : 40;
-    const IS = rv.icon != null ? rv.icon : (IS);
+    const IS = rv.icon != null ? rv.icon : (compact ? 32 : 42);
     const LOFF = rv.icon != null ? Math.round(IS * 0.75) : (compact ? 23 : 30);
     const ROFF = rv.icon != null ? Math.round(IS * 0.62) : (compact ? 16 : 22);
     const inLabel = (t, v) => (rv.labels && rv.labels[t]) || ("-" + fmt(v));
