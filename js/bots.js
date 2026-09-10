@@ -66,7 +66,7 @@ const AI_ANSWERS = {
 
 const AI_META = [
   ["bot_grok", "Grok", "\u{1F916}", "assets/bots/grok.png", "Grok 4.5"],
-  ["bot_chatgpt", "ChatGPT", "\u{1F7E2}", "assets/bots/chatgpt.png"],
+  ["bot_chatgpt", "ChatGPT", "\u{1F7E2}", "assets/bots/chatgpt.png", "GPT-5.6 Luna"],
   ["bot_deepseek", "DeepSeek", "\u{1F433}", "assets/bots/deepseek.png", "DeepSeek-V3"],
   ["bot_claude", "Claude", "\u{1F7E0}", "assets/bots/claude.png", "Fable 5.1 Max"],
   ["bot_mistral", "Mistral", "\u{1F32C}\uFE0F", "assets/bots/mistral.png", "Medium 3.5"],
