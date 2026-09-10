@@ -288,6 +288,8 @@ export async function mount(root) {
     }
   }
   window.addEventListener("resize", () => fitQ());
+  window.addEventListener("load", () => fitQ());
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitQ());
 
   function buildStage(q, phase, rv) {
     root.innerHTML = `

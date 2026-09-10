@@ -125,9 +125,9 @@
   @keyframes drawin { to { stroke-dashoffset:0; } }
   @keyframes fadein { to { opacity:1; } }
   @keyframes potpop { 0% { transform:scale(.9); } 65% { transform:scale(1.05); } 100% { transform:scale(1); } }
-  .optrows { margin:14px 0; }
-  .optrow { position:relative; overflow:hidden; border-radius:14px; padding:11px 58px 11px 16px; margin:8px 0; font-size:1.15rem; border:1px solid var(--line); }
-  .optrows.cols2 { display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+  .optrows { margin:clamp(6px,1.4vh,16px) 0; }
+  .optrow { position:relative; overflow:hidden; border-radius:14px; padding:clamp(4px,1.15vh,12px) 58px clamp(4px,1.15vh,12px) 16px; margin:clamp(3px,.85vh,9px) 0; font-size:clamp(.78rem,2.1vh,1.3rem); border:1px solid var(--line); }
+  .optrows.cols2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(4px,1vh,11px) 12px; }
   .optrows.cols2 .optrow { margin:0; }
   .optrow.plain { background:var(--wash); color:var(--ink); }
   .optrow.right { background:var(--blue); color:#fff; border:2px solid #fff; }
@@ -140,10 +140,10 @@
   @keyframes barfill { to { clip-path:inset(0 calc(100% - var(--w)) 0 0); } }
   .stage { position:fixed; inset:0; }
   .zone-q { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; width:50vw; min-width:660px; max-height:92vh; }
-  .qcard { background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:24px; padding:22px 26px; box-shadow:0 18px 50px rgba(11,16,48,.28); display:flex; flex-direction:column; max-height:100%; }
-  .qcard #optbox { overflow-y:auto; }
+  .qcard { background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); border-radius:24px; padding:clamp(10px,2.2vh,24px) 26px; box-shadow:0 18px 50px rgba(11,16,48,.28); display:flex; flex-direction:column; max-height:100%; }
+  .qcard #optbox { overflow-y:visible; }
   .qcard .qtext { color:#fff; }
-  .qcard .qmeta { color:rgba(255,255,255,.88); font-size:.95rem; }
+  .qcard .qmeta { color:rgba(255,255,255,.88); font-size:clamp(.7rem,1.5vh,1rem); }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
   .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; bottom:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
@@ -177,7 +177,7 @@
   img.boticon { height:1.8rem; width:1.8rem; object-fit:contain; border-radius:6px; vertical-align:-0.42em; }
   .finallb img.boticon { height:1.9rem; width:1.9rem; vertical-align:-0.32em; }
   .zone-q .optrow { font-size:1.25rem; }
-  .zone-q .qtext { font-size:2rem; }
+  .zone-q .qtext { font-size:clamp(1.05rem,3.3vh,2.2rem); }
   .qsmall { font-size:1.6rem; margin:.2em 0; }
   .reveal2 { padding-top:20px; }
   .revbottom { display:grid; grid-template-columns:1.15fr 1fr; gap:24px; align-items:start; margin-top:10px; }
@@ -279,7 +279,7 @@
         <path id="f8" d="M 63.54 85.09 L 74.62 62.56 A 33 33 0 1 0 66.01 73.45 L 134.63 16.80 A 21 21 0 1 1 139.81 52.34 L 57.88 17.62 A 33 33 0 1 0 38.88 80.43 L 117.36 95.25 A 72 72 0 1 1 39.38 134.24 Z" fill="none" stroke="none"/>
         <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
       </svg></div></div></div>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b145-potlabels", "./js/questions.js": "./js/questions.js?v=b145-potlabels", "./js/characters.js": "./js/characters.js?v=b145-potlabels", "./js/engine.js": "./js/engine.js?v=b145-potlabels", "./js/fb.js": "./js/fb.js?v=b145-potlabels", "./js/bots.js": "./js/bots.js?v=b145-potlabels", "./js/finale.js": "./js/finale.js?v=b145-potlabels", "./js/views/player.js": "./js/views/player.js?v=b145-potlabels", "./js/views/screen.js": "./js/views/screen.js?v=b145-potlabels", "./js/views/host.js": "./js/views/host.js?v=b145-potlabels", "./js/views/swarm.js": "./js/views/swarm.js?v=b145-potlabels", "./js/views/data.js": "./js/views/data.js?v=b145-potlabels" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b146-vhscale", "./js/questions.js": "./js/questions.js?v=b146-vhscale", "./js/characters.js": "./js/characters.js?v=b146-vhscale", "./js/engine.js": "./js/engine.js?v=b146-vhscale", "./js/fb.js": "./js/fb.js?v=b146-vhscale", "./js/bots.js": "./js/bots.js?v=b146-vhscale", "./js/finale.js": "./js/finale.js?v=b146-vhscale", "./js/views/player.js": "./js/views/player.js?v=b146-vhscale", "./js/views/screen.js": "./js/views/screen.js?v=b146-vhscale", "./js/views/host.js": "./js/views/host.js?v=b146-vhscale", "./js/views/swarm.js": "./js/views/swarm.js?v=b146-vhscale", "./js/views/data.js": "./js/views/data.js?v=b146-vhscale" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, SHOW_REFRESH } from "./js/config.js";
