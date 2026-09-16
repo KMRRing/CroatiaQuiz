@@ -161,7 +161,7 @@ export async function mount(root) {
       const foot = `<p class="dim" style="font-size:.72rem;opacity:.6;margin-top:14px">game ${GAME_ID} \u00b7 ${BUILD}</p>`;
       root.innerHTML = S.joinErr
         ? `<div class="dealwrap"><div class="bigdisc"><div class="demoji">!</div><p class="dim">Couldn\u2019t join: ${S.joinErr}</p></div><button id="rejoin" style="margin-top:16px">Try again</button>${foot}</div>`
-        : `<div class="dealwrap"><div class="bigdisc">${loaderMark()}</div>${foot}</div>`;
+        : `<div class="centerstage"><div class="bigdisc">${loaderMark()}</div></div>`;
       const rj = root.querySelector("#rejoin");
       if (rj) rj.onclick = () => { S.joinErr = null; S.joining = true; render(); join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); };
       return;
@@ -173,7 +173,7 @@ export async function mount(root) {
       root.innerHTML = `
         ${barHtml([emoji, name], false)}
         <div class="dealwrap" style="min-height:calc(100svh - 150px)">
-          <div class="bigdisc">
+          <div class="bigdisc grow">
             <div class="demoji">${emoji}</div>
             <h1>You are ${"AEIO".includes(name[0]) /* not U: "a Unicorn" */ ? "an" : "a"} ${name}</h1>
             <p class="dim">Waiting for the host to start. You get ${fmt(RULES.stipend)} every round; minimum stake ${fmt(RULES.minStake)}.</p>

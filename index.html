@@ -36,10 +36,12 @@
   .avatar { font-size:3.4rem; width:110px; height:110px; line-height:104px; margin:.4em auto; border-radius:50%;
             border:3px solid transparent; background:linear-gradient(#fff,#fff) padding-box, var(--grad) border-box; }
   .dealwrap { min-height:calc(100svh - 60px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-  .bigdisc { width:min(78vw,330px); aspect-ratio:1; border-radius:50%;
+  .centerstage { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  .bigdisc { --d:min(78vw,330px); width:var(--d); height:var(--d); flex:0 0 auto; border-radius:50%;
     background:linear-gradient(135deg,#0000FF 0%,#8200DE 60%,#FF6432 118%); color:#fff;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:13%; box-sizing:border-box; gap:8px; }
+  .bigdisc.grow { height:auto; min-height:var(--d); }
   .bigdisc .demoji { font-size:3.8rem; line-height:1.1; }
   .bigdisc h1 { font-size:1.35rem; margin:0; color:#fff; }
   .bigdisc .dim { color:rgba(255,255,255,.78); font-size:.86rem; line-height:1.35; }
@@ -304,18 +306,17 @@
   </linearGradient></defs>
   <circle cx="50" cy="50" r="49" fill="none" stroke="url(#tgr)" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
 </svg>
-<template id="loadermark"><svg viewBox="0 0 200 250" style="width:min(38vw,160px);height:auto" aria-label="Loading">
-        <path id="f8" d="M 63.54 85.09 L 74.62 62.56 A 33 33 0 1 0 66.01 73.45 L 134.63 16.80 A 21 21 0 1 1 139.81 52.34 L 57.88 17.62 A 33 33 0 1 0 38.88 80.43 L 117.36 95.25 A 72 72 0 1 1 39.38 134.24 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M 139.81 52.34 A 21 21 0 0 1 134.63 16.80" fill="none" stroke="#fff" stroke-width="2"/>
-        <path d="M 39.38 134.24 A 72 72 0 0 1 117.36 95.25" fill="none" stroke="#fff" stroke-width="2"/>
-        <g><circle r="8" fill="#fff" opacity=".35"/><circle r="4.5" fill="#fff"/><animateMotion dur="3.4s" repeatCount="indefinite" calcMode="paced" rotate="none"><mpath href="#f8"/></animateMotion></g>
+<template id="loadermark"><svg viewBox="0 0 200 250" style="width:min(38vw,160px);height:auto;display:block" aria-label="Loading">
+        <defs><linearGradient id="tailg" gradientUnits="userSpaceOnUse" x1="-28" y1="0" x2="2" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".95"/></linearGradient></defs>
+        <path id="f8" d="M 63.54 85.09 L 74.62 62.56 A 33 33 0 0 0 15.38 33.44 A 33 33 0 0 0 74.62 62.56 A 33 33 0 1 0 66.01 73.45 L 134.63 16.80 A 21 21 0 0 1 161.37 49.20 A 21 21 0 0 1 134.63 16.80 A 21 21 0 1 1 139.81 52.34 L 57.88 17.62 A 33 33 0 0 0 32.12 78.38 A 33 33 0 0 0 57.88 17.62 A 33 33 0 1 0 38.88 80.43 L 117.36 95.25 A 72 72 0 0 1 90.64 236.75 A 72 72 0 0 1 117.36 95.25 A 72 72 0 1 1 39.38 134.24 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+        <g><path d="M 0 -4.6 L -28 0 L 0 4.6 Z" fill="url(#tailg)"/><circle r="4.6" fill="#fff"/><animateMotion dur="6.8s" repeatCount="indefinite" calcMode="paced" rotate="auto"><mpath href="#f8"/></animateMotion></g>
       </svg></template>
-<div id="app"><div class="dealwrap"><div class="bigdisc" id="bootmark"></div></div></div>
+<div id="app"><div class="centerstage"><div class="bigdisc" id="bootmark"></div></div></div>
 <script>document.getElementById("bootmark").innerHTML = document.getElementById("loadermark").innerHTML;</script>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b183-q12fix", "./js/questions.js": "./js/questions.js?v=b183-q12fix", "./js/characters.js": "./js/characters.js?v=b183-q12fix", "./js/engine.js": "./js/engine.js?v=b183-q12fix", "./js/fb.js": "./js/fb.js?v=b183-q12fix", "./js/bots.js": "./js/bots.js?v=b183-q12fix", "./js/finale.js": "./js/finale.js?v=b183-q12fix", "./js/views/player.js": "./js/views/player.js?v=b183-q12fix", "./js/views/screen.js": "./js/views/screen.js?v=b183-q12fix", "./js/views/host.js": "./js/views/host.js?v=b183-q12fix", "./js/views/swarm.js": "./js/views/swarm.js?v=b183-q12fix", "./js/views/data.js": "./js/views/data.js?v=b183-q12fix" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b184-loader-laps", "./js/questions.js": "./js/questions.js?v=b184-loader-laps", "./js/characters.js": "./js/characters.js?v=b184-loader-laps", "./js/engine.js": "./js/engine.js?v=b184-loader-laps", "./js/fb.js": "./js/fb.js?v=b184-loader-laps", "./js/bots.js": "./js/bots.js?v=b184-loader-laps", "./js/sizing.js": "./js/sizing.js?v=b184-loader-laps", "./js/finale.js": "./js/finale.js?v=b184-loader-laps", "./js/views/player.js": "./js/views/player.js?v=b184-loader-laps", "./js/views/screen.js": "./js/views/screen.js?v=b184-loader-laps", "./js/views/host.js": "./js/views/host.js?v=b184-loader-laps", "./js/views/swarm.js": "./js/views/swarm.js?v=b184-loader-laps", "./js/views/data.js": "./js/views/data.js?v=b184-loader-laps" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
-  import { BUILD, SHOW_REFRESH } from "./js/config.js";
+  import { BUILD, TEST_MODE } from "./js/config.js";
   let __lastTouch = 0;
   document.addEventListener("touchend", (e) => {
     const now = Date.now();
@@ -330,11 +331,11 @@
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
-    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
+    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/sizing.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
     const bust = async () => { try { await Promise.all(FILES.map((f) => fetch(f, { cache: "reload" }))); } catch (e) {} };
     const chk = document.createElement("button");
     chk.className = "refresh-btn"; chk.textContent = "running " + BUILD + " \u00b7 live \u2026";
-    document.body.appendChild(chk);
+    if (TEST_MODE) document.body.appendChild(chk);
     let liveBuild = null;
     const doUpdate = async () => {
       chk.textContent = "updating\u2026";
