@@ -509,7 +509,14 @@ export async function mount(root) {
   }
 
   function render() {
-    const ph = S.state ? S.state.phase : "lobby";
+    if (!S.state) {   // no game yet: hold the loader rather than a QR nobody should scan
+      if (!root.querySelector(".centerstage")) {
+        const t = document.getElementById("loadermark");
+        root.innerHTML = `<div class="centerstage"><div class="bigdisc">${t ? t.innerHTML : ""}</div></div>`;
+      }
+      return;
+    }
+    const ph = S.state.phase;
     if ((!S.state || ph === "lobby") && !(S.state && S.state.tut > 0) && root.querySelector(".lobbystage")) {
       const el = root.querySelector(".lobbyicons");
       if (el) {
