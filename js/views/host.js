@@ -313,6 +313,7 @@ export async function mount(root) {
           </div>
           <div class="btnrow">
             <button id="lobby">Open lobby</button>
+            <button id="buildchart">Build chart: ${(S.state && S.state.showBuild) ? "hide" : "show"}</button>
             <button id="tut" ${ph === "lobby" ? "" : "disabled"}>Tutorial: ${((S.state && S.state.tut) || 0) >= 6 ? "end, back to QR" : "show step " + (((S.state && S.state.tut) || 0) + 1) + "/6"}</button>
             <button id="stage" ${ph === "finished" ? "" : "disabled"}>Finale: next screen (now ${(((S.state && S.state.finaleStage) || 0) + 1)}/8)</button>
             <button id="finish" class="${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : "danger"}">Finish \u2192 finale${ph === "reveal" && n + 1 >= N_ROUNDS ? "" : " (early)"}</button>
@@ -341,6 +342,11 @@ export async function mount(root) {
     const q = (id) => root.querySelector(id);
     if (q("#claim")) q("#claim").onclick = claim;
     if (q("#lobby")) q("#lobby").onclick = openLobby;
+    if (q("#buildchart")) q("#buildchart").onclick = async () => {
+      const on = !(S.state && S.state.showBuild);
+      await update(gref(), { "state/showBuild": on });
+      log(on ? "Build chart on the big screen." : "Build chart hidden.");
+    };
     if (q("#tut")) q("#tut").onclick = async () => {
       const cur = (S.state && S.state.tut) || 0;
       const nx = cur >= 6 ? 0 : cur + 1;

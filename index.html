@@ -182,6 +182,12 @@
   .tutai .boticon { width:clamp(40px,9vh,84px); height:clamp(40px,9vh,84px); border-radius:16px; background:#fff; padding:6px; box-sizing:border-box; }
   .tutai .lbicon { font-size:clamp(34px,8vh,74px); line-height:1; }
   .tutai .tutaiver { font-weight:400; opacity:.7; font-size:clamp(.55rem,1.5vh,.9rem); margin-top:-.5vh; }
+  #buildoverlay { position:fixed; inset:0; z-index:40; display:flex; align-items:center; justify-content:center; padding:3vh 4vw; background:rgba(255,255,255,.55); }
+  #buildoverlay .qcard { width:min(80vw,1300px); }
+  #buildoverlay .bhead { color:#fff; font-size:clamp(1.4rem,4.4vh,2.7rem); margin:0 0 .6vh; }
+  #buildoverlay .bsub { color:rgba(255,255,255,.9); font-size:clamp(.9rem,2.3vh,1.4rem); margin:0 0 1.8vh; }
+  #buildoverlay .bpanel { background:#fff; border-radius:18px; padding:1.6vh 1.2vw; }
+  #buildoverlay svg { width:100%; height:auto; display:block; }
   .qcard .optrow.plain { background:#fff; border-color:#fff; }
   .qcard .optrow.wrong { background:#fff; border-color:#fff; }
   .colmid { position:absolute; left:50%; transform:translateX(-50%); top:2.2vh; bottom:2.2vh; width:50vw; min-width:660px; display:flex; flex-direction:column; gap:1.2vh; }
@@ -313,7 +319,7 @@
       </svg></template>
 <div id="app"><div class="centerstage"><div class="bigdisc" id="bootmark"></div></div></div>
 <script>document.getElementById("bootmark").innerHTML = document.getElementById("loadermark").innerHTML;</script>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b185-wallloader", "./js/questions.js": "./js/questions.js?v=b185-wallloader", "./js/characters.js": "./js/characters.js?v=b185-wallloader", "./js/engine.js": "./js/engine.js?v=b185-wallloader", "./js/fb.js": "./js/fb.js?v=b185-wallloader", "./js/bots.js": "./js/bots.js?v=b185-wallloader", "./js/sizing.js": "./js/sizing.js?v=b185-wallloader", "./js/finale.js": "./js/finale.js?v=b185-wallloader", "./js/views/player.js": "./js/views/player.js?v=b185-wallloader", "./js/views/screen.js": "./js/views/screen.js?v=b185-wallloader", "./js/views/host.js": "./js/views/host.js?v=b185-wallloader", "./js/views/swarm.js": "./js/views/swarm.js?v=b185-wallloader", "./js/views/data.js": "./js/views/data.js?v=b185-wallloader" } }</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b186-buildchart", "./js/questions.js": "./js/questions.js?v=b186-buildchart", "./js/characters.js": "./js/characters.js?v=b186-buildchart", "./js/engine.js": "./js/engine.js?v=b186-buildchart", "./js/fb.js": "./js/fb.js?v=b186-buildchart", "./js/bots.js": "./js/bots.js?v=b186-buildchart", "./js/sizing.js": "./js/sizing.js?v=b186-buildchart", "./js/codefreq.js": "./js/codefreq.js?v=b186-buildchart", "./js/finale.js": "./js/finale.js?v=b186-buildchart", "./js/views/player.js": "./js/views/player.js?v=b186-buildchart", "./js/views/screen.js": "./js/views/screen.js?v=b186-buildchart", "./js/views/host.js": "./js/views/host.js?v=b186-buildchart", "./js/views/swarm.js": "./js/views/swarm.js?v=b186-buildchart", "./js/views/data.js": "./js/views/data.js?v=b186-buildchart" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, TEST_MODE } from "./js/config.js";
@@ -331,7 +337,7 @@
   if (!(await initFb())) {
     root.innerHTML = `<div class="card"><h1>Almost there</h1><p>Paste your Firebase config into <code>js/config.js</code> (see the README, step 2) and push. This page will then come alive.</p></div>`;
   } else {
-    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/sizing.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
+    const FILES = ["index.html","version.json","js/config.js","js/questions.js","js/characters.js","js/engine.js","js/fb.js","js/bots.js","js/sizing.js","js/codefreq.js","js/finale.js","js/views/player.js","js/views/screen.js","js/views/host.js","js/views/swarm.js"];
     const bust = async () => { try { await Promise.all(FILES.map((f) => fetch(f, { cache: "reload" }))); } catch (e) {} };
     const chk = document.createElement("button");
     chk.className = "refresh-btn"; chk.textContent = "running " + BUILD + " \u00b7 live \u2026";

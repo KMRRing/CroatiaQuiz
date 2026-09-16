@@ -5,6 +5,8 @@ import { CHARACTERS } from "../characters.js";
 import { fmt, board } from "../engine.js";
 import { botRoster } from "../bots.js";
 import { wealthSeries, svgWealthChart, AI_COLORS, KELLY_FORMULA_HTML } from "../finale.js";
+import { CODEFREQ } from "../codefreq.js";
+import { BUILD } from "../config.js";
 
 const BOTS = Object.fromEntries(botRoster().map((b) => [b.token, b]));
 
@@ -21,7 +23,7 @@ export async function mount(root) {
       S.prevReveal = S.state.round > 0 ? await read("reveal", S.state.round - 1) : null;
     }
     if (S.state && S.state.phase === "finished") { S.finale = await read("finale"); S.reveals = await read("reveal"); }
-    watchBets(); render();
+    watchBets(); render(); syncBuild();
   });
 
   function watchBets() {
@@ -506,6 +508,60 @@ export async function mount(root) {
 
   function joinUrl() {
     return location.origin + location.pathname + location.search + "#join";
+  }
+
+  // Host-toggled overlay: the repo's own history, day by day, as a GitHub-style
+  // code-frequency chart. Lives on document.body so stage re-renders never touch it.
+  function buildChartSvg() {
+    const W = 1000, H = 440, padL = 70, padR = 20, padT = 40, padB = 46;
+    const rows = CODEFREQ;
+    const maxAdd = Math.max(1, ...rows.map((r) => r.add)), maxDel = Math.max(1, ...rows.map((r) => r.del));
+    const zero = padT + (H - padT - padB) * (maxAdd / (maxAdd + maxDel));
+    const sy = (H - padT - padB) / (maxAdd + maxDel);
+    const slot = (W - padL - padR) / rows.length, bw = Math.min(slot * 0.62, 90);
+    const fmtN = (n) => n.toLocaleString("en-US");
+    const day = (d) => { const [y, m, dd] = d.split("-").map(Number); return new Date(y, m - 1, dd).toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
+    let g = "";
+    rows.forEach((r, i) => {
+      const x = padL + slot * i + (slot - bw) / 2, cx = (x + bw / 2).toFixed(1), t0 = (i * 0.08).toFixed(2);
+      if (r.add) {
+        const hA = (r.add * sy).toFixed(1), yA = (zero - r.add * sy).toFixed(1);
+        g += `<rect x="${x.toFixed(1)}" y="${yA}" width="${bw.toFixed(1)}" height="${hA}" rx="4" fill="#2da44e"><animate attributeName="height" from="0" to="${hA}" dur=".7s" begin="${t0}s" fill="freeze"/><animate attributeName="y" from="${zero.toFixed(1)}" to="${yA}" dur=".7s" begin="${t0}s" fill="freeze"/></rect>`;
+        g += `<text x="${cx}" y="${(zero - r.add * sy - 8).toFixed(1)}" text-anchor="middle" font-size="15" font-weight="700" fill="#1a7f37">+${fmtN(r.add)}</text>`;
+        g += `<text x="${cx}" y="${(zero - r.add * sy - 26).toFixed(1)}" text-anchor="middle" font-size="12" fill="#6e7781">${r.n} commit${r.n === 1 ? "" : "s"}</text>`;
+      }
+      if (r.del) {
+        const hD = (r.del * sy).toFixed(1);
+        g += `<rect x="${x.toFixed(1)}" y="${zero.toFixed(1)}" width="${bw.toFixed(1)}" height="${hD}" rx="4" fill="#cf222e"><animate attributeName="height" from="0" to="${hD}" dur=".7s" begin="${t0}s" fill="freeze"/></rect>`;
+        g += `<text x="${cx}" y="${(zero + r.del * sy + 20).toFixed(1)}" text-anchor="middle" font-size="15" font-weight="700" fill="#a40e26">\u2212${fmtN(r.del)}</text>`;
+      }
+      g += `<text x="${cx}" y="${H - 14}" text-anchor="middle" font-size="14" fill="#57606a">${day(r.d)}</text>`;
+    });
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <line x1="${padL}" y1="${zero.toFixed(1)}" x2="${W - padR}" y2="${zero.toFixed(1)}" stroke="#d0d7de" stroke-width="1.5"/>
+      <text x="${padL - 10}" y="${padT + 4}" text-anchor="end" font-size="12" fill="#57606a">+${fmtN(maxAdd)}</text>
+      <text x="${padL - 10}" y="${H - padB}" text-anchor="end" font-size="12" fill="#57606a">\u2212${fmtN(maxDel)}</text>
+      <text x="${padL - 10}" y="${(zero + 4).toFixed(1)}" text-anchor="end" font-size="12" fill="#57606a">0</text>
+      ${g}
+    </svg>`;
+  }
+
+  function syncBuild() {
+    const want = !!(S.state && S.state.showBuild);
+    const cur = document.getElementById("buildoverlay");
+    if (!want) { if (cur) cur.remove(); return; }
+    if (cur) return;
+    const rows = CODEFREQ;
+    const commits = rows.reduce((a, r) => a + r.n, 0), add = rows.reduce((a, r) => a + r.add, 0), del = rows.reduce((a, r) => a + r.del, 0);
+    const active = rows.filter((r) => r.n).length;
+    const el = document.createElement("div");
+    el.id = "buildoverlay";
+    el.innerHTML = `<div class="qcard">
+      <h1 class="bhead">This app, day by day</h1>
+      <p class="bsub">Built with Claude \u00b7 ${rows.length} calendar days, ${active} with commits \u00b7 ${commits.toLocaleString("en-US")} commits \u00b7 +${add.toLocaleString("en-US")} / \u2212${del.toLocaleString("en-US")} lines \u00b7 now on ${BUILD}</p>
+      <div class="bpanel">${buildChartSvg()}</div>
+    </div>`;
+    document.body.appendChild(el);
   }
 
   function render() {
