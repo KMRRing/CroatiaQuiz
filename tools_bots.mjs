@@ -62,6 +62,22 @@ for (const [name, rule] of Object.entries(rules)) {
   }
 }
 
+// 2c. oracle: Qwen's growth-brief rule must reproduce its author's four example stakes
+{
+  const { qwenStake } = await import("./js/sizing.js");
+  const oracle = [
+    ["R1 c=0.95 B=20 (27 players)", { c: 0.95, balance: 20, players: 27, carry: 0 }, 10],
+    ["R5 c=0.85 B=300 (32 players)", { c: 0.85, balance: 300, players: 32, carry: 0 }, 84],
+    ["R12 c=0.60 B=800 +$1,200 carry", { c: 0.60, balance: 800, players: 27, carry: 1200 }, 106],
+    ["R21 c=0.80 B=500", { c: 0.80, balance: 500, players: 27, carry: 0 }, 107],
+  ];
+  for (const [label, ctx, want] of oracle) {
+    const got = qwenStake(ctx);
+    if (got !== want) bad(`qwen oracle ${label}: got $${got}, author says $${want}`);
+    else console.log(`qwen oracle ok       ${label.padEnd(38)} $${got}`);
+  }
+}
+
 // 3. what Claude actually stakes in a few situations
 const show = (label, ctx) => console.log("  " + label.padEnd(34) + "$" + SIZING.bot_claude(ctx));
 console.log("\nClaude stake examples (32 players):");

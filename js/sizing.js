@@ -108,11 +108,18 @@ export function chatgptStake(input) {
   return clamp(Math.floor(c * (B + RULES.stipend)), B);
 }
 
-// Qwen: one-tenth Kelly at evens. Its confidences are already discounted for
-// expected competition, so this is the most cautious rule in the field.
+// Qwen (growth brief): half-Kelly against a fixed room model - 70% of the others
+// correct, each staking about what this model holds up to $100 - with no use of
+// history and no self-dilution term. Conservative by construction.
 export function qwenStake(input) {
-  const { c, balance: B } = input;
-  return clamp(0.1 * (2 * c - 1) * B, B);
+  const { c, balance: B, players, carry = 0 } = input;
+  const N = players || 27;
+  const A = Math.max(RULES.minStake, Math.min(B, 100));
+  const Cothers = (N - 1) * 0.7 * A;
+  const P = N * A + RULES.bonus + carry;
+  const b = P / Cothers - 1;
+  const fstar = b > 0 ? Math.max(0, c - (1 - c) / b) : 0;
+  return clamp(Math.round(B * 0.5 * fstar), B);
 }
 
 // Exact log-utility (Kelly) sizing on the parimutuel payoff, self-dilution included,
