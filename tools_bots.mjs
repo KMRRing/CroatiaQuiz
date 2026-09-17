@@ -44,6 +44,24 @@ for (const [name, rule] of Object.entries(rules)) {
   console.log(`${name.padEnd(12)} sizing rule: legal across grid`);
 }
 
+// 2b. oracle: the log-Kelly rule must reproduce the four example stakes its author computed
+{
+  const { logKellyStake } = await import("./js/sizing.js");
+  // a calibration-neutral history with others staking 60% of balance and half of it correct
+  const hist = Array.from({ length: 3 }, () => ({ pot: 710, carry: 0, correct: 10, myConf: 1, myCorrect: true, myStake: 10, mult: 710 / 310, othersBal: 1000 }));
+  const oracle = [
+    ["R1 c=0.95 B=20 (26 others at $20)", { c: 0.95, balance: 20, players: 27, round: 1, carry: 0, othersBal: 520, history: [] }, 16],
+    ["R5 c=0.85 B=300 (31 others, $2,020)", { c: 0.85, balance: 300, players: 32, round: 5, carry: 0, othersBal: 2020, history: hist }, 181],
+    ["R12 c=0.60 B=800 +$1,200 carry", { c: 0.60, balance: 800, players: 27, round: 12, carry: 1200, othersBal: 2610, history: hist }, 243],
+    ["R21 c=0.80 B=500", { c: 0.80, balance: 500, players: 27, round: 21, carry: 0, othersBal: 7440, history: hist }, 272],
+  ];
+  for (const [label, ctx, want] of oracle) {
+    const got = logKellyStake(ctx);
+    if (got !== want) bad(`logKelly oracle ${label}: got $${got}, author says $${want}`);
+    else console.log(`logKelly oracle ok   ${label.padEnd(38)} $${got}`);
+  }
+}
+
 // 3. what Claude actually stakes in a few situations
 const show = (label, ctx) => console.log("  " + label.padEnd(34) + "$" + SIZING.bot_claude(ctx));
 console.log("\nClaude stake examples (32 players):");

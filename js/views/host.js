@@ -114,11 +114,19 @@ export async function mount(root) {
       const past = [];
       for (let i = 0; i < n; i++) { const rv = (pastReveals || {})[i]; if (!rv) break; past.push(rv); }
       const nPlayers = Object.keys(players || {}).length;
+      // others' stakeable balance going into round i: last settled balances plus the stipend
+      const othersBalAt = (i, t) => {
+        if (i === 0) return Math.max(0, nPlayers - 1) * (RULES.start + RULES.stipend);
+        const wa = past[i - 1].wealthAfter || {};
+        return Object.entries(wa).reduce((s, [k, v]) => (k === t ? s : s + (v || 0) + RULES.stipend), 0);
+      };
       const histFor = (t) => past.map((rv, i) => ({
         pot: rv.pot, carry: i > 0 && past[i - 1].rolled ? past[i - 1].pot : 0,
         correct: rv.nRight || 0, myConf: botConf(t, i) || 0,
         myCorrect: ((rv.aiAnswers || {})[t] || "") === rv.correct,
+        myStake: ((rv.botStakes || {})[t]) || 0, mult: rv.mult || 0, othersBal: othersBalAt(i, t),
       }));
+      const othersBalNow = (t) => Object.entries(wealth || {}).reduce((s, [k, v]) => (k === t ? s : s + (v || 0)), 0);
       const leaderFor = (t) => Object.entries(wealth || {}).reduce((m, [k, v]) => (k === t ? m : Math.max(m, v || 0)), 0);
       const entries = {};
       for (const [t, p] of Object.entries(players || {})) {
@@ -128,7 +136,7 @@ export async function mount(root) {
           let d, stake;
           if (bot) {
             d = bot.decide(q, n, w, { players: nPlayers, round: n + 1, carry: S.state.rollover || 0,
-                                      leader: leaderFor(t), history: histFor(t) });
+                                      leader: leaderFor(t), othersBal: othersBalNow(t), history: histFor(t) });
             stake = Math.min(w, Math.max(Math.min(RULES.minStake, w), Math.round(d.stake || 0)));
           } else if (p.test) {
             if (TEST_MODE && n === 0) d = { answer: t === "tb_0" ? randomWrong(q) : q.correct };

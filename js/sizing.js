@@ -115,6 +115,41 @@ export function qwenStake(input) {
   return clamp(0.1 * (2 * c - 1) * B, B);
 }
 
+// Exact log-utility (Kelly) sizing on the parimutuel payoff, self-dilution included,
+// with a room model learned from history: the others' stake rate (phi), the share of
+// their stakes that were correct (kap), and a calibration of own certainty against
+// own record. Solved by bisection on the derivative of the expected log. Submitted
+// under the growth-rate brief; applied identically in every round.
+export function logKellyStake(input) {
+  const HOUSE = RULES.bonus, MIN = RULES.minStake;
+  const { c, balance: B, players, round: r = 1, carry: X = 0, othersBal = 0, history = [] } = input;
+  const N = Math.max(1, (players || 1) - 1);
+  if (!(B > MIN)) return clamp(MIN, B);
+  const n = history.length;
+  const E = history.reduce((a, h) => a + (h.myConf || 0), 0);
+  const H = history.filter((h) => h.myCorrect).length;
+  const p = Math.min(0.90, Math.max(0.05, c - (E - H) / (n + 5)));
+  const othersStake = (h) => h.pot - HOUSE - (h.carry || 0) - (h.myStake || 0);
+  const rates = history.slice(-3).map((h) => (h.othersBal > 0 ? othersStake(h) / h.othersBal : null))
+    .filter((v) => v != null && Number.isFinite(v));
+  const phi = rates.length ? rates.reduce((a, b) => a + b, 0) / rates.length : 0.75;
+  const T = Math.max(MIN * N, phi * othersBal);
+  let K = 0, m = 0;
+  for (const h of history) {
+    if (!h.myCorrect || !(h.mult > 0)) continue;
+    const Tj = othersStake(h);
+    if (Tj > 0) { K += (h.pot / h.mult - (h.myStake || 0)) / Tj; m++; }
+  }
+  const kap = Math.min(0.85, Math.max(0.15, (1.5 + K) / (3 + m)));
+  const A = T + HOUSE + X, C = kap * T, W = A - C;
+  if (p * A <= C) return clamp(MIN, B);
+  const Fp = (s) => p * (W * C / ((C + s) * (C + s))) / (B + s * W / (C + s)) - (1 - p) / (B - s);
+  if (Fp(MIN) <= 0) return clamp(MIN, B);
+  let lo = MIN, hi = B;
+  for (let i = 0; i < 48; i++) { const mid = (lo + hi) / 2; if (Fp(mid) > 0) lo = mid; else hi = mid; }
+  return clamp(Math.floor(lo), B);
+}
+
 export const SIZING = {
   bot_claude: claudeStake,
   bot_deepseek: deepseekStake,
