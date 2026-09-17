@@ -13,56 +13,13 @@ import { SIZING, defaultStake } from "./sizing.js";
 // Bet sizing is per model, in sizing.js; models without a rule use defaultStake.
 // ------------------------------------------------------------------
 const AI_ANSWERS = {
-  bot_grok: [
-    { a: "C", c: 0.95 }, { a: "C", c: 0.88 }, { a: "A", c: 0.82 }, { a: "B", c: 0.97 },
-    { a: "AE", c: 0.92 }, { a: "B", c: 0.85 }, { a: "D", c: 0.75 }, { a: "A", c: 0.90 },
-    { a: "CD", c: 0.70 }, { a: "A", c: 0.80 }, { a: "B", c: 0.78 }, { a: "F", c: 0.72 },
-    { a: "B", c: 0.65 }, { a: "BD", c: 0.68 }, { a: "B", c: 0.80 }, { a: "ABC", c: 0.70 },
-    { a: "C", c: 0.75 }, { a: "E", c: 0.78 }, null, { a: "E", c: 0.70 },
-  ],
-  bot_chatgpt: [
-    { a: "C", c: 0.90 }, { a: "C", c: 0.95 }, { a: "A", c: 0.90 }, { a: "B", c: 0.95 },
-    { a: "AE", c: 0.90 }, { a: "B", c: 0.85 }, { a: "D", c: 0.95 }, { a: "A", c: 0.90 },
-    { a: "BCD", c: 0.75 }, { a: "A", c: 0.95 }, { a: "A", c: 0.80 }, { a: "C", c: 0.75 },
-    { a: "B", c: 0.70 }, { a: "C", c: 0.90 }, { a: "B", c: 0.80 }, { a: "AD", c: 0.85 },
-    { a: "C", c: 0.60 }, { a: "E", c: 0.70 }, null, { a: "BE", c: 0.90 },
-  ],
-  bot_deepseek: [
-    { a: "C", c: 0.99 }, { a: "C", c: 0.99 }, { a: "A", c: 0.94 }, { a: "A", c: 0.99 },
-    { a: "AD", c: 0.99 }, { a: "B", c: 0.99 }, { a: "C", c: 0.90 }, { a: "A", c: 0.98 },
-    { a: "ACD", c: 0.84 }, { a: "B", c: 0.92 }, { a: "A", c: 0.88 }, { a: "F", c: 0.90 },
-    { a: "A", c: 0.68 }, { a: "AD", c: 0.86 }, { a: "B", c: 0.84 }, { a: "ABCD", c: 0.90 },
-    { a: "C", c: 0.90 }, { a: "E", c: 0.98 }, null, { a: "E", c: 0.92 },
-  ],
-  bot_claude: [
-    { a: "C", c: 0.96 }, { a: "C", c: 0.95 }, { a: "A", c: 0.8 },  { a: "B", c: 0.9 },
-    { a: "AE", c: 0.9 }, { a: "B", c: 0.85 }, { a: "D", c: 0.7 },  { a: "A", c: 0.85 },
-    { a: "CD", c: 0.75 }, { a: "A", c: 0.85 }, { a: "B", c: 0.75 }, { a: "E", c: 0.45 },
-    { a: "A", c: 0.6 },  { a: "A", c: 0.55 }, { a: "B", c: 0.65 }, { a: "BCE", c: 0.35 },
-    { a: "C", c: 0.8 },  { a: "E", c: 0.85 }, null, { a: "E", c: 0.6 },
-  ],
-  bot_mistral: [
-    { a: "C", c: 0.95 }, { a: "C", c: 0.95 }, { a: "A", c: 0.85 }, { a: "B", c: 0.95 },
-    { a: "AE", c: 0.9 }, { a: "B", c: 0.9 },  { a: "D", c: 0.85 }, { a: "A", c: 0.95 },
-    { a: "CD", c: 0.85 }, { a: "A", c: 0.8 }, { a: "A", c: 0.85 }, { a: "E", c: 0.85 },
-    { a: "A", c: 0.75 }, { a: "AC", c: 0.9 }, { a: "B", c: 0.85 }, { a: "BCDE", c: 0.8 },
-    { a: "C", c: 0.75 }, { a: "E", c: 0.8 }, null,  { a: "E", c: 0.8 },
-  ],
-  bot_gemini: [
-    { a: "C", c: 0.95 }, { a: "C", c: 0.95 }, { a: "B", c: 0.85 }, { a: "C", c: 0.9 },
-    { a: "ACF", c: 0.7 }, { a: "A", c: 0.8 }, { a: "C", c: 0.75 }, { a: "B", c: 0.8 },
-    { a: "ABC", c: 0.75 }, { a: "C", c: 0.8 }, { a: "B", c: 0.85 }, { a: "F", c: 0.8 },
-    { a: "B", c: 0.85 }, { a: "ABD", c: 0.7 }, { a: "A", c: 0.85 }, { a: "ABCD", c: 0.75 },
-    { a: "C", c: 0.8 }, { a: "E", c: 0.8 }, null, { a: "C", c: 0.8 },
-  ],
-  bot_qwen: [
-    { a: "C", c: 0.99 }, { a: "C", c: 0.98 }, { a: "B", c: 0.99 }, { a: "B", c: 0.99 },
-    { a: "AE", c: 0.97 }, { a: "B", c: 0.99 }, { a: "D", c: 0.98 }, { a: "A", c: 0.99 },
-    { a: "ACD", c: 0.96 }, { a: "B", c: 0.95 }, { a: "B", c: 0.97 }, { a: "B", c: 0.96 },
-    { a: "B", c: 0.95 }, { a: "A", c: 0.99 }, { a: "A", c: 0.98 }, { a: "ABCD", c: 0.94 },
-    { a: "D", c: 0.93 }, { a: "E", c: 0.95 }, { a: "AD", c: 0.90 }, { a: "B", c: 0.96 },
-    { a: "B", c: 0.99 },
-  ],
+  bot_grok: Array(QUESTIONS.length).fill(null),
+  bot_chatgpt: Array(QUESTIONS.length).fill(null),
+  bot_deepseek: Array(QUESTIONS.length).fill(null),
+  bot_claude: Array(QUESTIONS.length).fill(null),
+  bot_mistral: Array(QUESTIONS.length).fill(null),
+  bot_gemini: Array(QUESTIONS.length).fill(null),
+  bot_qwen: Array(QUESTIONS.length).fill(null),
 };
 
 const AI_META = [

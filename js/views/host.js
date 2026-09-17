@@ -337,6 +337,7 @@ export async function mount(root) {
             <div class="hostq">
               <p class="hqt">${q2.text}</p>
               ${q2.options.map((o, i) => `<div class="hopt${ph === "reveal" && q2.correct.includes(String(i)) ? " hopt-c" : ""}">${String.fromCharCode(65 + i)}. ${o}</div>`).join("")}
+              ${ph === "reveal" && q2.why ? `<p class="hwhy">${q2.why}</p>` : ""}
             </div>`;
         })() : ""}
         ${isHost() ? `<button id="nextbig" class="nextbig" ${ph === "preview" || ((ph === "lobby" || ph === "reveal") && n + 1 < N_ROUNDS) ? "" : "disabled"}>${
