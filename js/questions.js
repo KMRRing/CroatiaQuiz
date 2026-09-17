@@ -45,7 +45,7 @@ export const QUESTIONS = [
     text: "Category 3 animal fats, as classified under Regulation 1069/2009:",
     options: ["May be used in animal feed in the EU", "Are subject to the RED Annex IX Part B cap", "Count towards the RED food and feed crop cap", "Are treated as an Annex IX Part A (advanced) feedstock in Finland"], correct: "0" },
   { id: 15, tag: "NL / EREs", type: "single", roomP: 0.30,
-    text: "A barge loads 600 mt fossil naphtha, 200 mt ISCC PLUS circular naphtha and 200 mt ISCC EU bio-naphtha into one tank. The trader discharges 200 mt as circular naphtha at the first port, brings the remaining 800 mt into the Netherlands and applies to book 200 mt of bio-naphtha for EREs, the Dutch renewable-fuel units. Can he book the 200 mt?",
+    text: "A barge loads 600 mt fossil naphtha, 200 mt ISCC PLUS circular naphtha and 200 mt ISCC EU bio-naphtha into one tank. The trader discharges 200 mt as circular naphtha at the first port, brings the remaining 800 mt into the Netherlands and applies to book 200 mt of bio-naphtha for EREs, the Dutch renewable-fuel units. Can the full 200 mt be booked?",
     options: ["Yes", "No"], correct: "1" },
   { id: 16, tag: "Maritime", type: "multi", roomP: 0.30,
     text: "Rapeseed methyl ester, a food-crop biodiesel, is bunkered into a ship. Which of these give it a renewable benefit rather than treating it as fossil?",
