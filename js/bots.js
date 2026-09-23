@@ -15,7 +15,13 @@ import { SIZING, defaultStake } from "./sizing.js";
 const AI_ANSWERS = {
   bot_claude: Array(QUESTIONS.length).fill(null),
   bot_gemini: Array(QUESTIONS.length).fill(null),
-  bot_qwen:   Array(QUESTIONS.length).fill(null),
+  bot_qwen: [
+    { a: "C", c: 0.99 }, { a: "C", c: 0.99 }, { a: "D", c: 0.99 }, { a: "B", c: 0.99 },
+    { a: "B", c: 0.95 }, { a: "C", c: 0.85 }, { a: "B", c: 0.95 }, { a: "C", c: 0.99 },
+    { a: "B", c: 0.90 }, { a: "A", c: 0.99 }, { a: "B", c: 0.95 }, { a: "ABCD", c: 0.85 },
+    { a: "A", c: 0.95 }, { a: "D", c: 0.85 }, { a: "A", c: 0.98 }, { a: "D", c: 0.98 },
+    { a: "B", c: 0.99 }, { a: "C", c: 0.95 }, { a: "A", c: 0.95 }, { a: "A", c: 0.90 },
+  ],
 };
 
 const AI_META = [
