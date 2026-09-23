@@ -13,7 +13,13 @@ import { SIZING, defaultStake } from "./sizing.js";
 // Bet sizing is per model, in sizing.js; models without a rule use defaultStake.
 // ------------------------------------------------------------------
 const AI_ANSWERS = {
-  bot_claude: Array(QUESTIONS.length).fill(null),
+  bot_claude: [
+    { a: "C", c: 0.96 }, { a: "C", c: 0.95 }, { a: "D", c: 0.92 }, { a: "B", c: 0.9 },
+    { a: "B", c: 0.9 },  { a: "C", c: 0.5 },  { a: "B", c: 0.85 }, { a: "C", c: 0.88 },
+    { a: "C", c: 0.78 }, { a: "A", c: 0.85 }, { a: "B", c: 0.7 },  { a: "AC", c: 0.3 },
+    { a: "A", c: 0.88 }, { a: "C", c: 0.82 }, { a: "A", c: 0.8 },  { a: "D", c: 0.9 },
+    { a: "B", c: 0.9 },  { a: "D", c: 0.75 }, { a: "A", c: 0.7 },  { a: "A", c: 0.62 },
+  ],
   bot_gemini: Array(QUESTIONS.length).fill(null),
   bot_qwen: [
     { a: "C", c: 0.99 }, { a: "C", c: 0.99 }, { a: "D", c: 0.99 }, { a: "B", c: 0.99 },
