@@ -680,6 +680,8 @@ export async function mount(root) {
       }
       const bd = f.board || [];
       const twoCol = bd.length > 16;
+      const champion = bd.find((r) => { const pl = S.players[r.token]; return !(pl && pl.bot); });
+      const champToken = champion ? champion.token : null;
       const acc = {};
       (f.sizing || []).forEach((r) => { acc[r.token] = r.pHat; });
       (f.aiCalib || []).forEach((r) => { if (r.n) acc[r.token] = r.right / r.n; });
@@ -689,7 +691,7 @@ export async function mount(root) {
           <div class="finalboard">
             <h1>Final leaderboard</h1>
             ${(() => {
-              const row = (r, i) => `<li><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u00b7"}</span><span>${fmt(r.w)}</span></li>`;
+              const row = (r, i) => `<li class="${r.token === champToken ? "lbwin" : ""}"><span>${i + 1}. ${iconHtml(r.token)} ${plainName(r.token)}${r.token === champToken ? " \u{1F3C6}" : ""}</span><span class="lbacc">${acc[r.token] != null ? pc(acc[r.token]) : "\u00b7"}</span><span>${fmt(r.w)}</span></li>`;
               const rows = bd.map(row);
               if (!twoCol) return `<ol class="board finallb">${rows.join("")}</ol>`;
               const half = Math.ceil(rows.length / 2);

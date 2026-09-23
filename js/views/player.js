@@ -263,7 +263,7 @@ export async function mount(root) {
       const f = S.finale;
       const stage = (S.state && S.state.finaleStage) || 0;
       const pc = (x) => x == null ? "\u00b7" : (x * 100).toFixed(0) + "%";
-      if (stage >= 1 && stage <= 6 && f && S.reveals) {
+      if (stage >= 1 && stage <= 7 && f && S.reveals) {
         const nP = f.nPlayed || N_ROUNDS; const revArr = []; for (let i = 0; i < nP; i++) revArr.push(S.reveals[i]);
         const tokens = (f.board || []).map((r) => r.token);
         const series = wealthSeries(revArr, tokens);
@@ -283,22 +283,12 @@ export async function mount(root) {
           <div class="card"><div class="qsummary">${qrows}</div></div>`;
         return;
       }
-      if (stage === 7 && f && f.sizing) {
-        const mine = f.sizing.find((r) => r.token === token);
-        root.innerHTML = `${barHtml([emoji, name], false)}<div class="card"><h2>Your sizing</h2>
-          ${mine ? `
-          <div class="statrow"><span>Accuracy</span><strong>${pc(mine.pHat)}</strong></div>
-          <div class="statrow"><span>Average stake</span><strong>${pc(mine.fAvg)}</strong></div>
-          <div class="statrow"><span>The right stake at your accuracy and this game's odds</span><strong>${pc(mine.fStar)}</strong></div>
-          ` : `<p class="dim">No settled rounds on your record.</p>`}
-        </div>`;
-        return;
-      }
 
       let mine = "", won = false;
       if (f && f.board) {
         const idx = f.board.findIndex((r) => r.token === token);
-        const topHuman = f.board.find((r) => !["grok","chatgpt","deepseek","claude","mistral","gemini"].includes(r.token) && !r.token.startsWith("tb_"));
+        const isBot = (t) => t.startsWith("bot_") || t.startsWith("tb_");
+        const topHuman = f.board.find((r) => !isBot(r.token));
         won = !!(topHuman && topHuman.token === token);
         if (idx >= 0) mine = won
           ? `<h2>\u{1F3C6} You won the night: ${fmt(f.board[idx].w)}</h2>`
