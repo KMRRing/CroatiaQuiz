@@ -160,8 +160,16 @@ export async function mount(root) {
       ${g}
       <g class="potring" style="transform-origin:${cx}px ${cy}px">
         <circle cx="${cx}" cy="${cy}" r="${R}" fill="#fff" stroke="url(#tgw)" stroke-width="${compact ? 3.5 : 5}"/>
-        <text x="${cx}" y="${cy - f2 * 0.35}" text-anchor="middle" font-size="${f1}" font-weight="700" fill="#0000FF" font-family="Century Gothic,Questrial,Poppins,Arial">${fmt(rv.pot != null ? rv.pot : totalIn)}</text>
-        <text x="${cx}" y="${cy + f2 * 1.15}" text-anchor="middle" font-size="${f2}" font-weight="700" fill="#8200DE" font-family="Century Gothic,Questrial,Poppins,Arial">${rv.subLabel != null ? rv.subLabel : (rv.rolled ? "\u21bb rolls over" : "\u00d7" + rv.mult.toFixed(2))}</text>
+        ${(() => {
+          // No payout multiple yet (tutorial pay-in and reveal steps): the total sits alone,
+          // centred in the circle. Otherwise the total rides above the multiple as before.
+          const sub = rv.subLabel != null ? rv.subLabel : (rv.rolled ? "\u21bb rolls over" : "\u00d7" + rv.mult.toFixed(2));
+          const total = fmt(rv.pot != null ? rv.pot : totalIn);
+          const font = 'font-weight="700" font-family="Century Gothic,Questrial,Poppins,Arial"';
+          if (sub === "") return `<text x="${cx}" y="${cy + f1 * 0.36}" text-anchor="middle" font-size="${f1}" fill="#0000FF" ${font}>${total}</text>`;
+          return `<text x="${cx}" y="${cy - f2 * 0.35}" text-anchor="middle" font-size="${f1}" fill="#0000FF" ${font}>${total}</text>
+        <text x="${cx}" y="${cy + f2 * 1.15}" text-anchor="middle" font-size="${f2}" fill="#8200DE" ${font}>${sub}</text>`;
+        })()}
       </g>
     </svg>`;
   }
