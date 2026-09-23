@@ -23,7 +23,7 @@ const cases = {
   "lone winner": { stakes: { p1: 10, p2: 10 }, botStakes: {}, deltas: { p1: 30, p2: -10 }, pot: 40, mult: 4, rolled: false, correct: "0" },
   "lone loser": { stakes: { p1: 10, p2: 10 }, botStakes: {}, deltas: { p1: 10, p2: -10 }, pot: 30, mult: 1.5, rolled: false, correct: "0" },
   "rolled (no winners)": { stakes: { p1: 10, p2: 20 }, botStakes: {}, deltas: { p1: -10, p2: -20 }, pot: 130, mult: 1, rolled: true, correct: "0" },
-  "bots only": { stakes: {}, botStakes: { bot_claude: 10, bot_grok: 10 }, aiAnswers: { bot_claude: "0", bot_grok: "1" },
+  "bots only": { stakes: {}, botStakes: { bot_claude: 10, bot_gemini: 10 }, aiAnswers: { bot_claude: "0", bot_gemini: "1" },
     deltas: {}, pot: 120, mult: 2, rolled: false, correct: "0" },
   "tutorial skin (overrides)": { stakes: { t_fox: 40, t_oct: 10 }, botStakes: {}, deltas: { t_fox: 120, t_oct: 30 },
     pot: 200, mult: 4, rolled: false, correct: "0", yTop: 26, yBot: 26, fs: 23, icon: 42, potFs: 1.25,
