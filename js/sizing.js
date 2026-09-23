@@ -19,12 +19,19 @@ export function defaultStake({ c, balance }) {
   return clamp(Math.max(0, 2 * c - 1) * balance, balance);
 }
 
-// Gemini: a flat fraction of stack equal to confidence, eased only slightly as the
-// game runs down. At typical confidences this stakes most of the stack every round.
+// Gemini (growth brief): quarter-Kelly against a fixed room model. The room is
+// 27 players staking $15 each at 50% accuracy, the payout multiple is estimated
+// at a $10 stake, and the Kelly fraction from that multiple is scaled by 0.25.
+// The rule fixes the player count at 27 regardless of the room, as written.
+// The model's own example stakes (10 / 32.15 / 112.40 / 42.10) do not reproduce
+// from its rule; tools_bots asserts the rule's arithmetic instead.
 export function geminiStake(input) {
-  const { c, balance: B, round = 1 } = input;
-  const remaining = Math.max(0, 20 - round);
-  return clamp(Math.floor(B * c * (0.8 + 0.2 * (remaining / 20))), B);
+  const { c, balance: B, carry = 0 } = input;
+  const sOthers = 15 * 27, cOthers = sOthers * 0.5;
+  const cc = Math.min(0.99, Math.max(0.05, c));
+  const M = (10 + sOthers + 100 + carry) / (10 + cOthers);
+  const f = Math.max(0, (cc * M - 1) / (M - 1));
+  return clamp(0.25 * f * B, B);
 }
 
 // Qwen (growth brief): half-Kelly against a fixed room model - 70% of the others

@@ -78,6 +78,22 @@ for (const [name, rule] of Object.entries(rules)) {
   }
 }
 
+// 2d. oracle: Gemini's rule on the four brief cases, as its own arithmetic gives them
+{
+  const { geminiStake } = await import("./js/sizing.js");
+  const oracle = [
+    ["R1 c=0.95 B=20", { c: 0.95, balance: 20, carry: 0 }, 10],
+    ["R5 c=0.85 B=300", { c: 0.85, balance: 300, carry: 0 }, 56],
+    ["R12 c=0.60 B=800 +$1,200 carry", { c: 0.60, balance: 800, carry: 1200 }, 109],
+    ["R21 c=0.80 B=500", { c: 0.80, balance: 500, carry: 0 }, 82],
+  ];
+  for (const [label, ctx, want] of oracle) {
+    const got = geminiStake(ctx);
+    if (got !== want) bad(`gemini oracle ${label}: got $${got}, rule arithmetic says $${want}`);
+    else console.log(`gemini oracle ok     ${label.padEnd(38)} $${got}`);
+  }
+}
+
 // 3. what Claude actually stakes in a few situations
 const show = (label, ctx) => console.log("  " + label.padEnd(34) + "$" + SIZING.bot_claude(ctx));
 console.log("\nClaude stake examples (32 players):");
