@@ -467,9 +467,9 @@ export async function mount(root) {
       const letters = q.correct.split("").map((i) => String.fromCharCode(65 + +i)).join(" + ");
       res.innerHTML = `answer <strong>${letters}</strong>${rv.nAnswered ? ` \u00b7 ${rv.nRight} of ${rv.nAnswered} right` : ""} \u00b7 <strong>${rv.rolled ? "rollover" : "\u00d7" + rv.mult.toFixed(2)}</strong>`;
     }
-    if (q.why && !root.querySelector(".qwhy")) {
+    if (q.source && !root.querySelector(".qsrc")) {
       const inner = root.querySelector("#qinner");
-      if (inner) inner.insertAdjacentHTML("beforeend", `<p class="qwhy">${q.why}</p>`);
+      if (inner) inner.insertAdjacentHTML("beforeend", `<p class="qsrc">Source: ${q.source}</p>`);
     }
     const rows = root.querySelectorAll("#optbox .optrow");
     rows.forEach((row, i) => {
