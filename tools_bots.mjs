@@ -78,14 +78,14 @@ for (const [name, rule] of Object.entries(rules)) {
   }
 }
 
-// 2d. oracle: Gemini's rule on the four brief cases, as its own arithmetic gives them
+// 2d. oracle: Gemini's rule on the four brief cases, as its own arithmetic gives them on a $20 stipend
 {
   const { geminiStake } = await import("./js/sizing.js");
   const oracle = [
     ["R1 c=0.95 B=20", { c: 0.95, balance: 20, carry: 0 }, 10],
-    ["R5 c=0.85 B=300", { c: 0.85, balance: 300, carry: 0 }, 56],
-    ["R12 c=0.60 B=800 +$1,200 carry", { c: 0.60, balance: 800, carry: 1200 }, 109],
-    ["R21 c=0.80 B=500", { c: 0.80, balance: 500, carry: 0 }, 82],
+    ["R5 c=0.85 B=300", { c: 0.85, balance: 300, carry: 0 }, 55],
+    ["R12 c=0.60 B=800 +$1,200 carry", { c: 0.60, balance: 800, carry: 1200 }, 101],
+    ["R21 c=0.80 B=500", { c: 0.80, balance: 500, carry: 0 }, 79],
   ];
   for (const [label, ctx, want] of oracle) {
     const got = geminiStake(ctx);

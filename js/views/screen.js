@@ -362,10 +362,10 @@ export async function mount(root) {
     const slides = {
       1: `<h1 class="tuttitle">How it works</h1>
         <div class="optrows">
-          <div class="optrow plain tutstep tutpop" style="animation-delay:.1s">Each player starts with $10 and receives a further $10 at the start of every round.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:.1s">Each player starts with ${fmt(RULES.start)} and receives ${fmt(RULES.stipend)} at the start of every round.</div>
           <div class="optrow plain tutstep tutpop" style="animation-delay:.4s">Questions appear on this screen and on your phone. Once the question has been read out, the timer starts.</div>
           <div class="optrow plain tutstep tutpop" style="animation-delay:.7s">Select your answer and your stake on your phone.</div>
-          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The minimum stake is $10. If no answer is selected, that minimum is entered automatically.</div>
+          <div class="optrow plain tutstep tutpop" style="animation-delay:1s">The minimum stake is ${fmt(RULES.minStake)}. If no answer is selected, that minimum is entered automatically.</div>
         </div>`,
       2: `<h1 class="tuttitle">How the pot is split</h1>` + POT_ROWS.map(([p, html]) =>
           `<div class="optrow plain tutstep tutphase${p <= k ? " on" : ""}${p === k ? " now" : ""}" data-ph="${p}"><span class="tutnum">${p}</span><span>${html}</span></div>`
@@ -374,7 +374,7 @@ export async function mount(root) {
         const ts = Object.keys(BOTS), c = ts.length;
         return `<h1 class="tuttitle">The AI competitors</h1>
         <div class="tutai">${ts.map((t, i) => `<div class="tutaitile tutpop" style="animation-delay:${i * 120 + 100}ms">${iconHtml(t)}<span>${BOTS[t].name}</span>${BOTS[t].version ? `<span class="tutaiver">${BOTS[t].version}</span>` : ""}</div>`).join("")}</div>
-        <p class="tutcap tutpop" style="animation-delay:${c * 120 + 200}ms">${(NUMW[c] || c).replace(/^./, (m) => m.toUpperCase())} AI models are playing alongside you, on the same balance and the same $10 minimum. Each was given all of the questions in advance and worked out its own method for sizing its bets, using only the information available to you.</p>`;
+        <p class="tutcap tutpop" style="animation-delay:${c * 120 + 200}ms">${(NUMW[c] || c).replace(/^./, (m) => m.toUpperCase())} AI models are playing alongside you, on the same balance and the same ${fmt(RULES.minStake)} minimum. Each was given all of the questions in advance and worked out its own method for sizing its bets, using only the information available to you.</p>`;
       })(),
     };
     root.innerHTML = `<div class="stage"><div class="tutstage"><div class="qcard tutcard">${slides[n] || slides[1]}</div></div></div>`;

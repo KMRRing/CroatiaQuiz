@@ -20,16 +20,17 @@ export function defaultStake({ c, balance }) {
 }
 
 // Gemini (growth brief): quarter-Kelly against a fixed room model. The room is
-// 27 players staking $15 each at 50% accuracy, the payout multiple is estimated
-// at a $10 stake, and the Kelly fraction from that multiple is scaled by 0.25.
-// The rule fixes the player count at 27 regardless of the room, as written.
+// 27 players each staking 1.5x the round stipend (the rule said $15 on a $10
+// stipend) at 50% accuracy, the payout multiple is estimated at the minimum
+// stake, and the Kelly fraction from that multiple is scaled by 0.25. The rule
+// fixes the player count at 27 regardless of the room, as written.
 // The model's own example stakes (10 / 32.15 / 112.40 / 42.10) do not reproduce
 // from its rule; tools_bots asserts the rule's arithmetic instead.
 export function geminiStake(input) {
   const { c, balance: B, carry = 0 } = input;
-  const sOthers = 15 * 27, cOthers = sOthers * 0.5;
+  const sOthers = 1.5 * RULES.stipend * 27, cOthers = sOthers * 0.5;
   const cc = Math.min(0.99, Math.max(0.05, c));
-  const M = (10 + sOthers + 100 + carry) / (10 + cOthers);
+  const M = (RULES.minStake + sOthers + RULES.bonus + carry) / (RULES.minStake + cOthers);
   const f = Math.max(0, (cc * M - 1) / (M - 1));
   return clamp(0.25 * f * B, B);
 }

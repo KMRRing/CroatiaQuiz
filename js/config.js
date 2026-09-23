@@ -17,13 +17,13 @@ export const DB_URL_CANDIDATES = [
 
 // ---- game rules ----
 export const RULES = {
-  start: 10, stipend: 10,      // every player gets this at the start of every round
+  start: 0, stipend: 20,      // every player gets this at the start of every round
   bonus: 100,        // added to the pot every round
   minStake: 10,     // floor on every stake
   timerSec: 35,     // seconds per question
 };
 
-export const BUILD = "b216-humanwin";
+export const BUILD = "b217-stipend20";
 export const SHOW_REFRESH = true;  // set false for the real event
 
 export const GAME_ID = (typeof location !== "undefined" ? new URLSearchParams(location.search).get("g") : null) || "croatia";
