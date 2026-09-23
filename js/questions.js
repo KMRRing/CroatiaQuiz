@@ -24,7 +24,7 @@ export const QUESTIONS = [
     options: ["1 Green Certificate", "2 Green Certificates", "2.5 Green Certificates", "3 Green Certificates"], correct: "1",
     source: "S.I. No. 247 of 2025" },
   { id: 6, tag: "Germany / BEHG", type: "single", roomP: 0.40,
-    text: "In 2026, when a fossil fuel is replaced with an eligible biofuel in Germany, the obligated party saves, per tonne of CO\u2082e that would otherwise have been obligated under the BEHG, approximately:",
+    text: "In 2026, the marginal tonne of fossil fuel that a German obligated party replaces with eligible biofuel saves it, per tonne of CO\u2082e no longer obligated under the BEHG:",
     options: ["Nothing: the BEHG was replaced by EU ETS2 in 2026", "\u20ac60 per tCO\u2082e", "\u20ac65 per tCO\u2082e", "\u20ac68 per tCO\u2082e"], correct: "3",
     source: "BEHV \u00a7\u00a711\u201315" },
   { id: 7, tag: "SAF / cross-border", type: "single", roomP: 0.40,
