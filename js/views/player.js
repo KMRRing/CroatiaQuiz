@@ -67,6 +67,12 @@ export async function mount(root) {
       const free = CHARACTERS.map((_, i) => i).filter((i) => !taken.has(i));
       const ci = free.length ? free[Math.floor(Math.random() * free.length)] : Math.floor(Math.random() * CHARACTERS.length);
       await set(gref("players", token), { uid: user.uid, ci, joinedAt: serverTimestamp() });
+      // The host credits the stipend to everyone present when a round opens. A player who
+      // joins after that has no balance and cannot bet, so credit this round's stipend now.
+      const [st, w] = await Promise.all([read("state"), read("wealth", token)]);
+      if (w == null && st && st.round >= 0 && (st.phase === "preview" || st.phase === "question")) {
+        await set(gref("wealth", token), RULES.start + RULES.stipend);
+      }
       const again = (await read("players")) || {};
       const clash = Object.entries(again).filter(([t2, pl]) => t2 !== token && pl.ci === ci);
       if (!clash.length || !clash.some(([t2]) => t2 < token)) return; // we keep it; any later token re-rolls
