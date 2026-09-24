@@ -1,6 +1,6 @@
 import { ensureAuth, read } from "../fb.js";
 import { QUESTIONS } from "../questions.js";
-import { nameOf } from "../characters.js";
+import { CHARACTERS } from "../characters.js";
 
 export async function mount(root) {
   await ensureAuth();
@@ -9,7 +9,8 @@ export async function mount(root) {
     const p = (players || {})[t];
     if (!p) return t;
     if (p.bot) return p.name || t;
-    return nameOf(t, players) || t;
+    const ch = CHARACTERS.find((c) => c.emoji === p.emoji) || CHARACTERS.find((c) => c.name === p.name);
+    return `${p.emoji || ""} ${p.name || (ch ? ch.name : t)}`.trim();
   };
   const label = (o) => {
     if (!o) return "null";
