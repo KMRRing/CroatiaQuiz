@@ -28,5 +28,15 @@ answers: ${label(rv.answers)}
 deltas: ${label(rv.deltas)}
 raw bets (with ts): ${JSON.stringify(bb, null, 1)}</pre>`;
   });
-  root.innerHTML = `<div class="card"><h1>Round data</h1>${blocks.join("") || "<p>No settled rounds.</p>"}</div>`;
+  root.innerHTML = `<div class="card"><h1>Round data</h1>
+    <p><button id="dl" class="btn">Download everything (JSON)</button></p>
+    ${blocks.join("") || "<p>No settled rounds.</p>"}</div>`;
+  root.querySelector("#dl").onclick = () => {
+    const payload = { exportedAt: new Date().toISOString(), questions: QUESTIONS, players: players || {}, reveal: reveal || {}, bets: bets || {} };
+    const blob = new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "croatiaquiz-results.json";
+    document.body.appendChild(a); a.click(); a.remove();
+  };
 }
