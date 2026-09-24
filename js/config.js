@@ -23,8 +23,8 @@ export const RULES = {
   timerSec: 35,     // seconds per question
 };
 
-export const BUILD = "b218-potcentre";
-export const SHOW_REFRESH = true;  // set false for the real event
+export const BUILD = "b219-freeze";
+export const SHOW_REFRESH = false;  // event build: no refresh prompt on phones
 
 export const GAME_ID = (typeof location !== "undefined" ? new URLSearchParams(location.search).get("g") : null) || "croatia";
 export const TEST_MODE = /^test/i.test(GAME_ID);

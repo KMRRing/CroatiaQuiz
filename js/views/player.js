@@ -9,11 +9,21 @@ const TOKEN_KEY = "cq_token_" + GAME_ID;
 
 export async function mount(root) {
   const user = await ensureAuth();
-  let token = localStorage.getItem(TOKEN_KEY);
+  // localStorage can throw in some private-browsing modes; fall back to a per-load token
+  const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  let token = store.get(TOKEN_KEY);
   if (!token) {
     token = "p_" + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(TOKEN_KEY, token);
+    store.set(TOKEN_KEY, token);
   }
+  // A phone that slept through a round or more comes back with a stale socket and stale
+  // listeners; a reload re-mounts from Firebase and the saved token restores the player.
+  let hiddenAt = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") hiddenAt = Date.now();
+    else if (hiddenAt && Date.now() - hiddenAt > 90000) location.reload();
+  });
 
   const S = {
     me: null, state: null, wealth: 0,

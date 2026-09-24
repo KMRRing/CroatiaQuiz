@@ -321,8 +321,18 @@
         <g><path d="M 0 -4.6 L -28 0 L 0 4.6 Z" fill="url(#tailg)"/><circle r="4.6" fill="#fff"/><animateMotion dur="6.8s" repeatCount="indefinite" calcMode="paced" rotate="auto"><mpath href="#f8"/></animateMotion></g>
       </svg></template>
 <div id="app"><div class="centerstage"><div class="bigdisc" id="bootmark"></div></div></div>
-<script>document.getElementById("bootmark").innerHTML = document.getElementById("loadermark").innerHTML;</script>
-<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b218-potcentre", "./js/questions.js": "./js/questions.js?v=b218-potcentre", "./js/characters.js": "./js/characters.js?v=b218-potcentre", "./js/engine.js": "./js/engine.js?v=b218-potcentre", "./js/fb.js": "./js/fb.js?v=b218-potcentre", "./js/bots.js": "./js/bots.js?v=b218-potcentre", "./js/sizing.js": "./js/sizing.js?v=b218-potcentre", "./js/codefreq.js": "./js/codefreq.js?v=b218-potcentre", "./js/finale.js": "./js/finale.js?v=b218-potcentre", "./js/views/player.js": "./js/views/player.js?v=b218-potcentre", "./js/views/screen.js": "./js/views/screen.js?v=b218-potcentre", "./js/views/host.js": "./js/views/host.js?v=b218-potcentre", "./js/views/swarm.js": "./js/views/swarm.js?v=b218-potcentre", "./js/views/data.js": "./js/views/data.js?v=b218-potcentre" } }</script>
+<script>
+document.getElementById("bootmark").innerHTML = document.getElementById("loadermark").innerHTML;
+(function () {
+  var msg = '<div class="card" style="max-width:34rem;margin:12vh auto;padding:1.4rem"><h1>Can\u2019t load the quiz here</h1><p>This browser is too old for the quiz. On iPhone, update to iOS 16.4 or later or open the link in Chrome. On Android, open it in Chrome. If you opened the link inside Teams, WhatsApp or Outlook, use \u201cOpen in browser\u201d.</p></div>';
+  var ok = typeof HTMLScriptElement !== "undefined" && HTMLScriptElement.supports && HTMLScriptElement.supports("importmap");
+  if (!ok) { document.getElementById("app").innerHTML = msg; return; }
+  setTimeout(function () {
+    if (!window.__cqBooted) document.getElementById("app").innerHTML = '<div class="card" style="max-width:34rem;margin:12vh auto;padding:1.4rem"><h1>Still loading</h1><p>The quiz has not started in 15 seconds. Check the connection, then pull down to refresh. If that fails: ' + msg.replace(/<\/?h1>[^<]*|<div[^>]*>|<\/div>/g, "") + '</p></div>';
+  }, 15000);
+})();
+</script>
+<script type="importmap">{ "imports": { "./js/config.js": "./js/config.js?v=b219-freeze", "./js/questions.js": "./js/questions.js?v=b219-freeze", "./js/characters.js": "./js/characters.js?v=b219-freeze", "./js/engine.js": "./js/engine.js?v=b219-freeze", "./js/fb.js": "./js/fb.js?v=b219-freeze", "./js/bots.js": "./js/bots.js?v=b219-freeze", "./js/sizing.js": "./js/sizing.js?v=b219-freeze", "./js/codefreq.js": "./js/codefreq.js?v=b219-freeze", "./js/finale.js": "./js/finale.js?v=b219-freeze", "./js/views/player.js": "./js/views/player.js?v=b219-freeze", "./js/views/screen.js": "./js/views/screen.js?v=b219-freeze", "./js/views/host.js": "./js/views/host.js?v=b219-freeze", "./js/views/swarm.js": "./js/views/swarm.js?v=b219-freeze", "./js/views/data.js": "./js/views/data.js?v=b219-freeze" } }</script>
 <script type="module">
   import { initFb } from "./js/fb.js";
   import { BUILD, TEST_MODE } from "./js/config.js";
@@ -372,6 +382,7 @@
       }
     }
     setInterval(checkVersion, 30000); checkVersion();
+    window.__cqBooted = true;
     import(`./js/views/${files[view] || "player"}.js`)
       .then((m) => m.mount(root))
       .catch((e) => { root.innerHTML = `<div class="card"><h1>Error</h1><p class="dim">${e.message}</p></div>`; });
