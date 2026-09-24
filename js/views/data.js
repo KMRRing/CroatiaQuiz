@@ -9,8 +9,8 @@ export async function mount(root) {
     const p = (players || {})[t];
     if (!p) return t;
     if (p.bot) return p.name || t;
-    const ch = CHARACTERS.find((c) => c.emoji === p.emoji) || CHARACTERS.find((c) => c.name === p.name);
-    return `${p.emoji || ""} ${p.name || (ch ? ch.name : t)}`.trim();
+    const ch = CHARACTERS[p.ci];
+    return ch ? `${ch[0]} ${ch[1]}` : (p.name || t);
   };
   const label = (o) => {
     if (!o) return "null";
