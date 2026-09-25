@@ -9,20 +9,32 @@ const TOKEN_KEY = "cq_token_" + GAME_ID;
 
 export async function mount(root) {
   const user = await ensureAuth();
-  // localStorage can throw in some private-browsing modes; fall back to a per-load token
-  const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
-                  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
-  let token = store.get(TOKEN_KEY);
-  if (!token) {
-    token = "p_" + Math.random().toString(36).slice(2, 10);
-    store.set(TOKEN_KEY, token);
+  // Identity is the player token. Browsers inside chat apps, managed devices and private
+  // modes can lose local storage (and the Firebase auth session) on a reload, so the token
+  // is kept in three places: the page URL, session storage and local storage. The URL is
+  // the one that survives a reload in a storage-less context.
+  const stores = [
+    { get: (k) => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} } },
+    { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } },
+  ];
+  const params = new URLSearchParams(location.search);
+  let token = params.get("t") || stores[0].get(TOKEN_KEY) || stores[1].get(TOKEN_KEY);
+  if (!/^p_[a-z0-9]{6,12}$/.test(token || "")) token = "p_" + Math.random().toString(36).slice(2, 10);
+  for (const s of stores) s.set(TOKEN_KEY, token);
+  if (params.get("t") !== token) {
+    params.set("t", token);
+    try { history.replaceState(null, "", location.pathname + "?" + params.toString() + location.hash); } catch (e) {}
   }
-  // A phone that slept through a round or more comes back with a stale socket and stale
-  // listeners; a reload re-mounts from Firebase and the saved token restores the player.
-  let hiddenAt = 0;
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") hiddenAt = Date.now();
-    else if (hiddenAt && Date.now() - hiddenAt > 90000) location.reload();
+  // No automatic reload on wake: the SDK reconnects its socket by itself, and a reload in a
+  // storage-less browser is exactly what mints a new player. Just refresh the two things
+  // the listeners may have missed.
+  document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState !== "visible") return;
+    try {
+      const [st, w] = await Promise.all([read("state"), read("wealth", token)]);
+      if (w != null) { S.wealth = w; }
+      if (st) applyState(st);
+    } catch (e) { /* the live listeners will catch up */ }
   });
 
   const S = {
@@ -36,8 +48,8 @@ export async function mount(root) {
     if (!S.me && !S.joining) { S.joining = true; join().catch((e) => { S.joining = false; S.joinErr = ((e || {}).message) || String(e); render(); }); }
     render();
   });
-  onValue(gref("state"), (s) => {
-    const st = s.val();
+  onValue(gref("state"), (s) => applyState(s.val()));
+  function applyState(st) {
     const newRound = st && st.round !== (S.state && S.state.round);
     const prevPhase = S.state && S.state.phase;
     S.state = st;
@@ -48,7 +60,7 @@ export async function mount(root) {
     if (st && st.phase === "reveal") loadReveal(st.round);
     if (st && st.phase === "finished") loadFinale();
     render();
-  });
+  }
   onValue(gref("wealth", token), (s) => {
     const w = s.val() != null ? s.val() : RULES.start;
     const wasLocked = S.wealth <= RULES.minStake, isLocked = w <= RULES.minStake;

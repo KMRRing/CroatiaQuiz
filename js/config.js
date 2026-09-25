@@ -23,7 +23,7 @@ export const RULES = {
   timerSec: 35,     // seconds per question
 };
 
-export const BUILD = "b223-latejoin";
+export const BUILD = "b224-identity";
 export const SHOW_REFRESH = false;  // event build: no refresh prompt on phones
 
 export const GAME_ID = (typeof location !== "undefined" ? new URLSearchParams(location.search).get("g") : null) || "croatia";
